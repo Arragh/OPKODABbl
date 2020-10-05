@@ -163,8 +163,7 @@ namespace OPKODABbl.Controllers
                     Name = user.Name,
                     Email = user.Email,
                     CharacterName = user.CharacterName,
-                    CharacterClass = user.CharacterClass,
-                    RoleId = user.RoleId
+                    IngameClassId = user.IngameClassId
                 };
 
                 // Аватар
@@ -172,6 +171,9 @@ namespace OPKODABbl.Controllers
                 {
                     model.AvatarImage = avatarImage.ImagePath;
                 }
+
+                SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.IngameClassId);
+                ViewBag.Classes = ingameClasses;
 
                 return View(model);
             }
@@ -289,9 +291,9 @@ namespace OPKODABbl.Controllers
                     {
                         user.CharacterName = model.CharacterName;
                     }
-                    if (!string.IsNullOrWhiteSpace(model.CharacterClass))
+                    if (!string.IsNullOrWhiteSpace(model.IngameClassId.ToString()))
                     {
-                        user.CharacterClass = model.CharacterClass;
+                        user.IngameClassId = model.IngameClassId;
                     }
                     // Если был задан новый пароль, обновляем и его
                     if (!string.IsNullOrWhiteSpace(model.NewPassword))
@@ -311,6 +313,9 @@ namespace OPKODABbl.Controllers
                     // Переназначение аватара в случае ошибки валидации, иначе он теряется
                     AvatarImage temp1 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                     model.AvatarImage = temp1.ImagePath;
+
+                    SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.IngameClassId);
+                    ViewBag.Classes = ingameClasses;
 
                     return View(model);
                     //return RedirectToAction("EditProfile", "Account", new { userName = user.Name });

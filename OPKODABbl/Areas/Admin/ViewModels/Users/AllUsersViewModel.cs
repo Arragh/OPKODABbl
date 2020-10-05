@@ -10,5 +10,6 @@ namespace OPKODABbl.Areas.Admin.ViewModels.Users
     {
         public IEnumerable<User> Users { get; set; }
         public IEnumerable<Role> Roles { get; set; }
+        public IEnumerable<CharacterClass> CharacterClasses { get; set; }
     }
 }

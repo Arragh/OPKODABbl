@@ -30,18 +30,9 @@
                 </td>
                 <td class="right">
                     <span class="profile_edit">Выберите класс вашего персонажа</span>
-                    @*@Html.DropDownListFor(u => u.CharacterClass, ViewBag.Classes as SelectList)*@
-                    <select asp-for="CharacterClass">
-                        <option>--Не выбрано--</option>
-                        <option>Паладин</option>
-                        <option>Воин</option>
-                        <option>Охотник</option>
-                        <option>Шаман</option>
-                        <option>Разбойник</option>
-                        <option>Друид</option>
-                        <option>Жрец</option>
-                        <option>Маг</option>
-                        <option>Чернокнижник</option>
+                    @*@Html.DropDownListFor(u => u.IngameClassId, ViewBag.Classes as SelectList, "-Выберите класс персонажа-")*@
+                    <select asp-for="IngameClassId" asp-items="ViewBag.Classes" required>
+                        <option value="@Guid.NewGuid()">-Выберите класс персонажа-</option>
                     </select>
                 </td>
             </tr>

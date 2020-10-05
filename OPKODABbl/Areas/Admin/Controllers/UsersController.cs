@@ -31,11 +31,13 @@ namespace OPKODABbl.Areas.Admin.Controllers
         {
             List<User> users = await _usersDB.Users.Include(u => u.Role).OrderByDescending(u => u.Role).ToListAsync();
             List<Role> roles = await _usersDB.Roles.ToListAsync();
+            List<CharacterClass> characterClasses = await _usersDB.CharacterClasses.ToListAsync();
 
             AllUsersViewModel model = new AllUsersViewModel()
             {
                 Users = users,
-                Roles = roles
+                Roles = roles,
+                CharacterClasses = characterClasses
             };
 
             return View(model);

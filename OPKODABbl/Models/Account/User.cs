@@ -14,7 +14,7 @@ namespace OPKODABbl.Models.Account
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
         public string CharacterName { get; set; }
-        public string CharacterClass { get; set; }
+        public Guid IngameClassId { get; set; }
         public virtual AvatarImage AvatarImage { get; set; }
     }
 }

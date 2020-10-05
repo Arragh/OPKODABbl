@@ -1,4 +1,5 @@
-﻿using OPKODABbl.Models.Account;
+﻿using Newtonsoft.Json;
+using OPKODABbl.Models.Account;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -42,11 +43,7 @@ namespace OPKODABbl.ViewModels.Account
         [DataType(DataType.Text)]
         public string CharacterName { get; set; }
 
-        [Display(Name = "Класс")]
-        [DataType(DataType.Text)]
-        public string CharacterClass { get; set; }
-
-        public Guid RoleId { get; set; }
+        public Guid IngameClassId { get; set; }
         
         public string AvatarImage { get; set; }
     }
