@@ -1,0 +1,47 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Gallery.CreateGalleryViewModel
+
+<center>
+
+    <form asp-controller="Gallery" asp-action="CreateGallery" method="post" enctype="multipart/form-data">
+        <div>
+            <label asp-for="GalleryTitle"></label><br />
+            <input type="text" asp-for="GalleryTitle" /><br />
+            <span asp-validation-for="GalleryTitle"></span><br />
+        </div>
+        <div>
+            <label asp-for="GalleryDescription"></label><br />
+            @await Html.PartialAsync("BBcodeButtonsPartial")
+            <textarea id="textarea" asp-for="GalleryDescription" rows="30" cols="100"></textarea><br />
+            <span asp-validation-for="GalleryDescription"></span><br />
+        </div>
+        <div>
+            <label asp-for="GallerySliderImage"></label><br />
+            <span asp-validation-for="GallerySliderImage"></span><br />
+            <input type="file" name="sliderImage" accept=".jpg,.jpeg,.gif,.png" />
+            <input type="submit" value="Создать" />
+        </div>
+    </form>
+
+</center>
+
+<script>
+    function BBcode_1() {
+        document.getElementById('textarea').value += "[b][/b]"; // Добавляет к строке указанный текст
+    };
+    function BBcode_2() {
+        document.getElementById('textarea').value += "[i][/i]"; // Добавляет к строке указанный текст
+    };
+    function BBcode_3() {
+        document.getElementById('textarea').value += "[u][/u]"; // Добавляет к строке указанный текст
+    };
+    function BBcode_4() {
+        document.getElementById('textarea').value += "[img][/img]"; // Добавляет к строке указанный текст
+    };
+</script>
+
+@section scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

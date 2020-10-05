@@ -1,0 +1,58 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.News.EditNewsViewModel
+
+<center>
+
+    <div>
+        <form asp-controller="News" asp-action="EditNews" method="post" enctype="multipart/form-data">
+            <div>
+                <input type="hidden" asp-for="NewsId" value="@Model.NewsId" />
+                <input type="hidden" asp-for="NewsDate" value="@Model.NewsDate" />
+                <input type="hidden" asp-for="NewsUserName" value="@Model.NewsUserName" />
+                <input type="hidden" asp-for="NewsImagesCount" value="@Model.NewsImagesCount" />
+                <label asp-for="NewsTitle"></label><br />
+                <input type="text" asp-for="NewsTitle" width="300" />
+                <span asp-validation-for="NewsTitle"></span><br />
+            </div>
+            <br />
+            <div>
+                <label asp-for="NewsBody"></label><br />
+                @await Html.PartialAsync("BBcodeButtonsPartial")
+                <textarea id="textarea" asp-for="NewsBody" rows="30" cols="100"></textarea>
+                <span asp-validation-for="NewsBody"></span><br />
+            </div>
+            <div>
+                <span asp-validation-for="NewsImage"></span><br />
+                @if (Model.NewsImagesCount < 3)
+                {
+                    <input type="file" name="uploads" accept=".jpg,.jpeg,.png,.gif" multiple="" />
+                }
+                <input type="submit" value="Сохранить" />
+            </div>
+        </form>
+        <br />
+        <br />
+        @if (Model.NewsImages != null && Model.NewsImages.Count > 0)
+        {
+            <div>
+                @foreach (var image in Model.NewsImages)
+                {
+                    Model.NewsImagesCount++;
+                    <div>
+                        <a href="@Url.Content(image.ImagePathOriginal)"><img src="@Url.Content(image.ImagePathScaled)" /></a><br />
+                        @*@Html.ActionLink("Удалить изображение", "EditNews", "News", new { newsId = Model.NewsId, imageToDeleteName = image.ImageName })*@
+                        <a asp-action="EditNews" asp-controller="News" asp-route-newsId="@Model.NewsId" asp-route-imageToDeleteName="@image.ImageName">Удалить изображение</a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</center>
+
+@section scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_BBcodeScriptPartial");
+    }
+}

@@ -1,0 +1,87 @@
+﻿@model OPKODABbl.ViewModels.Account.EditProfileViewModel
+
+<div class="content_wrapper">
+    <a class="content_wrapper_blue" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Редактирование профиля</a>
+    <form class="profile_page" asp-action="EditProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="UserId" value="@Model.UserId" />
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Successful))
+        {
+            <span class="successful">@ViewBag.Successful</span>
+        }
+        <table class="profile_edit">
+            <tr>
+                <td class="left">
+                    <img style="vertical-align: middle;" src="~/images/login_icon.png" />
+                    <input class="login_page" type="text" asp-for="Name" placeholder="Логин" />
+                    <br />
+                    <span class="wrong_data" asp-validation-for="Name"></span>
+                </td>
+                <td class="right">
+                    <span class="profile_edit">Укажите имя вашего персонажа</span>
+                    <input class="login_page" type="text" asp-for="CharacterName" placeholder="Имя персонажа" />
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
+                    <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
+                    <br />
+                    <span class="wrong_data" asp-validation-for="Email"></span>
+                </td>
+                <td class="right">
+                    <span class="profile_edit">Выберите класс вашего персонажа</span>
+                    @*@Html.DropDownListFor(u => u.CharacterClass, ViewBag.Classes as SelectList)*@
+                    <select asp-for="CharacterClass">
+                        <option>--Не выбрано--</option>
+                        <option>Паладин</option>
+                        <option>Воин</option>
+                        <option>Охотник</option>
+                        <option>Шаман</option>
+                        <option>Разбойник</option>
+                        <option>Друид</option>
+                        <option>Жрец</option>
+                        <option>Маг</option>
+                        <option>Чернокнижник</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                    <input class="login_page" type="password" asp-for="NewPassword" placeholder="Новый пароль" />
+                    <br />
+                    <span class="wrong_data" asp-validation-for="NewPassword"></span>
+                </td>
+                <td class="avatar" rowspan="2">
+                    <img src="@Model.AvatarImage" /><br />
+                    <input class="file" type="file" name="avatarImage" accept=".jpg,.jpeg,.gif,.png" />
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                    <input class="login_page" type="password" asp-for="NewPasswordConfirm" placeholder="Повторите пароль" />
+                    <br />
+                    <span class="wrong_data" asp-validation-for="NewPasswordConfirm"></span>
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <br />
+                    <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                    <input class="login_page" type="password" asp-for="Password" placeholder="Введите текущий пароль" />
+                    <br />
+                    <span class="wrong_data" asp-validation-for="Password"></span>
+                    <br /><br />
+                    <input class="login_button" type="submit" value="Сохранить" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,125 @@
+﻿.slider {
+    width: 1056px;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+}
+
+a.slider_link {
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.slider__wrapper {
+    display: flex;
+    transition: transform 0.6s ease;
+}
+
+.slider__item {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.slider__control {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    color: #fff;
+    text-align: center;
+    opacity: 0.7;
+    transform: translateY(-50%);
+}
+
+    .slider__control:hover,
+    .slider__control:focus {
+        color: #fff;
+        text-decoration: none;
+        outline: 0;
+        opacity: .9;
+    }
+
+.slider__control_left {
+    left: 20px;
+}
+
+.slider__control_right {
+    right: 20px;
+}
+
+.slider__control::before {
+    content: '';
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: transparent no-repeat center center;
+    background-size: 100% 100%;
+}
+
+.slider__control_left::before {
+    background-image: url("../images/slider_button_left.png");
+}
+
+.slider__control_right::before {
+    background-image: url("../images/slider_button_right.png");
+}
+
+/*.slider__item > div {
+    line-height: 250px;
+    font-size: 20px;
+    text-align: center;
+}*/
+
+div.item_title_date {
+    position: absolute;
+    width: 100%;
+    margin: 160px 0px 0px 3px;
+}
+div.title_wrapper {
+    display: inline-block;
+    max-width: 700px;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+    background-color: rgba(0, 140, 227, 0.7);
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+    padding: 7px 12px 0px 12px;
+}
+div.date_wrapper {
+    display: inline-block;
+    height: 40px;
+    background-color: rgba(255, 0, 0, 0.7);
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+    padding: 7px 12px 0px 12px;
+}
+/*span.item_title {
+    background-color: rgba(0, 140, 227, 0.7);
+    padding: 5px 11px 5px 11px;
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+}
+span.item_date {
+    background-color: rgba(255, 0, 0, 0.7);
+    padding: 0px 11px 1px 11px;
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+}*/
+
+
+@font-face {
+    font-family: OPKODAB;
+    src: url("../css/futurespore_cyrillic.otf");
+}

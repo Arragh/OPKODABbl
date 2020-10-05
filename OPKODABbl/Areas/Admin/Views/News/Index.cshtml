@@ -1,0 +1,30 @@
+﻿@using OPKODABbl.Models.Main
+@model List<News>
+
+<center>
+
+    @Html.ActionLink("Назад в панель администратора", "Index", "Home")
+    <br /><br />
+    @Html.ActionLink("Создать новость", "CreateNews", "News")
+    <br /><br />
+    <table border="1">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.NewsTitle
+                </td>
+                <td>
+                    @Html.ActionLink("Изменить", "EditNews", "News", new { newsId = item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink("Удалить", "DeleteNews", "News", new { newsId = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+
+</center>

@@ -1,0 +1,25 @@
+﻿@model OPKODABbl.ViewModels.Gallery.ViewGalleryViewModel
+
+<div class="content_wrapper">
+    <a class="content_wrapper_blue" asp-action="Galleries" asp-controller="Gallery">Галерея</a><!--
+    --><a class="content_wrapper_red" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@Model.Gallery.Id">@Model.Gallery.GalleryTitle</a>
+       <div class="viewgallery_wrapper">
+           @if (!string.IsNullOrEmpty(Model.Gallery.GalleryDescription))
+           {
+               <div class="viewgallery_bodytext">
+                   @Html.Raw(Model.Gallery.GalleryDescription)
+               </div>
+           }
+           <div class="viewgallery_image_wrapper">
+               @foreach (var image in Model.GalleryImages)
+               {
+                   <div class="viewgallery_image" style="background-image: url(@image.ImagePathScaled)">
+                       <a class="readnews_image_link" href="@image.ImagePathOriginal"></a>
+                       <img src="~/images/img_preview_border.png" />
+                   </div>
+               }
+           </div>
+           <span class="readnews_date">@Model.Gallery.GalleryDate.ToShortDateString()</span>
+           <span class="readnews_author">@Model.Gallery.GalleryUserName</span>
+       </div>
+</div>

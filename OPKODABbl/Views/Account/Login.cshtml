@@ -1,0 +1,37 @@
+﻿@model OPKODABbl.ViewModels.Account.LoginViewModel
+
+<div class="content_wrapper">
+    <a class="content_wrapper_blue" asp-action="Login" asp-controller="Account">Авторизация</a>
+
+    <form class="login_page" asp-action="Login" asp-controller="Account" asp-antiforgery="true" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <img style="vertical-align: middle;" src="~/images/login_icon.png" />
+            <input class="login_page" type="text" placeholder="Логин" asp-for="Name" />
+        </div>
+        <div class="attention_wrapper">
+            <span class="wrong_data" asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+            <input class="login_page" type="password" placeholder="Пароль" asp-for="Password" />
+        </div>
+        <div class="attention_wrapper">
+            <span class="wrong_data" asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <input class="login_button" type="submit" value="Войти" />
+            <a class="login_pass_register" href="#">Забыл пароль?</a>
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@*
+    required pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,4}$"
+    required minlength="6"
+*@

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<OPKODABbl.Models.Gallery.Gallery>
+
+<center>
+
+    @Html.ActionLink("Создать галерею", "CreateGallery", "Gallery")
+
+    <br /><br />
+
+    <table border="1">
+        @foreach (var gallery in Model)
+        {
+            <tr>
+                <td>@gallery.Id</td>
+                <td>@gallery.GalleryTitle</td>
+                <td>@gallery.GalleryDate</td>
+                <td>@gallery.GalleryUserName</td>
+                <td>@Html.ActionLink("Добавить/Удалить изображения", "ViewGallery", "Gallery", new { galleryId = gallery.Id })</td>
+                <td>@Html.ActionLink("Изменить", "EditGallery", "Gallery", new { galleryId = gallery.Id })</td>
+                <td>@Html.ActionLink("Удалить", "DeleteGallery", "Gallery", new { galleryId = gallery.Id })</td>
+            </tr>
+        }
+    </table>
+
+</center>

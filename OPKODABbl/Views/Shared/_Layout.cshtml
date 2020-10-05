@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+
+    @await Html.PartialAsync("MetatagsPartial")
+
+</head>
+<body>
+
+    @await Html.PartialAsync("HeaderPartial")
+
+
+    <div class="renderbody">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

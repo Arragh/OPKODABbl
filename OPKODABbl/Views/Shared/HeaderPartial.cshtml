@@ -1,0 +1,38 @@
+﻿<div class="login_header">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form class="login_pass" asp-action="Logout" asp-controller="Account">
+            @if (User.IsInRole("admin"))
+            {
+                <a asp-action="Index" asp-controller="Home" asp-area="Admin">Админка (черновик)</a>
+            }
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Профиль</a>
+            }
+            <input class="logout_button" type="submit" value="Выйти" />
+        </form>
+    }
+    else
+    {
+        <form class="login_pass" asp-action="Login" asp-controller="Account" asp-route-ReturnUrl="@Url.PageLink()" asp-antiforgery="true" method="post">
+            <img src="~/images/login_icon.png" />
+            <input type="text" placeholder="Логин" class="login_pass" name="Name" required minlength="6" />
+            <img src="~/images/pass_icon.png" />
+            <input type="password" placeholder="Пароль" class="login_pass" name="Password" required minlength="6" />
+            <input class="login_button" type="submit" value="Войти" />
+            <a class="login_pass_register" asp-action="Register" asp-controller="Account">Регистрация</a>
+        </form>
+    }
+</div>
+<div class="logo"></div>
+<div class="main_menu">
+    <ul>
+        <li><a asp-action="Index" asp-controller="Main">Главная</a></li>
+        <li><a href="#">О нас</a></li>
+        <li><a asp-action="Galleries" asp-controller="Gallery">Галерея</a></li>
+        <li><a asp-action="Roster" asp-controller="Page">Состав</a></li>
+        <li><a href="#">Вступить</a></li>
+        <li><a href="#">Форум</a></li>
+    </ul>
+</div>

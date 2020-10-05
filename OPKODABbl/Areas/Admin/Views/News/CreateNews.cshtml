@@ -1,0 +1,32 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.News.CreateNewsViewModel
+
+<center>
+
+    <form asp-controller="News" asp-action="CreateNews" method="post" enctype="multipart/form-data">
+        <div>
+            <label asp-for="NewsTitle"></label><br />
+            <input type="text" asp-for="NewsTitle" width="300" /><br />
+            <span asp-validation-for="NewsTitle"></span>
+        </div>
+        <div>
+            <label asp-for="NewsBody"></label><br />
+            @await Html.PartialAsync("BBcodeButtonsPartial")
+            <textarea style="width: 500px; height: 300px;" id="textarea" asp-for="NewsBody"></textarea><br />
+            <span asp-validation-for="NewsBody"></span>
+        </div>
+        <div>
+            <font color="red">@Html.ValidationMessageFor(f => f.NewsImage)</font><br />
+            <input type="file" name="uploads" accept=".jpg,.jpeg,.png,.gif" multiple="" />
+            <input type="submit" value="Опубликовать" />
+        </div>
+    </form>
+
+</center>
+
+@section scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_BBcodeScriptPartial");
+    }
+}

@@ -1,0 +1,78 @@
+﻿@model OPKODABbl.ViewModels.Main.IndexViewModel
+
+@{
+    int newsPosition = 0;
+}
+
+@foreach (var news in Model.News)
+{
+    if (newsPosition == 0)
+    {
+        <div class="news0">
+            <img class="news_img" src="@Model.NewsImages.FirstOrDefault(i=>i.NewsId == news.Id).ImagePathScaled" />
+            <div class="news_img_border"><span class="news_date">@news.NewsDate.ToShortDateString()</span></div>
+            <span class="news_title">@news.NewsTitle</span>
+            <span class="news_body">
+                @news.NewsBody
+            </span>
+            <div class="news_comments">Читать дальше >>></div>
+            <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@news.Id"></a>
+        </div>
+        newsPosition++;
+    }
+    else
+    {
+        <div class="news1">
+            <img class="news_img" src="@Model.NewsImages.FirstOrDefault(i=>i.NewsId == news.Id).ImagePathScaled" />
+            <div class="news_img_border"><span class="news_date">@news.NewsDate.ToShortDateString()</span></div>
+            <span class="news_title">@news.NewsTitle</span>
+            <span class="news_body">
+                @news.NewsBody
+            </span>
+            <div class="news_comments">Читать дальше >>></div>
+            <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@news.Id"></a>
+        </div>
+    }
+}
+
+<div class="spacer_link"><a asp-action="NewsArchive" asp-controller="News">Архив новостей</a></div>
+
+@for (int i = 0; i < 5; i++)
+{
+    <div class="forum_last_messages">
+        <img class="forum_last_messages_icon" src="~/images/forum_topic_icon.png" />
+        <a class="forum_last_messages_title" href="#">Хочу вступить к вам</a>
+        <span class="forum_last_messages_message">Здравствуйте, хочу вступить в вашу гильду. Вы просто супер, а Мнемоник - лучший!!!</span>
+        <a class="forum_last_messages_nickname" href="#">ВасяЛолПРО</a>
+        <span class="forum_last_messages_date">12.07.2021</span>
+        <a href="#"><img class="forum_last_messages_next_icon" src="~/images/forum_next_icon.png" /></a>
+    </div>
+}
+
+<div class="spacer_link"><a href="#">Перейти на форум</a></div>
+
+<div class="slider">
+    <div class="slider__wrapper">
+        @foreach (var item in Model.Galleries)
+	    {
+		    <div class="slider__item">
+                <div class="item_title_date">
+                    <div class="title_wrapper">@item.GalleryTitle</div><div class="date_wrapper">@item.GalleryDate.ToShortDateString()</div>
+                </div>
+                <a class="slider_link" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@item.Id"></a>
+                <div style="background-image: url(@item.GallerySliderImage);"><img src="~/images/slider_border.png" /></div>
+            </div>
+	    }
+    </div>
+    <a class="slider__control slider__control_left" href="#" role="button"></a>
+    <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
+</div>
+
+<div class="spacer_link"><a asp-action="Galleries" asp-controller="Gallery">В галерею</a></div>
+
+@section scripts
+{
+    @{
+        await Html.RenderPartialAsync("_SliderScriptPartial");
+    }
+}

@@ -1,0 +1,41 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Gallery.EditGalleryViewModel
+
+<center>
+
+    <form asp-controller="Gallery" asp-action="EditGallery" method="post" enctype="multipart/form-data">
+        <div>
+            <input type="hidden" asp-for="GalleryId" value="@Model.GalleryId" />
+            <input type="hidden" asp-for="GalleryPreviewImage" value="@Model.GalleryPreviewImage" />
+        </div>
+        <div>
+            <label asp-for="GalleryTitle"></label><br />
+            <input type="text" asp-for="GalleryTitle" width="300" /><br />
+            <span asp-validation-for="GalleryTitle"></span><br />
+        </div>
+        <div>
+            <label asp-for="GalleryDescription"></label><br />
+            @await Html.PartialAsync("BBcodeButtonsPartial")
+            <textarea id="textarea" asp-for="GalleryDescription" rows="30" cols="100"></textarea>
+            <span asp-validation-for="GalleryDescription"></span><br />
+        </div>
+        <div>
+            <label asp-for="GalleryPreviewImage"></label><br />
+            <span asp-validation-for="GalleryPreviewImage"></span><br />
+            <input type="file" name="sliderImage" accept=".jpg,.jpeg,.gif,.png" />
+            <input type="submit" value="Сохранить" />
+        </div>
+    </form>
+
+    <div>
+        <img src="@Url.Content(Model.GalleryPreviewImage)" />
+    </div>
+
+</center>
+
+@section scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_BBcodeScriptPartial");
+    }
+}
