@@ -1,0 +1,26 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Users.AllUsersViewModel
+
+<center>
+    <table border="1">
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @user.Id
+                </td>
+                <td>
+                    @user.Name
+                </td>
+                <td>
+                    @user.CharacterClass
+                </td>
+                <td>
+                    @Model.Roles.FirstOrDefault(r => r.Id == user.RoleId).Name
+                </td>
+                <td>
+                    <a asp-action="EditUser" asp-controller="Users" asp-route-userId="@user.Id">Изменить</a>
+                </td>
+            </tr>
+        }
+    </table>
+</center>

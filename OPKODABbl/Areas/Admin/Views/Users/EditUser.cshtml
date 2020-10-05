@@ -1,0 +1,53 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Users.EditUserViewModel
+
+<center>
+    <table border="1">
+        <tr>
+            <td>
+                <form asp-action="EditUser" asp-controller="Users" method="post">
+                    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+
+                    <div>
+                        Имя пользователя должно содержать от 3 до 30 символов, состоять только из маленьких и больших букв русского или латинского алфавита.
+                    </div>
+                    <div>
+                        <label asp-for="Name"></label><br />
+                        <input type="text" asp-for="Name" /><br />
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    <br />
+
+                    <div>
+                        Адрес Email пользователя.
+                    </div>
+                    <div>
+                        <label asp-for="Email"></label><br />
+                        <input type="email" asp-for="Email" /><br />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <br />
+
+                    <div>
+                        Пароль должен содержать от 6 до 64 символов, состоять из маленьких и больших букв, цифр и какого-нибудь знака.
+                    </div>
+                    <div>
+                        <label asp-for="Password"></label><br />
+                        <input type="password" asp-for="Password" /><br />
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                    <br />
+
+                    <div>
+                        Права пользователя на сайте. Не рекомендуется раздавать админские права кому попало.
+                    </div>
+                    <div>
+                        <label asp-for="RoleId"></label><br />
+                        @Html.DropDownListFor(u => u.RoleId, ViewBag.Roles as SelectList)<br />
+                    </div>
+                    <br />
+                    <center><input type="submit" value="Сохранить" /></center>
+                </form>
+            </td>
+        </tr>
+    </table>
+</center>
