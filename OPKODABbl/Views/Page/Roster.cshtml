@@ -1,1 +1,23 @@
-﻿<h3>Page/Roster</h3>
+﻿@model OPKODABbl.ViewModels.Page.RosterViewModel
+
+<div class="content_wrapper">
+    <table border="1" width="100%">
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    <img src="@user.CharacterClass.ClassIconPath" />
+                </td>
+                <td>
+                    @user.CharacterClass.ClassName
+                </td>
+                <td>
+                    @user.CharacterName
+                </td>
+                <td>
+                    @user.Role.Name
+                </td>
+            </tr>
+        }
+    </table>
+</div>
