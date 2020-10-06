@@ -12,9 +12,9 @@
                     @user.Name
                 </td>
                 <td>
-                    @if (Model.CharacterClasses.FirstOrDefault(c => c.Id == user.IngameClassId) != null)
+                    @if (Model.CharacterClasses.FirstOrDefault(c => c.Id == user.CharacterClassId) != null)
 	                {
-		                <img src="@Model.CharacterClasses.FirstOrDefault(c => c.Id == user.IngameClassId).ClassIconPath" />
+		                <img src="@Model.CharacterClasses.FirstOrDefault(c => c.Id == user.CharacterClassId).ClassIconPath" />
 	                }
                 </td>
                 <td>

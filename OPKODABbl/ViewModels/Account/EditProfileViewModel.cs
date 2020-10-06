@@ -43,7 +43,7 @@ namespace OPKODABbl.ViewModels.Account
         [DataType(DataType.Text)]
         public string CharacterName { get; set; }
 
-        public Guid IngameClassId { get; set; }
+        public Guid CharacterClassId { get; set; }
         
         public string AvatarImage { get; set; }
     }

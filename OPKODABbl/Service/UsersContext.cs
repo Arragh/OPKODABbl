@@ -46,84 +46,78 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "user"
             };
+            #endregion
 
+            #region Добавление игровых классов
+            CharacterClass paladin = new CharacterClass()
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_paladin.jpg",
+                ClassName = "Паладин"
+            };
+            CharacterClass warrior = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_warrior.jpg",
+                ClassName = "Воин"
+            };
+            CharacterClass hunter = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_hunter.jpg",
+                ClassName = "Охотник"
+            };
+            CharacterClass shaman = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_shaman.jpg",
+                ClassName = "Шаман"
+            };
+            CharacterClass rogue = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_rogue.jpg",
+                ClassName = "Разбойник"
+            };
+            CharacterClass druid = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_druid.jpg",
+                ClassName = "Друид"
+            };
+            CharacterClass priest = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_priest.jpg",
+                ClassName = "Жрец"
+            };
+            CharacterClass mage = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_mage.jpg",
+                ClassName = "Маг"
+            };
+            CharacterClass warlock = new CharacterClass
+            {
+                Id = Guid.NewGuid(),
+                ClassIconPath = "/images/class_icon_warlock.jpg",
+                ClassName = "Чернокнижник"
+            };
+            #endregion
+
+            #region Добавление пользователей
             User Administrator = new User()
             {
                 Id = Guid.NewGuid(),
                 Name = "Administrator",
                 Email = "admin@lol.ru",
                 Password = "123456".HashString(),
-                RoleId = adminRole.Id
+                RoleId = adminRole.Id,
+                CharacterClassId = paladin.Id
             };
             #endregion
 
-            #region Добавление игровых классов
-            List<CharacterClass> characterClasses = new List<CharacterClass>()
-            {
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "",
-                    ClassName = "-Выберите класс персонажа-"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_paladin.jpg",
-                    ClassName = "Паладин"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_warrior.jpg",
-                    ClassName = "Воин"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_hunter.jpg",
-                    ClassName = "Охотник"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_shaman.jpg",
-                    ClassName = "Шаман"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_rogue.jpg",
-                    ClassName = "Разбойник"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_druid.jpg",
-                    ClassName = "Друид"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_priest.jpg",
-                    ClassName = "Жрец"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_mage.jpg",
-                    ClassName = "Маг"
-                },
-                new CharacterClass
-                {
-                    Id = Guid.NewGuid(),
-                    ClassIconPath = "/images/class_icon_warlock.jpg",
-                    ClassName = "Чернокнижник"
-                }
-            };
-            #endregion
-
-            modelBuilder.Entity<CharacterClass>().HasData( characterClasses );
+            modelBuilder.Entity<CharacterClass>().HasData( new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock } );
             modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, clanMember, clanRecruit, userRole });
             modelBuilder.Entity<User>().HasData(new User[] { Administrator });
             base.OnModelCreating(modelBuilder);

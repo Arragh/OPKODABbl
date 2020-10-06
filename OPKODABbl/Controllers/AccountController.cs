@@ -36,6 +36,9 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            ViewBag.Classes = ingameClasses;
+
             return View();
         }
         #endregion
@@ -46,23 +49,26 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             // Проверка имени пользователя на наличие запрещенных символов
-            string allowedUserNameCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
-            foreach (var inputChar in model.Name)
+            if (!string.IsNullOrWhiteSpace(model.Name))
             {
-                bool errorTrigger = false;
-
-                foreach (var allowedChar in allowedUserNameCharacters)
+                string allowedUserNameCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+                foreach (var inputChar in model.Name)
                 {
-                    if (inputChar == allowedChar)
+                    bool errorTrigger = false;
+
+                    foreach (var allowedChar in allowedUserNameCharacters)
                     {
-                        errorTrigger = true;
+                        if (inputChar == allowedChar)
+                        {
+                            errorTrigger = true;
+                            break;
+                        }
+                    }
+                    if (!errorTrigger)
+                    {
+                        ModelState.AddModelError("Name", "Имя содержит запрещенные символы");
                         break;
                     }
-                }
-                if (!errorTrigger)
-                {
-                    ModelState.AddModelError("Name", "Имя содержит запрещенные символы");
-                    break;
                 }
             }
 
@@ -85,7 +91,16 @@ namespace OPKODABbl.Controllers
                 // добавляем пользователя в бд
                 Role role = await _usersDB.Roles.FirstOrDefaultAsync(r => r.Name == "user");
 
-                User newUser = new User { Id = Guid.NewGuid(), Name = model.Name, Email = model.Email, Password = model.Password.HashString(), Role = role };
+                User newUser = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = model.Name,
+                    Email = model.Email,
+                    Password = model.Password.HashString(),
+                    CharacterName = model.CharacterName,
+                    CharacterClassId = model.CharacterClassId,
+                    Role = role
+                };
 
                 // Создаем аватар по дефолту
                 AvatarImage avatar = new AvatarImage()
@@ -107,6 +122,9 @@ namespace OPKODABbl.Controllers
             }
 
             // В случае ошибок валидации возвращаем модель с сообщениями об ошибках
+            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            ViewBag.Classes = ingameClasses;
+
             return View(model);
         }
         #endregion
@@ -163,7 +181,7 @@ namespace OPKODABbl.Controllers
                     Name = user.Name,
                     Email = user.Email,
                     CharacterName = user.CharacterName,
-                    IngameClassId = user.IngameClassId
+                    CharacterClassId = user.CharacterClassId
                 };
 
                 // Аватар
@@ -172,7 +190,7 @@ namespace OPKODABbl.Controllers
                     model.AvatarImage = avatarImage.ImagePath;
                 }
 
-                SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.IngameClassId);
+                SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
                 ViewBag.Classes = ingameClasses;
 
                 return View(model);
@@ -291,9 +309,9 @@ namespace OPKODABbl.Controllers
                     {
                         user.CharacterName = model.CharacterName;
                     }
-                    if (!string.IsNullOrWhiteSpace(model.IngameClassId.ToString()))
+                    if (!string.IsNullOrWhiteSpace(model.CharacterClassId.ToString()))
                     {
-                        user.IngameClassId = model.IngameClassId;
+                        user.CharacterClassId = model.CharacterClassId;
                     }
                     // Если был задан новый пароль, обновляем и его
                     if (!string.IsNullOrWhiteSpace(model.NewPassword))
@@ -314,7 +332,7 @@ namespace OPKODABbl.Controllers
                     AvatarImage temp1 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                     model.AvatarImage = temp1.ImagePath;
 
-                    SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.IngameClassId);
+                    SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
                     ViewBag.Classes = ingameClasses;
 
                     return View(model);

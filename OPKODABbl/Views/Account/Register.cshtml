@@ -2,41 +2,90 @@
 
 <div class="content_wrapper">
     <a class="content_wrapper_blue" asp-action="Register" asp-controller="Account">Регистрация нового пользователя</a>
-    <form class="login_page" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post">
-        <div class="register_attention">
-            Обратите внимание, что мы не предъявляем каких-то изощренных требований к вашему паролю, дабы не взрывать вам мозг. Но при этом мы надеемся на ваше благоразумие, и что вы не будете использовать пароли от других ваших аккаунтов, а так же не станете делать пароль аля "qwerty".
-        </div>
-        <div>
-            <img style="vertical-align: middle;" src="~/images/login_icon.png" />
-            <input class="login_page" type="text" asp-for="Name" placeholder="Логин" />
-        </div>
-        <div class="attention_wrapper">
-            <span class="wrong_data" asp-validation-for="Name"></span>
-        </div>
-        <div>
-            <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
-            <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
-        </div>
-        <div class="attention_wrapper">
-            <span class="wrong_data" asp-validation-for="Email"></span>
-        </div>
-        <div>
-            <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
-            <input class="login_page" type="password" asp-for="Password" placeholder="Пароль" />
-        </div>
-        <div class="attention_wrapper">
-            <span class="wrong_data" asp-validation-for="Password"></span>
-        </div>
-        <div>
-            <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
-            <input class="login_page" type="password" asp-for="PasswordConfirm" placeholder="Повторите пароль" />
-        </div>
-        <div class="attention_wrapper">
-            <span class="wrong_data" asp-validation-for="PasswordConfirm"></span>
-        </div>
-        <div>
-            <input class="login_button" type="submit" value="Регистрация" />
-        </div>
+    <form class="register" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post">
+        <table class="register">
+            <tr>
+                <td class="left">Ваш логин на сайте ололо</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/login_icon.png" />
+                        <input class="login_page" type="text" asp-for="Name" placeholder="Логин" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="Name"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Ваш емаил. Указывайте реальный адрес, т.к. на него придет письмо для подтверждения регистрации</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
+                        <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="Email"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Задайте пароль, только не "qwerty".</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <input class="login_page" type="password" asp-for="Password" placeholder="Пароль" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="Password"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Введите пароль еще раз, чтобы убедиться в своей адекватности.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <input class="login_page" type="password" asp-for="PasswordConfirm" placeholder="Повторите пароль" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="PasswordConfirm"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">А теперь давай, расскажи нам, как зовут твоего паладина.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <input class="login_page" type="text" asp-for="CharacterName" placeholder="Имя персонажа" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CharacterName"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Убедимся что ты играешь за паладина.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CharacterClassId"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <input class="login_button" type="submit" value="Регистрация" />
+                    </div>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
 

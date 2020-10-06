@@ -11,10 +11,12 @@ namespace OPKODABbl.Models.Account
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string CharacterName { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
-        public string CharacterName { get; set; }
-        public Guid IngameClassId { get; set; }
-        public virtual AvatarImage AvatarImage { get; set; }
+        public Guid CharacterClassId { get; set; }
+        public CharacterClass CharacterClass { get; set; }
+        public Guid AvatarImageId { get; set; }
+        public AvatarImage AvatarImage { get; set; }
     }
 }
