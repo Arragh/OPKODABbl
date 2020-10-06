@@ -326,11 +326,14 @@ namespace OPKODABbl.Controllers
                     // Перезаписываем куки на новые, с обновленными данными
                     await Authenticate(user);
 
-                    ViewBag.Successful = "Изменения сохранены";
+                    ViewBag.Successful = "Профиль сохранён";
 
                     // Переназначение аватара в случае ошибки валидации, иначе он теряется
                     AvatarImage temp1 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
-                    model.AvatarImage = temp1.ImagePath;
+                    if (temp1 != null)
+                    {
+                        model.AvatarImage = temp1.ImagePath;
+                    }
 
                     SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
                     ViewBag.Classes = ingameClasses;

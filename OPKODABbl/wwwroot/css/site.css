@@ -151,20 +151,25 @@ input.login_page {
 
 /*Register*/
 form.register {
-    margin: 20px 0px 20px 0px;
+    margin: 20px 0px 0px 0px;
     text-align: center;
 }
 table.register {
     width: 800px;
     border-collapse: collapse;
     margin: auto;
+    font-family: Verdana;
+    font-size: 13px;
+    color: #dcdcdc;
 }
     table.register tr {
         height: 90px;
     }
     table.register td.left {
         width: 50%;
+        padding: 12px 0px 0px 0px;
         vertical-align: top;
+        text-align: right;
     }
     table.register td.right {
         width: 50%;
@@ -564,23 +569,8 @@ div.viewgallery_image {
 
 
 /*EditProfile*/
-div.profile_attention {
-    width: 670px;
-    min-height: 260px;
-    float: right;
-    padding: 0px 0px 0px 0px;
-    margin: 0px 20px 0px 0px;
-    text-align: justify;
-    font-family: Verdana;
-    font-size: 12px;
-    color: #dcdcdc;
-}
-form.profile_page {
-    margin: 40px 0px 20px 0px;
-    text-align: center;
-}
-div.avatar {
-    margin: 10px 0px 0px 0px;
+form.edit_profile {
+    margin: 20px 0px 20px 0px;
     text-align: center;
 }
 input.file {
@@ -596,58 +586,11 @@ input.file {
     input.file:focus {
         outline: none;
     }
-table.profile_edit {
-    width: 850px;
-    margin: auto;
-    border: 0px solid;
-    padding: 0px 0px 0px 0px;
-}
-    table.profile_edit td.left {
-        width: 300px;
-        height: 70px;
-        text-align: left;
-    }
-    table.profile_edit td.right {
-        width: 500px;
-        height: 70px;
-        text-align: right;
-        vertical-align: middle;
-    }
-        table.profile_edit td.right select {
-            width: 224px;
-            font-family: Verdana;
-            color: #ffffff;
-            font-size: 13px;
-            padding: 5px 10px 5px 10px;
-            margin: 0px 15px 0px 0px;
-            border: 2px solid #ffffff;
-            border-radius: 15px;
-            background-color: rgba(49, 51, 54, 0.6);
-            -webkit-appearance: none;
-        }
-            table.profile_edit td.right select:hover {
-                -webkit-appearance: none;
-            }
-            table.profile_edit td.right select:focus {
-                outline: none;
-            }
-            table.profile_edit td.avatar {
-                width: 500px;
-                height: 70px;
-                text-align: center;
-            }
-span.profile_edit {
-    margin: 0px 10px 0px 0px;
-    font-family: Verdana;
-    font-size: 12px;
-    color: white;
-}
 span.successful {
     font-family: OPKODAB;
     font-size: 21px;
     color: #fff343;
 }
-
 
 
 @font-face {

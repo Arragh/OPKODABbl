@@ -2,63 +2,101 @@
 
 <div class="content_wrapper">
     <a class="content_wrapper_blue" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Редактирование профиля</a>
-    <form class="profile_page" asp-action="EditProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+    <form class="edit_profile" asp-action="EditProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
         <input type="hidden" name="UserId" value="@Model.UserId" />
-        @if (!string.IsNullOrWhiteSpace(ViewBag.Successful))
-        {
-            <span class="successful">@ViewBag.Successful</span>
-        }
-        <table class="profile_edit">
+        <div class="attention_wrapper">
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Successful))
+            {
+                <span class="successful">@ViewBag.Successful</span>
+            }
+        </div>
+        <table class="register">
             <tr>
-                <td class="left">
-                    <img style="vertical-align: middle;" src="~/images/login_icon.png" />
-                    <input class="login_page" type="text" asp-for="Name" placeholder="Логин" />
-                    <br />
-                    <span class="wrong_data" asp-validation-for="Name"></span>
-                </td>
+                <td class="left">Ваш логин на сайте ололо</td>
                 <td class="right">
-                    <span class="profile_edit">Укажите имя вашего персонажа</span>
-                    <input class="login_page" type="text" asp-for="CharacterName" placeholder="Имя персонажа" />
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/login_icon.png" />
+                        <input class="login_page" type="text" asp-for="Name" placeholder="Логин" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="Name"></span>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td class="left">
-                    <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
-                    <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
-                    <br />
-                    <span class="wrong_data" asp-validation-for="Email"></span>
-                </td>
+                <td class="left">Ваш емаил. Указывайте реальный адрес, т.к. на него придет письмо для подтверждения регистрации</td>
                 <td class="right">
-                    <span class="profile_edit">Выберите класс вашего персонажа</span>
-                    @*@Html.DropDownListFor(u => u.IngameClassId, ViewBag.Classes as SelectList, "-Выберите класс персонажа-")*@
-                    <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
-                        <option value="@Guid.NewGuid()">-Выберите класс персонажа-</option>
-                    </select>
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
+                        <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="Email"></span>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td class="left">
-                    <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
-                    <input class="login_page" type="password" asp-for="NewPassword" placeholder="Новый пароль" />
-                    <br />
-                    <span class="wrong_data" asp-validation-for="NewPassword"></span>
-                </td>
-                <td class="avatar" rowspan="2">
-                    <img src="@Model.AvatarImage" /><br />
-                    <input class="file" type="file" name="avatarImage" accept=".jpg,.jpeg,.gif,.png" />
+                <td class="left">Задайте пароль, только не "qwerty".</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <input class="login_page" type="password" asp-for="NewPassword" placeholder="Новый пароль" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="NewPassword"></span>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td class="left">
-                    <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
-                    <input class="login_page" type="password" asp-for="NewPasswordConfirm" placeholder="Повторите пароль" />
-                    <br />
-                    <span class="wrong_data" asp-validation-for="NewPasswordConfirm"></span>
+                <td class="left">Введите пароль еще раз, чтобы убедиться в своей адекватности.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <input class="login_page" type="password" asp-for="NewPasswordConfirm" placeholder="Повторите пароль" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="NewPasswordConfirm"></span>
+                    </div>
                 </td>
-
             </tr>
             <tr>
-                <td colspan="2" align="center">
+                <td class="left">А теперь давай, расскажи нам, как зовут твоего паладина.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <input class="login_page" type="text" asp-for="CharacterName" placeholder="Имя персонажа" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CharacterName"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Убедимся что ты играешь за паладина.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CharacterClassId"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">А покажи как свою фотку.</td>
+                <td class="right">
+                    <div>
+                        <img src="@Model.AvatarImage" /><br />
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <input class="file" type="file" name="avatarImage" accept=".jpg,.jpeg,.gif,.png" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <br />
                     <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
                     <input class="login_page" type="password" asp-for="Password" placeholder="Введите текущий пароль" />
