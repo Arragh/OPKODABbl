@@ -12,10 +12,6 @@ namespace OPKODABbl.ViewModels.Account
     {
         public Guid UserId { get; set; }
 
-        [Required(ErrorMessage = "Укажите логин")]
-        [Display(Name = "Логин пользователя")]
-        [DataType(DataType.Text)]
-        [StringLength(64, ErrorMessage = "Логин должен быть от {2} до {1} символов.", MinimumLength = 6)]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Укажите Email")]

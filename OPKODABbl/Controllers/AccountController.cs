@@ -303,7 +303,6 @@ namespace OPKODABbl.Controllers
                     }
 
                     // Обновляем данные пользователя на полученные данные с модели
-                    user.Name = model.Name;
                     user.Email = model.Email;
                     if (!string.IsNullOrWhiteSpace(model.CharacterName))
                     {
@@ -328,12 +327,14 @@ namespace OPKODABbl.Controllers
 
                     ViewBag.Successful = "Профиль сохранён";
 
-                    // Переназначение аватара в случае ошибки валидации, иначе он теряется
+                    // Переназначение аватара, иначе он теряется
                     AvatarImage temp1 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                     if (temp1 != null)
                     {
                         model.AvatarImage = temp1.ImagePath;
                     }
+                    // Переназначение имени пользователя
+                    model.Name = user.Name;
 
                     SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
                     ViewBag.Classes = ingameClasses;
