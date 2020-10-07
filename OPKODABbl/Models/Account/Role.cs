@@ -11,6 +11,7 @@ namespace OPKODABbl.Models.Account
         public string Name { get; set; }
         public string Rank { get; set; }
         public int AccessLevel { get; set; }
+        public string Color { get; set; }
         public List<User> Users { get; set; }
         public Role()
         {

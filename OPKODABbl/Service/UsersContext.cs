@@ -28,6 +28,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "admin",
                 Rank = "Глава гильдии",
+                Color = "#ff0000",
                 AccessLevel = 5
             };
 
@@ -36,6 +37,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "elite",
                 Rank = "Элита",
+                Color = "#ff7d0a",
                 AccessLevel = 4
             };
 
@@ -44,6 +46,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "member",
                 Rank = "Член гильдии",
+                Color = "#68ccf0",
                 AccessLevel = 3
             };
 
@@ -52,6 +55,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "recruit",
                 Rank = "Рекрут",
+                Color = "#dcdcdc",
                 AccessLevel = 2
             };
 
@@ -60,6 +64,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "user",
                 Rank = "Мимо крокодил",
+                Color = "#000000",
                 AccessLevel = 1
             };
             #endregion

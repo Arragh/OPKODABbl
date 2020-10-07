@@ -25,7 +25,7 @@ namespace OPKODABbl.Controllers
         {
             //List<User> users = await _usersDB.Users.Include(u => u.Role).Where(u => u.Role.Name == "clanmember" || u.Role.Name == "admin" || u.Role.Name == "recruit").OrderBy(u => u.Role.Name).ToListAsync();
 
-            List<User> users = await _usersDB.Users.Include(u => u.Role).Where(u => u.Role.AccessLevel >= 2).OrderByDescending(u => u.Role.AccessLevel).ToListAsync();
+            List<User> users = await _usersDB.Users.Include(u => u.Role).Where(u => u.Role.AccessLevel >= 2 && u.Name != "Administrator").OrderByDescending(u => u.Role.AccessLevel).ToListAsync();
 
             List<CharacterClass> characterClasses = await _usersDB.CharacterClasses.ToListAsync();
 
