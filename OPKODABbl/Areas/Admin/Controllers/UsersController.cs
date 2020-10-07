@@ -29,7 +29,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Список пользователей
         public async Task<IActionResult> AllUsers()
         {
-            List<User> users = await _usersDB.Users.Include(u => u.Role).OrderByDescending(u => u.Role).ToListAsync();
+            List<User> users = await _usersDB.Users.Include(u => u.Role).OrderBy(u => u.RegisterDate).ToListAsync();
             List<Role> roles = await _usersDB.Roles.ToListAsync();
             List<CharacterClass> characterClasses = await _usersDB.CharacterClasses.ToListAsync();
 
@@ -51,7 +51,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
             if (user != null)
             {
-                SelectList rolesList = new SelectList(_usersDB.Roles, "Id", "Name", user.RoleId);
+                SelectList rolesList = new SelectList(_usersDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
                 ViewBag.Roles = rolesList;
 
                 EditUserViewModel model = new EditUserViewModel()
@@ -77,6 +77,9 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
             if (user != null)
             {
+                SelectList rolesList = new SelectList(_usersDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
+                ViewBag.Roles = rolesList;
+
                 user.Name = model.Name;
                 user.Email = model.Email;
                 user.RoleId = model.RoleId;

@@ -23,28 +23,44 @@ namespace OPKODABbl.Service
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Добавление ролей
-            Role adminRole = new Role()
+            Role admin = new Role()
             {
                 Id = Guid.NewGuid(),
-                Name = "admin"
+                Name = "admin",
+                Rank = "Глава гильдии",
+                AccessLevel = 5
             };
 
-            Role clanMember = new Role()
+            Role officer = new Role()
             {
                 Id = Guid.NewGuid(),
-                Name = "clanmember"
+                Name = "elite",
+                Rank = "Элита",
+                AccessLevel = 4
             };
 
-            Role clanRecruit = new Role()
+            Role member = new Role()
             {
                 Id = Guid.NewGuid(),
-                Name = "recruit"
+                Name = "member",
+                Rank = "Член гильдии",
+                AccessLevel = 3
             };
 
-            Role userRole = new Role()
+            Role recruit = new Role()
             {
                 Id = Guid.NewGuid(),
-                Name = "user"
+                Name = "recruit",
+                Rank = "Рекрут",
+                AccessLevel = 2
+            };
+
+            Role user = new Role()
+            {
+                Id = Guid.NewGuid(),
+                Name = "user",
+                Rank = "Мимо крокодил",
+                AccessLevel = 1
             };
             #endregion
 
@@ -121,13 +137,14 @@ namespace OPKODABbl.Service
                 Name = "Administrator",
                 Email = "admin@lol.ru",
                 Password = "123456".HashString(),
-                RoleId = adminRole.Id,
+                RegisterDate = DateTime.Now,
+                RoleId = admin.Id,
                 CharacterClassId = paladin.Id
             };
             #endregion
 
             modelBuilder.Entity<CharacterClass>().HasData( new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock } );
-            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, clanMember, clanRecruit, userRole });
+            modelBuilder.Entity<Role>().HasData(new Role[] { admin, officer, member, recruit, user });
             modelBuilder.Entity<User>().HasData(new User[] { Administrator });
             base.OnModelCreating(modelBuilder);
         }

@@ -89,7 +89,7 @@ namespace OPKODABbl.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем пользователя в бд
-                Role role = await _usersDB.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                Role role = await _usersDB.Roles.FirstOrDefaultAsync(r => r.AccessLevel == 1);
 
                 User newUser = new User()
                 {
@@ -97,6 +97,7 @@ namespace OPKODABbl.Controllers
                     Name = model.Name,
                     Email = model.Email,
                     Password = model.Password.HashString(),
+                    RegisterDate = DateTime.Now,
                     CharacterClassId = model.CharacterClassId,
                     Role = role
                 };

@@ -1,21 +1,21 @@
 ﻿@model OPKODABbl.ViewModels.Page.RosterViewModel
 
 <div class="content_wrapper">
-    <table border="1" width="500px">
+
+    <a class="content_wrapper_blue" asp-action="Roster" asp-controller="Page">Состав гильдии</a><br />
+
+    <table class="roster">
         @foreach (var user in Model.Users)
         {
             <tr>
-                <td>
+                <td class="class">
                     <img src="@user.CharacterClass.ClassIconPath" />
                 </td>
-                <td style="color: @user.CharacterClass.ClassColor">
-                    @user.CharacterClass.ClassName
-                </td>
-                <td>
+                <td class="name" style="color: @user.CharacterClass.ClassColor">
                     @user.Name
                 </td>
-                <td>
-                    @user.Role.Name
+                <td class="role">
+                    @user.Role.Rank
                 </td>
             </tr>
         }

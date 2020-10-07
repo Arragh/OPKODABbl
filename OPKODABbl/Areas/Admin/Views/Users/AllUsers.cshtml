@@ -21,6 +21,9 @@
                     @Model.Roles.FirstOrDefault(r => r.Id == user.RoleId).Name
                 </td>
                 <td>
+                    @user.RegisterDate.ToShortDateString()
+                </td>
+                <td>
                     <a asp-action="EditUser" asp-controller="Users" asp-route-userId="@user.Id">Изменить</a>
                 </td>
             </tr>
