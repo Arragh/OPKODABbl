@@ -10,5 +10,6 @@ namespace OPKODABbl.Models.Account
         public Guid Id { get; set; }
         public string ClassIconPath { get; set; }
         public string ClassName { get; set; }
+        public string ClassColor { get; set; }
     }
 }

@@ -16,7 +16,7 @@
                 <td class="left">Класс твоего персонажа.</td>
                 <td class="right">
                     <div>
-                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <img style="vertical-align: middle;" src="~/images/class_icon.png" />
                         <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
                             <option></option>
                         </select>
@@ -63,11 +63,11 @@
                 </td>
             </tr>
             <tr>
-                <td class="left">Аватарка.</td>
+                <td class="left">А какой ты сегодня?</td>
                 <td class="right">
                     <div>
                         <img src="@Model.AvatarImage" /><br />
-                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <img style="vertical-align: middle;" src="~/images/avatar_icon.png" />
                         <input class="file" type="file" name="avatarImage" accept=".jpg,.jpeg,.gif,.png" />
                     </div>
                 </td>

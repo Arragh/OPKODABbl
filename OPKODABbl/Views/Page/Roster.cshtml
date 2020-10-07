@@ -1,14 +1,14 @@
 ﻿@model OPKODABbl.ViewModels.Page.RosterViewModel
 
 <div class="content_wrapper">
-    <table border="1" width="100%">
+    <table border="1" width="500px">
         @foreach (var user in Model.Users)
         {
             <tr>
                 <td>
                     <img src="@user.CharacterClass.ClassIconPath" />
                 </td>
-                <td>
+                <td style="color: @user.CharacterClass.ClassColor">
                     @user.CharacterClass.ClassName
                 </td>
                 <td>

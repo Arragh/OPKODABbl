@@ -53,55 +53,64 @@ namespace OPKODABbl.Service
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_paladin.jpg",
-                ClassName = "Паладин"
+                ClassName = "Паладин",
+                ClassColor = "#f58cba"
             };
             CharacterClass warrior = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_warrior.jpg",
-                ClassName = "Воин"
+                ClassName = "Воин",
+                ClassColor = "#c79c6e"
             };
             CharacterClass hunter = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_hunter.jpg",
-                ClassName = "Охотник"
+                ClassName = "Охотник",
+                ClassColor = "#abd473"
             };
             CharacterClass shaman = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_shaman.jpg",
-                ClassName = "Шаман"
+                ClassName = "Шаман",
+                ClassColor = "#0070de"
             };
             CharacterClass rogue = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_rogue.jpg",
-                ClassName = "Разбойник"
+                ClassName = "Разбойник",
+                ClassColor = "#fff569"
             };
             CharacterClass druid = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_druid.jpg",
-                ClassName = "Друид"
+                ClassName = "Друид",
+                ClassColor = "#ff7d0a"
             };
             CharacterClass priest = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_priest.jpg",
-                ClassName = "Жрец"
+                ClassName = "Жрец",
+                ClassColor = "#ffffff"
             };
             CharacterClass mage = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_mage.jpg",
-                ClassName = "Маг"
+                ClassName = "Маг",
+                ClassColor = "#69ccf0"
             };
             CharacterClass warlock = new CharacterClass
             {
                 Id = Guid.NewGuid(),
                 ClassIconPath = "/images/class_icon_warlock.jpg",
-                ClassName = "Чернокнижник"
+                ClassName = "Чернокнижник",
+                ClassColor = "#9482c9"
             };
             #endregion
 
