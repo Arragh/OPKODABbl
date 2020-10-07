@@ -5,7 +5,7 @@
     <form class="register" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post">
         <table class="register">
             <tr>
-                <td class="left">Ваш логин на сайте ололо</td>
+                <td class="left">Твой логин на сайте. Если собираешься подать заявку на вступление, в качестве логина указывай ник своего персонажа, иначе заявка будет отклонена без рассмотрения.</td>
                 <td class="right">
                     <div>
                         <img style="vertical-align: middle;" src="~/images/login_icon.png" />
@@ -17,7 +17,21 @@
                 </td>
             </tr>
             <tr>
-                <td class="left">Ваш емаил. Указывайте реальный адрес, т.к. на него придет письмо для подтверждения регистрации</td>
+                <td class="left">Класс твоего персонажа.</td>
+                <td class="right">
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
+                        <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CharacterClassId"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Адрес Email. Указывай реальный адрес, т.к. на него придет письмо для подтверждения регистрации.</td>
                 <td class="right">
                     <div>
                         <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
@@ -29,7 +43,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="left">Задайте пароль, только не "qwerty".</td>
+                <td class="left">Задай пароль, отличный от "qwerty" (если, конечно, ты не паладин).</td>
                 <td class="right">
                     <div>
                         <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
@@ -41,40 +55,14 @@
                 </td>
             </tr>
             <tr>
-                <td class="left">Введите пароль еще раз, чтобы убедиться в своей адекватности.</td>
+                <td class="left">Введи пароль еще раз, на всякий случай.</td>
                 <td class="right">
                     <div>
                         <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
-                        <input class="login_page" type="password" asp-for="PasswordConfirm" placeholder="Повторите пароль" />
+                        <input class="login_page" type="password" asp-for="PasswordConfirm" placeholder="Еще раз пароль" />
                     </div>
                     <div class="attention_wrapper">
                         <span class="wrong_data" asp-validation-for="PasswordConfirm"></span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="left">А теперь давай, расскажи нам, как зовут твоего паладина.</td>
-                <td class="right">
-                    <div>
-                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
-                        <input class="login_page" type="text" asp-for="CharacterName" placeholder="Имя персонажа" />
-                    </div>
-                    <div class="attention_wrapper">
-                        <span class="wrong_data" asp-validation-for="CharacterName"></span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="left">Убедимся что ты играешь за паладина.</td>
-                <td class="right">
-                    <div>
-                        <img style="vertical-align: middle;" src="~/images/whitespace_icon.gif" />
-                        <select asp-for="CharacterClassId" asp-items="ViewBag.Classes" required>
-                            <option></option>
-                        </select>
-                    </div>
-                    <div class="attention_wrapper">
-                        <span class="wrong_data" asp-validation-for="CharacterClassId"></span>
                     </div>
                 </td>
             </tr>

@@ -35,10 +35,8 @@ namespace OPKODABbl.ViewModels.Account
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Имя персонажа")]
-        [DataType(DataType.Text)]
-        public string CharacterName { get; set; }
-
+        [Required(ErrorMessage = "Укажите класс вашего персонажа в игре")]
+        [Display(Name = "Класс игрового персонажа")]
         public Guid CharacterClassId { get; set; }
         
         public string AvatarImage { get; set; }

@@ -29,12 +29,6 @@ namespace OPKODABbl.ViewModels.Account
         [Compare("Password", ErrorMessage = "Пароли не совпадают.")]
         public string PasswordConfirm { get; set; }
 
-        [Required(ErrorMessage = "Введите имя вашего персонажа в игре")]
-        [Display(Name = "Имя игрового персонажа")]
-        [DataType(DataType.Text)]
-        [StringLength(64, ErrorMessage = "Имя игрового персонажа должно быть от {2} до {1} символов.", MinimumLength = 2)]
-        public string CharacterName { get; set; }
-
         [Required(ErrorMessage = "Укажите класс вашего персонажа в игре")]
         [Display(Name = "Класс игрового персонажа")]
         public Guid CharacterClassId { get; set; }

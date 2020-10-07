@@ -97,7 +97,6 @@ namespace OPKODABbl.Controllers
                     Name = model.Name,
                     Email = model.Email,
                     Password = model.Password.HashString(),
-                    CharacterName = model.CharacterName,
                     CharacterClassId = model.CharacterClassId,
                     Role = role
                 };
@@ -180,7 +179,6 @@ namespace OPKODABbl.Controllers
                     UserId = user.Id,
                     Name = user.Name,
                     Email = user.Email,
-                    CharacterName = user.CharacterName,
                     CharacterClassId = user.CharacterClassId
                 };
 
@@ -207,6 +205,9 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> EditProfile(EditProfileViewModel model, IFormFile avatarImage)
         {
             int imageSize = 1048576 * 2;
+
+            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            ViewBag.Classes = ingameClasses;
 
             // Ищем такого юзера в БД
             User user = await _usersDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == model.UserId);
@@ -304,10 +305,6 @@ namespace OPKODABbl.Controllers
 
                     // Обновляем данные пользователя на полученные данные с модели
                     user.Email = model.Email;
-                    if (!string.IsNullOrWhiteSpace(model.CharacterName))
-                    {
-                        user.CharacterName = model.CharacterName;
-                    }
                     if (!string.IsNullOrWhiteSpace(model.CharacterClassId.ToString()))
                     {
                         user.CharacterClassId = model.CharacterClassId;
@@ -336,16 +333,15 @@ namespace OPKODABbl.Controllers
                     // Переназначение имени пользователя
                     model.Name = user.Name;
 
-                    SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
-                    ViewBag.Classes = ingameClasses;
-
                     return View(model);
                     //return RedirectToAction("EditProfile", "Account", new { userName = user.Name });
                 }
 
-                // Переназначение аватара в случае ошибки валидации, иначе он теряется
+                // Переназначение lfyys[ в случае ошибки валидации, иначе они теряется
                 AvatarImage temp2 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                 model.AvatarImage = temp2.ImagePath;
+
+                model.Name = user.Name;
 
                 // Возврат модели с ошибкой
                 return View(model);
