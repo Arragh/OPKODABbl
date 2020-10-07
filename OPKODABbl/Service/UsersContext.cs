@@ -143,6 +143,7 @@ namespace OPKODABbl.Service
                 Email = "admin@lol.ru",
                 Password = "123456".HashString(),
                 RegisterDate = DateTime.Now,
+                IsConfirmed = true,
                 RoleId = admin.Id,
                 CharacterClassId = paladin.Id
             };

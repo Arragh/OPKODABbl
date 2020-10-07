@@ -98,6 +98,8 @@ namespace OPKODABbl.Controllers
                     Email = model.Email,
                     Password = model.Password.HashString(),
                     RegisterDate = DateTime.Now,
+                    IsConfirmed = false,
+                    ConfirmationToken = Guid.NewGuid().ToString(),
                     CharacterClassId = model.CharacterClassId,
                     Role = role
                 };
@@ -116,7 +118,13 @@ namespace OPKODABbl.Controllers
                 _usersDB.AvatarImages.Add(avatar);
                 await _usersDB.SaveChangesAsync();
 
-                await Authenticate(newUser); // аутентификация
+                // Подтверждение адреса Email
+                string mailLink = "https://" + "localhost:44358/Account/EmailConfirmation?" + $"userId={newUser.Id}&" + $"confirmationToken={newUser.ConfirmationToken}";
+                EmailConfirmation emailConfirmation = new EmailConfirmation();
+                await emailConfirmation.SendEmailAsync(model.Email, "Подтверждение регистрации на сайте оркодав.ру",
+                    $"Для подтверждения регистрации, надо пройти по ссылке в письме. Если вы не регистрировались, то просто удалите это письмо и забудьте. {mailLink}");
+
+                //await Authenticate(newUser); // аутентификация
 
                 return RedirectToAction("Index", "Main");
             }
@@ -145,8 +153,15 @@ namespace OPKODABbl.Controllers
             if (ModelState.IsValid)
             {
                 User user = await _usersDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name && u.Password == model.Password.HashString());
+
                 if (user != null)
                 {
+                    if (!user.IsConfirmed)
+                    {
+                        ModelState.AddModelError("Password", "Подтвердите регистрацию по ссылке в письме, отправленной вам на Email.");
+                        return View(model);
+                    }
+
                     await Authenticate(user); // аутентификация
 
                     if (model.ReturnUrl != null)
@@ -358,6 +373,25 @@ namespace OPKODABbl.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Main");
+        }
+        #endregion
+
+        #region Подтверждение регистрации
+        [HttpGet]
+        public async Task<IActionResult> EmailConfirmation(Guid userId, string confirmationToken)
+        {
+            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Id == userId && u.ConfirmationToken == confirmationToken);
+            if (user != null)
+            {
+                user.IsConfirmed = true;
+
+                _usersDB.Users.Update(user);
+                await _usersDB.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Main");
+            }
+
+            return Redirect("/Main/PageNotFound");
         }
         #endregion
 

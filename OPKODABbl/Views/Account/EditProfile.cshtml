@@ -1,8 +1,10 @@
 ﻿@model OPKODABbl.ViewModels.Account.EditProfileViewModel
 
 <div class="content_wrapper">
-    <a class="content_wrapper_blue" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Редактирование профиля</a><!--
-    --><a class="content_wrapper_red" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">@Model.Name</a>
+    <a class="content_wrapper_blue" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Редактирование профиля</a>
+    <!--
+    -->
+    <a class="content_wrapper_red" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">@Model.Name</a>
     <form class="edit_profile" asp-action="EditProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
         <input type="hidden" name="UserId" value="@Model.UserId" />
         <div class="attention_wrapper">
