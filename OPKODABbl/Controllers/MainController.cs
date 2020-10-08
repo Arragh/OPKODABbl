@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OPKODABbl.Areas.Admin.Controllers;
 using OPKODABbl.Helpers;
+using OPKODABbl.Models.Account;
 using OPKODABbl.Models.Gallery;
 using OPKODABbl.Models.Main;
 using OPKODABbl.Service;
@@ -14,10 +16,12 @@ namespace OPKODABbl.Controllers
     public class MainController : Controller
     {
         private readonly WebsiteContext _websiteDB;
+        private readonly UsersContext _usersDB;
 
-        public MainController(WebsiteContext context)
+        public MainController(WebsiteContext websiteContext, UsersContext usersContext)
         {
-            _websiteDB = context;
+            _websiteDB = websiteContext;
+            _usersDB = usersContext;
         }
 
         #region Главная страница

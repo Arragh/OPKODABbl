@@ -351,9 +351,12 @@ namespace OPKODABbl.Controllers
                     //return RedirectToAction("EditProfile", "Account", new { userName = user.Name });
                 }
 
-                // Переназначение lfyys[ в случае ошибки валидации, иначе они теряется
+                // Переназначение аватара в случае ошибки валидации, иначе они теряется
                 AvatarImage temp2 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
-                model.AvatarImage = temp2.ImagePath;
+                if (temp2 != null)
+                {
+                    model.AvatarImage = temp2.ImagePath;
+                }
 
                 model.Name = user.Name;
 

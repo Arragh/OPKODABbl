@@ -1,14 +1,15 @@
-﻿<div class="login_header">
+﻿
+<div class="login_header">
     @if (User.Identity.IsAuthenticated)
     {
         <form class="login_pass" asp-action="Logout" asp-controller="Account">
-            @if (User.IsInRole("admin"))
-            {
-                <a asp-action="Index" asp-controller="Home" asp-area="Admin">Админка (черновик)</a>
-            }
             @if (User.Identity.IsAuthenticated)
             {
-                <a asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">Профиль</a>
+                @if (User.IsInRole("admin"))
+                {
+                    <a asp-action="Index" asp-controller="Home" asp-area="Admin">Админка (черновик)</a>
+                }
+                    <a class="login_white" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">@User.Identity.Name</a>
             }
             <input class="logout_button" type="submit" value="Выйти" />
         </form>
