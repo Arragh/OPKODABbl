@@ -13,7 +13,7 @@ namespace OPKODABbl.Models.Account
         public string Password { get; set; }
         public DateTime RegisterDate { get; set; }
         public bool IsConfirmed { get; set; }
-        public string ConfirmationToken { get; set; }
+        public string ConfirmationKey { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
         public Guid CharacterClassId { get; set; }

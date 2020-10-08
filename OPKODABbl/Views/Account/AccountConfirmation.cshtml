@@ -1,0 +1,24 @@
+﻿@model OPKODABbl.ViewModels.Account.AccountConfirmationViewModel
+
+<div class="content_wrapper">
+    <a class="content_wrapper_blue" asp-action="AccountConfirmation" asp-controller="Account">Подтверждение регистрации</a>
+
+    <form class="login_page" asp-action="AccountConfirmation" asp-controller="Account" asp-antiforgery="true" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <img style="vertical-align: middle;" src="~/images/mail_icon.png" />
+            <input class="login_page" type="email" asp-for="Email" placeholder="Адрес Email" />
+        </div>
+        <div class="attention_wrapper">
+            <span class="wrong_data" asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <input class="login_button" type="submit" value="Отправить" />
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

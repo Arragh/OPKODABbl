@@ -67,6 +67,7 @@ namespace OPKODABbl.Controllers
         }
         #endregion
 
+        #region Архив новостей
         public async Task<IActionResult> NewsArchive()
         {
             List<News> news = await _websiteDB.News.OrderByDescending(n => n.NewsDate).ToListAsync();
@@ -97,6 +98,7 @@ namespace OPKODABbl.Controllers
 
             return View(model);
         }
+        #endregion
 
     }
 }

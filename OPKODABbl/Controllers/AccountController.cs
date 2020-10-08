@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using OPKODABbl.Helpers;
 using OPKODABbl.Models.Account;
 using OPKODABbl.Service;
@@ -99,7 +101,7 @@ namespace OPKODABbl.Controllers
                     Password = model.Password.HashString(),
                     RegisterDate = DateTime.Now,
                     IsConfirmed = false,
-                    ConfirmationToken = Guid.NewGuid().ToString(),
+                    ConfirmationKey = Guid.NewGuid().ToString(),
                     CharacterClassId = model.CharacterClassId,
                     Role = role
                 };
@@ -118,15 +120,11 @@ namespace OPKODABbl.Controllers
                 _usersDB.AvatarImages.Add(avatar);
                 await _usersDB.SaveChangesAsync();
 
-                // Подтверждение адреса Email
-                string mailLink = "https://" + "localhost:44358/Account/EmailConfirmation?" + $"userId={newUser.Id}&" + $"confirmationToken={newUser.ConfirmationToken}";
-                EmailConfirmation emailConfirmation = new EmailConfirmation();
-                await emailConfirmation.SendEmailAsync(model.Email, "Подтверждение регистрации на сайте оркодав.ру",
-                    $"Для подтверждения регистрации, надо пройти по ссылке в письме. Если вы не регистрировались, то просто удалите это письмо и забудьте. {mailLink}");
+                // Отправка письма для подтверждения регистрации на Email
+                await SendEmailConfirmation(newUser.Id, newUser.Email, newUser.ConfirmationKey);
 
-                //await Authenticate(newUser); // аутентификация
-
-                return RedirectToAction("Index", "Main");
+                //return RedirectToAction("Index", "Main");
+                return RedirectToAction("ConfirmationStatus", "Account", new { message = "Письмо с подтверждением регистрации было отправлено на указанный адрес Email." });
             }
 
             // В случае ошибок валидации возвращаем модель с сообщениями об ошибках
@@ -376,22 +374,97 @@ namespace OPKODABbl.Controllers
         }
         #endregion
 
-        #region Подтверждение регистрации
+        #region Повторная отправка письма с подтверждением [GET]
         [HttpGet]
-        public async Task<IActionResult> EmailConfirmation(Guid userId, string confirmationToken)
+        public IActionResult AccountConfirmation()
         {
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Id == userId && u.ConfirmationToken == confirmationToken);
+            return View();
+        }
+        #endregion
+
+        #region Повторная отправка письма с подтверждением [POST]
+        [HttpPost]
+        public async Task<IActionResult> AccountConfirmation(AccountConfirmationViewModel model)
+        {
+            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+
             if (user != null)
             {
+                if (user.IsConfirmed)
+                {
+                    ModelState.AddModelError("Email", "Пользователь уже подтвердил регистрацию.");
+                    return View(model);
+                }
+
+                // Отправка письма для подтверждения регистрации на Email
+                await SendEmailConfirmation(user.Id, user.Email, user.ConfirmationKey);
+
+                return RedirectToAction("ConfirmationStatus", "Account", new { message = "Письмо с подтверждением регистрации было отправлено на указанный адрес Email." });
+            }
+
+            ModelState.AddModelError("Email", "Пользователь не найден.");
+            return View(model);
+        }
+        #endregion
+
+        #region Отправка письма с подтверждением регистрации
+        public async Task SendEmailConfirmation(Guid userId, string userEmail, string confirmationKey)
+        {
+            string mailLink = "https://" + "localhost:44358/Account/EmailConfirmation?" + $"userId={userId}&" + $"confirmationKey={confirmationKey}";
+            string subject = "Подтверждение регистрации на сайте оркодав.ру";
+            string message = $"Для подтверждения регистрации пройдите по ссылке, скопировав её в адресную строку браузера. Если вы не регистрировались, то просто удалите это письмо и забудьте.<br> <a href=\"{mailLink}\">Подтвердить регистрацию</a>";
+
+            var emailMessage = new MimeMessage();
+
+            emailMessage.From.Add(new MailboxAddress("Администрация сайта orcodav.ru", "alexvolkov-777@mail.ru"));
+            emailMessage.To.Add(new MailboxAddress("", userEmail));
+            emailMessage.Subject = subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = message
+            };
+
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync("smtp.mail.ru", 25, false);
+                await client.AuthenticateAsync("alexvolkov-777@mail.ru", "Ytrewq#21");
+                await client.SendAsync(emailMessage);
+
+                await client.DisconnectAsync(true);
+            }
+        }
+        #endregion
+
+        #region Метод подтверждения регистрации
+        [HttpGet]
+        public async Task<IActionResult> EmailConfirmation(Guid userId, string confirmationKey)
+        {
+            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Id == userId && u.ConfirmationKey == confirmationKey);
+            if (user != null)
+            {
+                if (user.IsConfirmed)
+                {
+                    return RedirectToAction("ConfirmationStatus", "Account", new { message = "Пользователь уже подтвердил регистрацию." });
+                }
+
                 user.IsConfirmed = true;
 
                 _usersDB.Users.Update(user);
                 await _usersDB.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Main");
+                //return RedirectToAction("Index", "Main");
+                return RedirectToAction("ConfirmationStatus", "Account", new { message = "Регистрация подтверждена." });
             }
 
             return Redirect("/Main/PageNotFound");
+        }
+        #endregion
+
+        #region ConfirmationStatus
+        public IActionResult ConfirmationStatus(string message)
+        {
+            ViewBag.Message = message;
+            return View();
         }
         #endregion
 

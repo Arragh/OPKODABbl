@@ -21,6 +21,7 @@ namespace OPKODABbl.Controllers
             _usersDB = usersDbContext;
         }
 
+        #region Состав гильдии
         public async Task<IActionResult> Roster()
         {
             //List<User> users = await _usersDB.Users.Include(u => u.Role).Where(u => u.Role.Name == "clanmember" || u.Role.Name == "admin" || u.Role.Name == "recruit").OrderBy(u => u.Role.Name).ToListAsync();
@@ -37,5 +38,7 @@ namespace OPKODABbl.Controllers
 
             return View(model);
         }
+        #endregion
+
     }
 }
