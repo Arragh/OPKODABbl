@@ -41,13 +41,13 @@ a.white:hover {
 /*ContentPages*/
 div.content_wrapper {
     width: 1056px;
-    padding: 20px 0px 0px 0px;
+    padding: 4px 0px 0px 0px;
     margin: 0px 0px 5px 0px;
     background-color: rgba(31, 37, 43, 0.7);
     border-left: 1px solid #2e3741;
     border-top: 1px solid #2e3741;
     border-right: 1px solid #2e3741;
-    border-bottom: 1px solid #2e3741;
+    border-bottom: 4px solid #1b8bdf;
     /*border-bottom: 4px solid #1b8bdf;*/
 }
 div.content_title {
@@ -61,7 +61,7 @@ a.content_wrapper_blue {
     color: #ffffff;
     background-color: rgba(0, 140, 227, 0.7);
     padding: 5px 9px 5px 9px;
-    margin: 0px 0px 0px 0px;
+    margin: 0px 0px 0px -1px;
     text-decoration: none;
 }
 a.content_wrapper_red {
@@ -142,7 +142,7 @@ a.login_pass_register {
 
 /*LoginPage*/
 form.login_page {
-    margin: 20px 0px 20px 0px;
+    margin: 30px 0px 20px 0px;
     text-align: center;
 }
 input.login_page {

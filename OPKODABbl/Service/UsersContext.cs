@@ -37,7 +37,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "elite",
                 Rank = "Элита",
-                Color = "#ff7d0a",
+                Color = "#00ff00",
                 AccessLevel = 4
             };
 
@@ -45,8 +45,8 @@ namespace OPKODABbl.Service
             {
                 Id = Guid.NewGuid(),
                 Name = "member",
-                Rank = "Член гильдии",
-                Color = "#68ccf0",
+                Rank = "Боец",
+                Color = "#cdcdcd",
                 AccessLevel = 3
             };
 
@@ -55,7 +55,7 @@ namespace OPKODABbl.Service
                 Id = Guid.NewGuid(),
                 Name = "recruit",
                 Rank = "Рекрут",
-                Color = "#dcdcdc",
+                Color = "#828282",
                 AccessLevel = 2
             };
 
