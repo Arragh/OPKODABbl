@@ -407,12 +407,85 @@ namespace OPKODABbl.Controllers
         }
         #endregion
 
+        #region Восстановление пароля [GET]
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        #endregion
+
+        #region Восстановление пароля [POST]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name && u.Email == model.Email);
+                if (user != null)
+                {
+                    string allowedCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+                    Random rnd = new Random();
+
+                    string newPassword = "";
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        newPassword += allowedCharacters[rnd.Next(allowedCharacters.Length)];
+                    }
+
+                    user.Password = newPassword.HashString();
+
+                    _usersDB.Users.Update(user);
+                    await _usersDB.SaveChangesAsync();
+
+                    await SendEmailNewPassword(user.Name, user.Email, newPassword);
+
+                    return RedirectToAction("ConfirmationStatus", "Account", new { message = "Новый пароль отправлен на почту." });
+                }
+
+                return RedirectToAction("ConfirmationStatus", "Account", new { message = "Пользователь с таким сочетанием Логина и Email не найден." });
+            }
+
+            ModelState.AddModelError("Email", "Что-то пошло не так...");
+
+            return View(model);
+        }
+        #endregion
+
         #region Отправка письма с подтверждением регистрации
         public async Task SendEmailConfirmation(Guid userId, string userEmail, string confirmationKey)
         {
             string mailLink = "https://" + "localhost:44358/Account/EmailConfirmation?" + $"userId={userId}&" + $"confirmationKey={confirmationKey}";
             string subject = "Подтверждение регистрации на сайте оркодав.ру";
             string message = $"Для подтверждения регистрации пройдите по ссылке, скопировав её в адресную строку браузера. Если вы не регистрировались, то просто удалите это письмо и забудьте.<br> <a href=\"{mailLink}\">Подтвердить регистрацию</a>";
+
+            var emailMessage = new MimeMessage();
+
+            emailMessage.From.Add(new MailboxAddress("Администрация сайта orcodav.ru", "alexvolkov-777@mail.ru"));
+            emailMessage.To.Add(new MailboxAddress("", userEmail));
+            emailMessage.Subject = subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = message
+            };
+
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync("smtp.mail.ru", 25, false);
+                await client.AuthenticateAsync("alexvolkov-777@mail.ru", "Ytrewq#21");
+                await client.SendAsync(emailMessage);
+
+                await client.DisconnectAsync(true);
+            }
+        }
+        #endregion
+
+        #region Отправка письма с новым паролем
+        public async Task SendEmailNewPassword(string userName, string userEmail, string newPassword)
+        {
+            string subject = "Новый пароль на сайте оркодав.ру";
+            string message = $"Новый пароль на сайте orcodav.ru<br>Логин: {userName}<br>Пароль: {newPassword}";
 
             var emailMessage = new MimeMessage();
 
