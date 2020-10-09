@@ -627,7 +627,7 @@ table.roster {
 
     }
     table.roster td.class {
-
+        width: 40px;
     }
     table.roster td.name {
         font-family: OPKODAB;

@@ -1,17 +1,17 @@
-﻿@model OPKODABbl.ViewModels.Page.RosterViewModel
+﻿@model List<OPKODABbl.Models.Account.User>
 
 <div class="content_wrapper">
 
     <a class="content_wrapper_blue" asp-action="Roster" asp-controller="Page">Состав гильдии</a><br />
 
     <table class="roster">
-        @foreach (var user in Model.Users)
+        @foreach (var user in Model)
         {
             <tr>
                 <td class="class">
                     <img src="@user.CharacterClass.ClassIconPath" />
                 </td>
-                <td class="name" style="color: @user.CharacterClass.ClassColor">
+                <td class="name" style="color: @user.CharacterClass.ClassColor;">
                     @user.Name
                 </td>
                 <td class="role" style="color: @user.Role.Color;">

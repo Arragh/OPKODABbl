@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OPKODABbl.Areas.Admin.Controllers;
 using OPKODABbl.Helpers;
-using OPKODABbl.Models.Account;
 using OPKODABbl.Models.Gallery;
 using OPKODABbl.Models.Main;
 using OPKODABbl.Service;

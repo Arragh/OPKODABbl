@@ -2,9 +2,6 @@
 using OPKODABbl.Helpers;
 using OPKODABbl.Models.Account;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OPKODABbl.Service
 {
@@ -147,11 +144,47 @@ namespace OPKODABbl.Service
                 RoleId = admin.Id,
                 CharacterClassId = paladin.Id
             };
+
+            User user1 = new User()
+            {
+                Id = Guid.NewGuid(),
+                Name = "User1",
+                Email = "user1@lol.ru",
+                Password = "123456".HashString(),
+                RegisterDate = DateTime.Now,
+                IsConfirmed = true,
+                RoleId = user.Id,
+                CharacterClassId = rogue.Id
+            };
+
+            User user2 = new User()
+            {
+                Id = Guid.NewGuid(),
+                Name = "User2",
+                Email = "user2@lol.ru",
+                Password = "123456".HashString(),
+                RegisterDate = DateTime.Now,
+                IsConfirmed = true,
+                RoleId = user.Id,
+                CharacterClassId = priest.Id
+            };
+
+            User user3 = new User()
+            {
+                Id = Guid.NewGuid(),
+                Name = "User3",
+                Email = "user3@lol.ru",
+                Password = "123456".HashString(),
+                RegisterDate = DateTime.Now,
+                IsConfirmed = true,
+                RoleId = user.Id,
+                CharacterClassId = shaman.Id
+            };
             #endregion
 
-            modelBuilder.Entity<CharacterClass>().HasData( new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock } );
+            modelBuilder.Entity<CharacterClass>().HasData(new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock });
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, officer, member, recruit, user });
-            modelBuilder.Entity<User>().HasData(new User[] { Administrator });
+            modelBuilder.Entity<User>().HasData(new User[] { Administrator, user1, user2, user3 });
             base.OnModelCreating(modelBuilder);
         }
     }

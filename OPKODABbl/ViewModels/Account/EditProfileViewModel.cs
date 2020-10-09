@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
-using OPKODABbl.Models.Account;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OPKODABbl.ViewModels.Account
 {
@@ -38,7 +34,7 @@ namespace OPKODABbl.ViewModels.Account
         [Required(ErrorMessage = "Укажите класс вашего персонажа в игре")]
         [Display(Name = "Класс игрового персонажа")]
         public Guid CharacterClassId { get; set; }
-        
+
         public string AvatarImage { get; set; }
     }
 }

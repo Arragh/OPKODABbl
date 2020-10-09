@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OPKODABbl.Models.Gallery;
 using OPKODABbl.Service;
-using OPKODABbl.ViewModels.Gallery;
 
 namespace OPKODABbl.Controllers
 {
@@ -22,30 +21,9 @@ namespace OPKODABbl.Controllers
         #region Список галерей
         public async Task<IActionResult> Galleries()
         {
-            List<Gallery> galleries = await _websiteDB.Galleries.OrderByDescending(g => g.GalleryDate).ToListAsync();
+            List<Gallery> galleries = await _websiteDB.Galleries.Include(g => g.GalleryImages).OrderByDescending(g => g.GalleryDate).ToListAsync();
 
-            List<GalleryImage> tempImages = await _websiteDB.GalleryImages.OrderBy(i => i.ImageDate).ToListAsync();
-            Dictionary<Guid, string> previewImages = new Dictionary<Guid, string>();
-            foreach (var item in galleries)
-            {
-                GalleryImage image = tempImages.FirstOrDefault(i => i.GalleryId == item.Id);
-                if (image != null)
-                {
-                    previewImages.Add(image.GalleryId, image.ImagePathScaled);
-                }
-                else
-                {
-                    previewImages.Add(item.Id, "/images/news_noimage.jpg");
-                }
-            }
-
-            GalleriesViewModel model = new GalleriesViewModel()
-            {
-                Galleries = galleries,
-                PreviewImages = previewImages
-            };
-
-            return View(model);
+            return View(galleries);
         }
         #endregion
 
@@ -56,6 +34,7 @@ namespace OPKODABbl.Controllers
 
             if (gallery != null)
             {
+                // Урезание заголовка до 40 символов
                 if (gallery.GalleryTitle.Length > 40)
                 {
                     // Ограничиваем длину заголовка и всё что сверх меры - переносим на новую отдельную строку
@@ -68,6 +47,7 @@ namespace OPKODABbl.Controllers
                     // Возврат записи в преобразованном виде
                     return View(gallery);
                 }
+
                 // Или в изначальном виде
                 return View(gallery);
             }

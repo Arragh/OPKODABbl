@@ -1,14 +1,14 @@
-﻿@model OPKODABbl.ViewModels.News.ReadNewsViewModel
+﻿@model OPKODABbl.Models.Main.News
 
 <div class="content_wrapper">
     <a class="content_wrapper_blue" asp-action="NewsArchive" asp-controller="News">Новости</a><!--
-    --><a class="content_wrapper_red" asp-action="ReadNews" asp-controller="News" asp-route-newsId="@Model.News.Id">@Model.News.NewsTitle</a>
+    --><a class="content_wrapper_red" asp-action="ReadNews" asp-controller="News" asp-route-newsId="@Model.Id">@Model.NewsTitle</a>
     <div class="readnews_wrapper">
         <div class="readnews_bodytext">
-            @Html.Raw(Model.News.NewsBody)
+            @Html.Raw(Model.NewsBody)
         </div>
         <div class="readnews_image_wrapper">
-            @foreach (var image in Model.NewsImages)
+            @foreach (var image in Model.NewsImages.OrderBy(i => i.ImageDate))
             {
                 <div class="readnews_image" style="background-image: url(@image.ImagePathScaled)">
                     <a class="readnews_image_link" href="@image.ImagePathOriginal"></a>
@@ -16,8 +16,8 @@
                 </div>
             }
         </div>
-        <span class="readnews_date">@Model.News.NewsDate.ToShortDateString()</span>
-        <span class="readnews_author">@Model.News.NewsUserName</span>
+        <span class="readnews_date">@Model.NewsDate.ToShortDateString()</span>
+        <span class="readnews_author">@Model.NewsUserName</span>
     </div>
 </div>
 

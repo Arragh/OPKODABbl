@@ -1,11 +1,16 @@
-﻿@model OPKODABbl.ViewModels.Gallery.GalleriesViewModel
+﻿@model List<OPKODABbl.Models.Gallery.Gallery>
 
 <div class="content_wrapper">
 	<a class="content_wrapper_blue" asp-action="Galleries" asp-controller="Gallery">Галерея</a><br />
     <div class="galleries_wrapper">
-        @foreach (var gallery in Model.Galleries)
-		{
-			<div class="previewgallery_wrapper" style="background-image: url(@Model.PreviewImages.FirstOrDefault(i => i.Key == gallery.Id).Value)">
+        @foreach (var gallery in Model)
+        {
+            string previewImagePath = "/images/news_noimage.jpg";
+            if (gallery.GalleryImages.Count > 0)
+            {
+                previewImagePath = gallery.GalleryImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.GalleryId == gallery.Id).ImagePathScaled;
+            }
+			<div class="previewgallery_wrapper" style="background-image: url(@previewImagePath)">
 				<img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
 				<div class="galleries_title">@gallery.GalleryTitle</div>
                 <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
@@ -13,4 +18,3 @@
 		}
     </div>
 </div>
-

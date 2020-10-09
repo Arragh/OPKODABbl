@@ -1,9 +1,4 @@
-﻿using OPKODABbl.Models.Gallery;
-using OPKODABbl.Models.Main;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OPKODABbl.ViewModels.Main
 {

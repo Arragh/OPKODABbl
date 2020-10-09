@@ -10,7 +10,7 @@
                </div>
            }
            <div class="viewgallery_image_wrapper">
-               @foreach (var image in Model.GalleryImages)
+               @foreach (var image in Model.GalleryImages.OrderByDescending(i => i.ImageDate))
                {
                    <div class="viewgallery_image" style="background-image: url(@image.ImagePathScaled)">
                        <a class="readnews_image_link" href="@image.ImagePathOriginal"></a>

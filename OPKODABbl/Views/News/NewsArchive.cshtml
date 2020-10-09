@@ -1,15 +1,20 @@
-﻿@model OPKODABbl.ViewModels.News.NewsArchiveViewModel
+﻿@model List<OPKODABbl.Models.Main.News>
 
 <div class="content_wrapper">
     <a class="content_wrapper_blue" asp-action="NewsArchive" asp-controller="News">Новости</a><br />
     <div class="newsarchive_wrapper">
-        @foreach (var item in Model.News)
+        @foreach (var news in Model)
         {
-            <div class="news_wrapper" style="background-image: url(@Model.PreviewImages.FirstOrDefault(i => i.Key == item.Id).Value)">
-                <img src="~/images/news_img_border.png" /><span class="news_date">@item.NewsDate.ToShortDateString()</span>
-                <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@item.Id"></a>
-                <div class="newsarchive_title">@item.NewsTitle</div>
-                <div class="newsarchive_bodytext">@Html.Raw(item.NewsBody)</div>
+            string previewImagePath = "/images/news_noimage.jpg";
+            if (news.NewsImages.Count > 0)
+            {
+                previewImagePath = news.NewsImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.NewsId == news.Id).ImagePathScaled;
+            }
+            <div class="news_wrapper" style="background-image: url(@previewImagePath)">
+                <img src="~/images/news_img_border.png" /><span class="news_date">@news.NewsDate.ToShortDateString()</span>
+                <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@news.Id"></a>
+                <div class="newsarchive_title">@news.NewsTitle</div>
+                <div class="newsarchive_bodytext">@Html.Raw(news.NewsBody)</div>
                 <div class="newsarchive_readnext">Читать дальше...</div>
             </div>
         }
