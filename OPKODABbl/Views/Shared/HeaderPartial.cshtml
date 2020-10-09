@@ -9,7 +9,7 @@
                 {
                     <a asp-action="Index" asp-controller="Home" asp-area="Admin">Админка (черновик)</a>
                 }
-                    <a class="login_white" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">@User.Identity.Name</a>
+                <a class="login_white" asp-action="EditProfile" asp-controller="Account" asp-route-userName="@User.Identity.Name">@User.Identity.Name</a>
             }
             <input class="logout_button" type="submit" value="Выйти" />
         </form>

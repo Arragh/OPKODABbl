@@ -9,7 +9,14 @@
     if (newsPosition == 0)
     {
         <div class="news0">
-            <img class="news_img" src="@Model.NewsImages.FirstOrDefault(i=>i.NewsId == news.Id).ImagePathScaled" />
+            @if (news.NewsImages.Count > 0)
+            {
+                <img class="news_img" src="@news.NewsImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.NewsId == news.Id).ImagePathScaled" />
+            }
+            else
+            {
+                <img class="news_img" src="/images/news_noimage.jpg" />
+            }
             <div class="news_img_border"><span class="news_date">@news.NewsDate.ToShortDateString()</span></div>
             <span class="news_title">@news.NewsTitle</span>
             <span class="news_body">
@@ -23,7 +30,14 @@
     else
     {
         <div class="news1">
-            <img class="news_img" src="@Model.NewsImages.FirstOrDefault(i=>i.NewsId == news.Id).ImagePathScaled" />
+            @if (news.NewsImages.Count > 0)
+            {
+                <img class="news_img" src="@news.NewsImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.NewsId == news.Id).ImagePathScaled" />
+            }
+            else
+            {
+                <img class="news_img" src="/images/news_noimage.jpg" />
+            }
             <div class="news_img_border"><span class="news_date">@news.NewsDate.ToShortDateString()</span></div>
             <span class="news_title">@news.NewsTitle</span>
             <span class="news_body">

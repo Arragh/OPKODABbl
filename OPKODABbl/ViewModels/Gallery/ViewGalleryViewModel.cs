@@ -9,6 +9,6 @@ namespace OPKODABbl.ViewModels.Gallery
     public class ViewGalleryViewModel
     {
         public Models.Gallery.Gallery Gallery { get; set; }
-        public IEnumerable<GalleryImage> GalleryImages { get; set; }
+        //public List<GalleryImage> GalleryImages { get; set; }
     }
 }

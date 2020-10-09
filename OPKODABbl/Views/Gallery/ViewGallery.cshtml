@@ -1,13 +1,12 @@
-﻿@model OPKODABbl.ViewModels.Gallery.ViewGalleryViewModel
-
+﻿@model OPKODABbl.Models.Gallery.Gallery
 <div class="content_wrapper">
     <a class="content_wrapper_blue" asp-action="Galleries" asp-controller="Gallery">Галерея</a><!--
-    --><a class="content_wrapper_red" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@Model.Gallery.Id">@Model.Gallery.GalleryTitle</a>
+    --><a class="content_wrapper_red" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@Model.Id">@Model.GalleryTitle</a>
        <div class="viewgallery_wrapper">
-           @if (!string.IsNullOrEmpty(Model.Gallery.GalleryDescription))
+           @if (!string.IsNullOrEmpty(Model.GalleryDescription))
            {
                <div class="viewgallery_bodytext">
-                   @Html.Raw(Model.Gallery.GalleryDescription)
+                   @Html.Raw(Model.GalleryDescription)
                </div>
            }
            <div class="viewgallery_image_wrapper">
@@ -19,7 +18,7 @@
                    </div>
                }
            </div>
-           <span class="readnews_date">@Model.Gallery.GalleryDate.ToShortDateString()</span>
-           <span class="readnews_author">@Model.Gallery.GalleryUserName</span>
+           <span class="readnews_date">@Model.GalleryDate.ToShortDateString()</span>
+           <span class="readnews_author">@Model.GalleryUserName</span>
        </div>
 </div>

@@ -9,8 +9,7 @@ namespace OPKODABbl.ViewModels.Main
 {
     public class IndexViewModel
     {
-        public IEnumerable<Models.Main.News> News { get; set; }
-        public IEnumerable<NewsImage> NewsImages { get; set; }
-        public IEnumerable<Models.Gallery.Gallery> Galleries { get; set; }
+        public List<Models.Main.News> News { get; set; }
+        public List<Models.Gallery.Gallery> Galleries { get; set; }
     }
 }

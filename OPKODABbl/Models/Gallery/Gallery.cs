@@ -13,6 +13,6 @@ namespace OPKODABbl.Models.Gallery
         public DateTime GalleryDate { get; set; }
         public string GalleryUserName { get; set; }
         public string GallerySliderImage { get; set; }
-        public virtual ICollection<GalleryImage> GalleryImages { get; set; }
+        public List<GalleryImage> GalleryImages { get; set; }
     }
 }

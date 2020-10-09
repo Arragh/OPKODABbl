@@ -13,6 +13,6 @@ namespace OPKODABbl.Models.Main
         public string ImagePathScaled { get; set; }
         public DateTime ImageDate { get; set; }
         public Guid NewsId { get; set; }
-        public virtual News News { get; set; }
+        public News News { get; set; }
     }
 }

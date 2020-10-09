@@ -12,6 +12,6 @@ namespace OPKODABbl.Models.Main
         public string NewsBody { get; set; }
         public DateTime NewsDate { get; set; }
         public string NewsUserName { get; set; }
-        public virtual ICollection<NewsImage> NewsImages { get; set; }
+        public List<NewsImage> NewsImages { get; set; }
     }
 }

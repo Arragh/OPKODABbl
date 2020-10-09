@@ -52,12 +52,10 @@ namespace OPKODABbl.Controllers
         #region Просмотр галереи
         public async Task<IActionResult> ViewGallery(Guid galleryId)
         {
-            Gallery gallery = await _websiteDB.Galleries.FirstOrDefaultAsync(g => g.Id == galleryId);
+            Gallery gallery = await _websiteDB.Galleries.Include(g => g.GalleryImages).FirstOrDefaultAsync(g => g.Id == galleryId);
 
             if (gallery != null)
             {
-                List<GalleryImage> galleryImages = await _websiteDB.GalleryImages.Where(i => i.GalleryId == galleryId).OrderByDescending(i => i.ImageDate).ToListAsync();
-
                 if (gallery.GalleryTitle.Length > 40)
                 {
                     // Ограничиваем длину заголовка и всё что сверх меры - переносим на новую отдельную строку
@@ -68,24 +66,10 @@ namespace OPKODABbl.Controllers
                     gallery.GalleryDescription = titleOverflow + gallery.GalleryDescription;
 
                     // Возврат записи в преобразованном виде
-                    ViewGalleryViewModel model = new ViewGalleryViewModel()
-                    {
-                        Gallery = gallery,
-                        GalleryImages = galleryImages
-                    };
-
-                    return View(model);
+                    return View(gallery);
                 }
-                else
-                {
-                    ViewGalleryViewModel model = new ViewGalleryViewModel()
-                    {
-                        Gallery = gallery,
-                        GalleryImages = galleryImages
-                    };
-
-                    return View(model);
-                }
+                // Или в изначальном виде
+                return View(gallery);
             }
             else
             {
