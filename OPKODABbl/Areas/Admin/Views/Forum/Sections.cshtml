@@ -1,0 +1,42 @@
+﻿@model List<OPKODABbl.Models.Forum.Section>
+
+<table border="1" align="center">
+    @foreach (var item1 in Model.OrderBy(s => s.SectionPosition))
+	{
+		 <tr style="background-color: red;">
+			 <td>
+				 @item1.SectionName
+			 </td>
+			 <td>@Html.ActionLink("Вверх", "MoveSectionUp", "Forum", new { sectionId = item1.Id })</td>
+             <td>@Html.ActionLink("Вниз", "MoveSectionDown", "Forum", new { sectionId = item1.Id })</td>
+		 </tr>
+		 @foreach (var item2 in item1.Subsections.OrderBy(s => s.SubsectionPosition))
+		 {
+			<tr>
+				<td>
+					-----@item2.SubsectionName
+				</td>
+                <td>@Html.ActionLink("Вверх", "MoveSubsectionUp", "Forum", new { sectionId = item1.Id, subsectionId = item2.Id })</td>
+                <td>@Html.ActionLink("Вниз", "MoveSubsectionDown", "Forum", new { sectionId = item1.Id, subsectionId = item2.Id })</td>
+			</tr>
+		 }
+		<tr>
+            <td colspan="3">
+                <form asp-action="CreateSubsection" asp-controller="Forum" method="post">
+                    <input type="hidden" name="sectionId" value="@item1.Id" />
+                    <input type="text" name="subsectionName" />
+                    <input type="submit" value="Создать подраздел" />
+                </form>
+            </td>
+		</tr>
+	}
+</table>
+
+<br /><br /><br />
+
+<center>
+	<form asp-action="CreateSection" asp-controller="Forum" method="post">
+		<input type="text" name="sectionName" />
+		<input type="submit" value="Создать раздел" />
+	</form>
+</center>

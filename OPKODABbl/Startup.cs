@@ -15,6 +15,7 @@ namespace OPKODABbl
         {
             services.AddDbContext<WebsiteContext>(options => options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Orcodav_WebsiteDB;Trusted_Connection=True;"));
             services.AddDbContext<UsersContext>(options => options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Orcodav_UsersDB;Trusted_Connection=True;"));
+            services.AddDbContext<ForumContext>(options => options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Orcodav_ForumDB;Trusted_Connection=True;"));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
