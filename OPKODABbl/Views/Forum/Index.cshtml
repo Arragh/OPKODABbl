@@ -1,0 +1,25 @@
+﻿@model List<OPKODABbl.Models.Forum.Section>
+
+<div class="content_wrapper">
+
+    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a>
+
+    <table class="forum_main">
+        @foreach (var sec in Model)
+        {
+            <tr>
+                <td class="section_title">
+                    @sec.SectionName
+                </td>
+            </tr>
+            @foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@subsec.Id">@subsec.SubsectionName</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

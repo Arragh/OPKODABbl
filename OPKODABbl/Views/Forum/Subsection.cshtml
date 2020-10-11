@@ -1,0 +1,14 @@
+﻿@model OPKODABbl.Models.Forum.Subsection
+
+@Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
+
+<table border="1">
+    @foreach (var topic in Model.Topics)
+	{
+		 <tr>
+			 <td>
+                 <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+			 </td>
+		 </tr>
+	}
+</table>

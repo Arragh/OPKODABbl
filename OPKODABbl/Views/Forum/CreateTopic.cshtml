@@ -1,0 +1,8 @@
+﻿@model OPKODABbl.ViewModels.Forum.CreateTopicViewModel
+
+<form asp-action="CreateTopic" asp-controller="Forum" method="post">
+    <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
+    <input type="text" asp-for="TopicName" /><br />
+    <textarea asp-for="TopicBody"></textarea>
+    <input type="submit" value="Создать тему" />
+</form>

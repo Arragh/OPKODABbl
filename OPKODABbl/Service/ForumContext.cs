@@ -11,6 +11,7 @@ namespace OPKODABbl.Service
     {
         public DbSet<Section> Sections { get; set; }
         public DbSet<Subsection> Subsections { get; set; }
+        public DbSet<Topic> Topics { get; set; }
 
         public ForumContext(DbContextOptions<ForumContext> options) : base(options)
         {

@@ -51,10 +51,8 @@ namespace OPKODABbl.Controllers
                 // Или в изначальном виде
                 return View(gallery);
             }
-            else
-            {
-                return Redirect("/Main/PageNotFound");
-            }
+
+            return Redirect("/Main/PageNotFound");
 
         }
         #endregion
