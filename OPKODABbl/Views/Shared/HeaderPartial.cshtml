@@ -18,7 +18,7 @@
     {
         <form class="login_pass" asp-action="Login" asp-controller="Account" asp-route-ReturnUrl="@Url.PageLink()" asp-antiforgery="true" method="post">
             <img src="~/images/login_icon.png" />
-            <input type="text" placeholder="Логин" class="login_pass" name="Name" required minlength="6" />
+            <input type="text" placeholder="Логин" class="login_pass" name="Name" required minlength="4" />
             <img src="~/images/pass_icon.png" />
             <input type="password" placeholder="Пароль" class="login_pass" name="Password" required minlength="6" />
             <input class="login_button" type="submit" value="Войти" />

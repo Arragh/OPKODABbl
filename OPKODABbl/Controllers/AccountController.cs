@@ -24,12 +24,12 @@ namespace OPKODABbl.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UsersContext _usersDB;
+        private readonly WebsiteContext _websiteDB;
         private IWebHostEnvironment _appEnvironment;
 
-        public AccountController(UsersContext usersDbContext, IWebHostEnvironment appEnvironment)
+        public AccountController(WebsiteContext websiteDbContext, IWebHostEnvironment appEnvironment)
         {
-            _usersDB = usersDbContext;
+            _websiteDB = websiteDbContext;
             _appEnvironment = appEnvironment;
         }
 
@@ -37,7 +37,7 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
             return View();
@@ -74,13 +74,13 @@ namespace OPKODABbl.Controllers
             }
 
             // Проверяем пользователя на дубликат по имени
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
             if (user != null)
             {
                 ModelState.AddModelError("Name", "Пользователь с таким именем уже существует.");
             }
             // И по адресу Email
-            user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
             if (user != null)
             {
                 ModelState.AddModelError("Email", "Данный адрес Email уже занят.");
@@ -90,7 +90,7 @@ namespace OPKODABbl.Controllers
             if (ModelState.IsValid)
             {
                 // добавляем пользователя в бд
-                Role role = await _usersDB.Roles.FirstOrDefaultAsync(r => r.AccessLevel == 1);
+                Role role = await _websiteDB.Roles.FirstOrDefaultAsync(r => r.AccessLevel == 1);
 
                 User newUser = new User()
                 {
@@ -115,9 +115,9 @@ namespace OPKODABbl.Controllers
                     UserId = newUser.Id
                 };
 
-                _usersDB.Users.Add(newUser);
-                _usersDB.AvatarImages.Add(avatar);
-                await _usersDB.SaveChangesAsync();
+                _websiteDB.Users.Add(newUser);
+                _websiteDB.AvatarImages.Add(avatar);
+                await _websiteDB.SaveChangesAsync();
 
                 // Отправка письма для подтверждения регистрации на Email
                 await SendEmailConfirmation(newUser.Id, newUser.Email, newUser.ConfirmationKey);
@@ -127,7 +127,7 @@ namespace OPKODABbl.Controllers
             }
 
             // В случае ошибок валидации возвращаем модель с сообщениями об ошибках
-            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
             return View(model);
@@ -149,7 +149,7 @@ namespace OPKODABbl.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _usersDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name && u.Password == model.Password.HashString());
+                User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name && u.Password == model.Password.HashString());
 
                 if (user != null)
                 {
@@ -178,10 +178,10 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> EditProfile(string userName)
         {
             // Находим пользователя по имени
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Name == userName);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == userName);
 
             // Находим его аватар
-            AvatarImage avatarImage = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
+            AvatarImage avatarImage = await _websiteDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
 
             // Проверяем, чтобы пользователь не был NUll и чтобы имя залогиненного пользователя совпадало с полученным в методе
             if (User.Identity.Name == userName && user != null)
@@ -201,7 +201,7 @@ namespace OPKODABbl.Controllers
                     model.AvatarImage = avatarImage.ImagePath;
                 }
 
-                SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
+                SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName", user.CharacterClassId);
                 ViewBag.Classes = ingameClasses;
 
                 return View(model);
@@ -219,11 +219,11 @@ namespace OPKODABbl.Controllers
         {
             int imageSize = 1048576 * 2;
 
-            SelectList ingameClasses = new SelectList(_usersDB.CharacterClasses, "Id", "ClassName");
+            SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
             // Ищем такого юзера в БД
-            User user = await _usersDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == model.UserId);
+            User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == model.UserId);
 
             // Проверяем, что такой юзер существует
             if (user != null)
@@ -290,7 +290,7 @@ namespace OPKODABbl.Controllers
                         }
 
                         // Удаляем предыдущий аватар
-                        AvatarImage temp = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
+                        AvatarImage temp = await _websiteDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
 
                         // Проверяем, чтобы предыдущий аватар не оказался NULL или дефолтным
                         if (temp != null && temp.ImageName != "default")
@@ -313,7 +313,7 @@ namespace OPKODABbl.Controllers
                         };
 
                         // Сохраняем аватар в БД
-                        await _usersDB.AvatarImages.AddAsync(avatar);
+                        await _websiteDB.AvatarImages.AddAsync(avatar);
                     }
 
                     // Обновляем данные пользователя на полученные данные с модели
@@ -329,8 +329,8 @@ namespace OPKODABbl.Controllers
                     }
 
                     // Сохраняем
-                    _usersDB.Users.Update(user);
-                    await _usersDB.SaveChangesAsync();
+                    _websiteDB.Users.Update(user);
+                    await _websiteDB.SaveChangesAsync();
 
                     // Перезаписываем куки на новые, с обновленными данными
                     await Authenticate(user);
@@ -338,7 +338,7 @@ namespace OPKODABbl.Controllers
                     ViewBag.Successful = "Профиль сохранён";
 
                     // Переназначение аватара, иначе он теряется
-                    AvatarImage temp1 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
+                    AvatarImage temp1 = await _websiteDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                     if (temp1 != null)
                     {
                         model.AvatarImage = temp1.ImagePath;
@@ -351,7 +351,7 @@ namespace OPKODABbl.Controllers
                 }
 
                 // Переназначение аватара в случае ошибки валидации, иначе они теряется
-                AvatarImage temp2 = await _usersDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
+                AvatarImage temp2 = await _websiteDB.AvatarImages.FirstOrDefaultAsync(a => a.UserId == user.Id);
                 if (temp2 != null)
                 {
                     model.AvatarImage = temp2.ImagePath;
@@ -388,7 +388,7 @@ namespace OPKODABbl.Controllers
         [HttpPost]
         public async Task<IActionResult> AccountConfirmation(AccountConfirmationViewModel model)
         {
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user != null)
             {
@@ -423,7 +423,7 @@ namespace OPKODABbl.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name && u.Email == model.Email);
+                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name && u.Email == model.Email);
                 if (user != null)
                 {
                     string allowedCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -438,8 +438,8 @@ namespace OPKODABbl.Controllers
 
                     user.Password = newPassword.HashString();
 
-                    _usersDB.Users.Update(user);
-                    await _usersDB.SaveChangesAsync();
+                    _websiteDB.Users.Update(user);
+                    await _websiteDB.SaveChangesAsync();
 
                     await SendEmailNewPassword(user.Name, user.Email, newPassword);
 
@@ -514,7 +514,7 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> EmailConfirmation(Guid userId, string confirmationKey)
         {
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Id == userId && u.ConfirmationKey == confirmationKey);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Id == userId && u.ConfirmationKey == confirmationKey);
             if (user != null)
             {
                 if (user.IsConfirmed)
@@ -524,8 +524,8 @@ namespace OPKODABbl.Controllers
 
                 user.IsConfirmed = true;
 
-                _usersDB.Users.Update(user);
-                await _usersDB.SaveChangesAsync();
+                _websiteDB.Users.Update(user);
+                await _websiteDB.SaveChangesAsync();
 
                 //return RedirectToAction("Index", "Main");
                 return RedirectToAction("ConfirmationStatus", "Account", new { message = "Регистрация подтверждена." });

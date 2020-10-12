@@ -1,15 +1,82 @@
 ﻿@model OPKODABbl.Models.Forum.Topic
 
-<table border="1">
+<table border="1" width="100%">
     <tr>
         <td colspan="2">@Model.TopicName</td>
     </tr>
-    <tr>
-        <td>
-            Тут будет информация о юзере
-        </td>
-        <td>
-            @Model.TopicBody
-        </td>
-    </tr>
+    @if (ViewBag.CurrentPage == 1)
+    {
+        <tr>
+            <td width="20%">
+                @if (Model.User != null)
+                {
+                    @Model.User.Name
+                    <br />
+                    @if (Model.User.AvatarImage != null)
+                    {
+                        <img src="@Model.User.AvatarImage.ImagePath" />
+                    }
+                }
+                else
+                {
+                    <span>Anonymous</span>
+                }
+            </td>
+            <td>
+                @Model.TopicBody
+            </td>
+        </tr>
+    }
+    @foreach (var reply in Model.Replies)
+    {
+        <tr>
+            <td>
+                @if (reply.User != null)
+                {
+                    @reply.User.Name
+                    <br />
+                    @if (reply.User.AvatarImage != null)
+                    {
+                        <img src="@reply.User.AvatarImage.ImagePath" />
+                    }
+                }
+                else
+                {
+                    <span>Anonymous</span>
+                }
+            </td>
+            <td>
+                @reply.ReplyBody
+            </td>
+        </tr>
+    }
 </table>
+
+<br /><br /><br />
+
+<form asp-action="AddReply" asp-controller="Forum" method="post">
+    <input type="hidden" name="TopicId" value="@Model.Id" />
+    <textarea name="ReplyBody"></textarea>
+    <input type="submit" value="Ответить" />
+</form>
+
+<br /><br /><br />
+
+<center>
+    <pre>
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            if (i != ViewBag.CurrentPage)
+            {
+                string space = " ";
+                @Html.ActionLink(i.ToString(), "ViewTopic", "Forum", new { topicId = Model.Id, page = i })
+                @space
+            }
+            else
+            {
+                string space = i + " ";
+                @space
+            }
+        }
+    </pre>
+</center>

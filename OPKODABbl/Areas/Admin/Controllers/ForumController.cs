@@ -12,17 +12,17 @@ namespace OPKODABbl.Areas.Admin.Controllers
     [Area("Admin")]
     public class ForumController : Controller
     {
-        private readonly ForumContext _forumDB;
+        private readonly WebsiteContext _websiteDB;
 
-        public ForumController(ForumContext forumContext)
+        public ForumController(WebsiteContext websiteContext)
         {
-            _forumDB = forumContext;
+            _websiteDB = websiteContext;
         }
 
         #region Список разделов и подразделов
         public async Task<IActionResult> Sections()
         {
-            List<Section> sections = await _forumDB.Sections.Include(f => f.Subsections).ToListAsync();
+            List<Section> sections = await _websiteDB.Sections.Include(f => f.Subsections).ToListAsync();
 
             return View(sections);
         }
@@ -33,7 +33,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         {
             if (!string.IsNullOrWhiteSpace(sectionName))
             {
-                int position = await _forumDB.Sections.CountAsync() + 1;
+                int position = await _websiteDB.Sections.CountAsync() + 1;
 
                 Section section = new Section()
                 {
@@ -42,8 +42,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     SectionPosition = position
                 };
 
-                await _forumDB.Sections.AddAsync(section);
-                await _forumDB.SaveChangesAsync();
+                await _websiteDB.Sections.AddAsync(section);
+                await _websiteDB.SaveChangesAsync();
 
                 return RedirectToAction("Sections", "Forum");
             }
@@ -55,9 +55,9 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Создание подраздела
         public async Task<IActionResult> CreateSubsection(Guid sectionId, string subsectionName)
         {
-            Section section = await _forumDB.Sections.FirstOrDefaultAsync(s => s.Id == sectionId);
+            Section section = await _websiteDB.Sections.FirstOrDefaultAsync(s => s.Id == sectionId);
 
-            int position = await _forumDB.Subsections.Where(s => s.SectionId == sectionId).CountAsync() + 1;
+            int position = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).CountAsync() + 1;
 
             if (section != null && !string.IsNullOrWhiteSpace(subsectionName))
             {
@@ -69,8 +69,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     SubsectionPosition = position
                 };
 
-                await _forumDB.Subsections.AddAsync(subsection);
-                await _forumDB.SaveChangesAsync();
+                await _websiteDB.Subsections.AddAsync(subsection);
+                await _websiteDB.SaveChangesAsync();
 
                 return RedirectToAction("Sections", "Forum");
             }
@@ -82,7 +82,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг раздела вверх
         public async Task<IActionResult> MoveSectionUp(Guid sectionId)
         {
-            List<Section> sections = await _forumDB.Sections.OrderBy(s => s.SectionPosition).ToListAsync();
+            List<Section> sections = await _websiteDB.Sections.OrderBy(s => s.SectionPosition).ToListAsync();
             Section section = sections.FirstOrDefault(s => s.Id == sectionId);
 
             if (section != null && section.SectionPosition > 1)
@@ -100,8 +100,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     }
                 }
 
-                _forumDB.Sections.Update(section);
-                await _forumDB.SaveChangesAsync();
+                _websiteDB.Sections.Update(section);
+                await _websiteDB.SaveChangesAsync();
             }
 
             return RedirectToAction("Sections", "Forum");
@@ -111,7 +111,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг раздела вниз
         public async Task<IActionResult> MoveSectionDown(Guid sectionId)
         {
-            List<Section> sections = await _forumDB.Sections.OrderBy(s => s.SectionPosition).ToListAsync();
+            List<Section> sections = await _websiteDB.Sections.OrderBy(s => s.SectionPosition).ToListAsync();
             Section section = sections.FirstOrDefault(s => s.Id == sectionId);
 
             int maxPosition = sections.Count();
@@ -131,8 +131,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     }
                 }
 
-                _forumDB.Sections.Update(section);
-                await _forumDB.SaveChangesAsync();
+                _websiteDB.Sections.Update(section);
+                await _websiteDB.SaveChangesAsync();
             }
 
             return RedirectToAction("Sections", "Forum");
@@ -142,7 +142,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг подраздела вверх
         public async Task<IActionResult> MoveSubsectionUp(Guid sectionId, Guid subsectionId)
         {
-            List<Subsection> subsections = await _forumDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
+            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
             Subsection subsection = subsections.FirstOrDefault(s => s.Id == subsectionId);
 
             if (subsection != null && subsection.SubsectionPosition > 1)
@@ -160,8 +160,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     }
                 }
 
-                _forumDB.Subsections.Update(subsection);
-                await _forumDB.SaveChangesAsync();
+                _websiteDB.Subsections.Update(subsection);
+                await _websiteDB.SaveChangesAsync();
             }
 
             return RedirectToAction("Sections", "Forum");
@@ -171,7 +171,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг подраздела вниз
         public async Task<IActionResult> MoveSubsectionDown(Guid sectionId, Guid subsectionId)
         {
-            List<Subsection> subsections = await _forumDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
+            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
             Subsection subsection = subsections.FirstOrDefault(s => s.Id == subsectionId);
 
             int maxPosition = subsections.Count();
@@ -192,8 +192,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     }
                 }
 
-                _forumDB.Subsections.Update(subsection);
-                await _forumDB.SaveChangesAsync();
+                _websiteDB.Subsections.Update(subsection);
+                await _websiteDB.SaveChangesAsync();
             }
 
             return RedirectToAction("Sections", "Forum");

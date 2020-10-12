@@ -13,19 +13,17 @@ namespace OPKODABbl.Controllers
 {
     public class ForumController : Controller
     {
-        private readonly ForumContext _forumDB;
-        private readonly UsersContext _usersDB;
+        private readonly WebsiteContext _websiteDB;
 
-        public ForumController(ForumContext forumContext, UsersContext usersContext)
+        public ForumController(WebsiteContext websiteContext)
         {
-            _forumDB = forumContext;
-            _usersDB = usersContext;
+            _websiteDB = websiteContext;
         }
 
         #region Главная страница форума
         public async Task<IActionResult> Index()
         {
-            List<Section> sections = await _forumDB.Sections.Include(s => s.Subsections).OrderBy(s => s.SectionPosition).ToListAsync();
+            List<Section> sections = await _websiteDB.Sections.Include(s => s.Subsections).OrderBy(s => s.SectionPosition).ToListAsync();
 
             return View(sections);
         }
@@ -34,7 +32,7 @@ namespace OPKODABbl.Controllers
         #region Просмотр раздела форума
         public async Task<IActionResult> Subsection(Guid subsectionId)
         {
-            Subsection subsection = await _forumDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == subsectionId);
+            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == subsectionId);
             if (subsection != null)
             {
                 ViewBag.SubsectionId = subsection.Id;
@@ -49,7 +47,7 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateTopic(Guid subsectionId)
         {
-            Subsection subsection = await _forumDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId);
+            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId);
             if (subsection != null)
             {
                 ViewBag.SubsectionId = subsection.Id;
@@ -63,10 +61,10 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            Subsection subsection = await _forumDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
             if (subsection != null)
             {
-                User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
                 if (user != null)
                 {
                     Topic topic = new Topic()
@@ -78,8 +76,8 @@ namespace OPKODABbl.Controllers
                         UserId = user.Id
                     };
 
-                    await _forumDB.Topics.AddAsync(topic);
-                    await _forumDB.SaveChangesAsync();
+                    await _websiteDB.Topics.AddAsync(topic);
+                    await _websiteDB.SaveChangesAsync();
 
                     return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
                 }
@@ -90,12 +88,51 @@ namespace OPKODABbl.Controllers
         #endregion
 
         #region Просмотр топика
-        public async Task<IActionResult> ViewTopic(Guid topicId)
+        public async Task<IActionResult> ViewTopic(Guid topicId, int page = 1)
         {
-            Topic topic = await _forumDB.Topics.FirstOrDefaultAsync(t => t.Id == topicId);
+            Topic topic = await _websiteDB.Topics.Include(t => t.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                 .FirstOrDefaultAsync(t => t.Id == topicId);
+
             if (topic != null)
             {
+                int count = topic.Replies.Count();
+                int pageSize = 10;
+                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+                ViewBag.CurrentPage = page;
+
                 return View(topic);
+            }
+
+            return Redirect("/Main/PageNotFound");
+        }
+        #endregion
+
+        #region Ответить
+        [HttpPost]
+        public async Task<IActionResult> AddReply(AddReplyViewModel model)
+        {
+            Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
+            if (topic != null)
+            {
+                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                if (user != null)
+                {
+                    Reply reply = new Reply()
+                    {
+                        Id = Guid.NewGuid(),
+                        ReplyBody = model.ReplyBody,
+                        TopicId = model.TopicId,
+                        UserId = user.Id,
+                        ReplyDate = DateTime.Now
+                    };
+
+                    await _websiteDB.Replies.AddAsync(reply);
+                    await _websiteDB.SaveChangesAsync();
+
+                    return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                }
             }
 
             return Redirect("/Main/PageNotFound");

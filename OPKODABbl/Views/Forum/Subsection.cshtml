@@ -1,14 +1,22 @@
 ﻿@model OPKODABbl.Models.Forum.Subsection
 
-@Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
+<div class="content_wrapper">
 
-<table border="1">
-    @foreach (var topic in Model.Topics)
-	{
-		 <tr>
-			 <td>
-                 <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
-			 </td>
-		 </tr>
-	}
-</table>
+    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a><!--
+    --><a class="content_wrapper_red" asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
+
+    <br /><br /><br />
+    @Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
+
+    <table class="forum_main">
+        @foreach (var topic in Model.Topics)
+        {
+            <tr>
+                <td>
+                    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>

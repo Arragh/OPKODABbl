@@ -17,21 +17,21 @@ namespace OPKODABbl.Areas.Admin.Controllers
     [Area("Admin")]
     public class UsersController : Controller
     {
-        private UsersContext _usersDB;
+        private WebsiteContext _websiteDB;
         private IWebHostEnvironment _appEnvironment;
 
-        public UsersController(UsersContext usersDBContext, IWebHostEnvironment appEnvironment)
+        public UsersController(WebsiteContext websiteDBContext, IWebHostEnvironment appEnvironment)
         {
-            _usersDB = usersDBContext;
+            _websiteDB = websiteDBContext;
             _appEnvironment = appEnvironment;
         }
 
         #region Список пользователей
         public async Task<IActionResult> AllUsers()
         {
-            List<User> users = await _usersDB.Users.Include(u => u.Role).OrderBy(u => u.RegisterDate).ToListAsync();
-            List<Role> roles = await _usersDB.Roles.ToListAsync();
-            List<CharacterClass> characterClasses = await _usersDB.CharacterClasses.ToListAsync();
+            List<User> users = await _websiteDB.Users.Include(u => u.Role).OrderBy(u => u.RegisterDate).ToListAsync();
+            List<Role> roles = await _websiteDB.Roles.ToListAsync();
+            List<CharacterClass> characterClasses = await _websiteDB.CharacterClasses.ToListAsync();
 
             AllUsersViewModel model = new AllUsersViewModel()
             {
@@ -47,11 +47,11 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Изменение пользователя [GET]
         public async Task<IActionResult> EditUser(Guid userId)
         {
-            User user = await _usersDB.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user != null)
             {
-                SelectList rolesList = new SelectList(_usersDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
+                SelectList rolesList = new SelectList(_websiteDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
                 ViewBag.Roles = rolesList;
 
                 EditUserViewModel model = new EditUserViewModel()
@@ -73,11 +73,11 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            User user = await _usersDB.Users.FirstAsync(u => u.Id == model.UserId);
+            User user = await _websiteDB.Users.FirstAsync(u => u.Id == model.UserId);
 
             if (user != null)
             {
-                SelectList rolesList = new SelectList(_usersDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
+                SelectList rolesList = new SelectList(_websiteDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
                 ViewBag.Roles = rolesList;
 
                 user.Name = model.Name;
@@ -88,8 +88,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     user.Password = model.Password.HashString();
                 }
 
-                _usersDB.Users.Update(user);
-                await _usersDB.SaveChangesAsync();
+                _websiteDB.Users.Update(user);
+                await _websiteDB.SaveChangesAsync();
 
                 return RedirectToAction("AllUsers", "Users");
             }
