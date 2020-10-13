@@ -14,11 +14,11 @@ div.renderbody {
 div.spacer_link {
     width: 100%;
     text-align: right;
-    margin: 22px 0px 26px 0px;
+    margin: 16px 0px 21px 0px;
 }
     div.spacer_link a {
         font-family: OPKODAB;
-        font-size: 18px;
+        font-size: 19px;
         color: #ffffff;
         text-decoration: none;
         padding: 5px 8px 5px 8px;
@@ -38,6 +38,7 @@ a.white:hover {
     text-decoration: none;
 }
 
+
 /*ContentPages*/
 div.content_wrapper {
     width: 1056px;
@@ -48,7 +49,6 @@ div.content_wrapper {
     border-top: 1px solid #2e3741;
     border-right: 1px solid #2e3741;
     border-bottom: 4px solid #1b8bdf;
-    /*border-bottom: 4px solid #1b8bdf;*/
 }
 div.content_title {
     width: 100%;
@@ -261,6 +261,7 @@ div.main_menu {
     margin: auto;
 }
 div.main_menu ul {
+    float: left;
     padding: 20px 0px 0px 10px;
     margin: 0px 0px 0px 0px;
 }
@@ -268,16 +269,32 @@ div.main_menu li {
     padding: 0px 23px 0px 0px;
     display: inline-block;
 }
-div.main_menu a {
-    font-family: OPKODAB;
-    font-size: 19px;
-    color: #ffffff;
-    text-decoration: none;
+    div.main_menu a {
+        font-family: OPKODAB;
+        font-size: 19px;
+        color: #ffffff;
+        text-decoration: none;
+    }
+        div.main_menu a:hover {
+            color: #ff0000;
+        }
+/*div.test1 {
+    width: 800px;
+    background-color: red;
+    float: left;
+}*/
+div.navigation {
+    float: right;
+    margin: 20px 0px 0px 0px;
 }
-div.main_menu a:hover {
-    color: #ff0000;
-}
-
+    div.navigation a.navigation {
+        font-family: OPKODAB;
+        font-size: 19px;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 5px 8px 5px 8px;
+        background-color: rgba(255, 0, 0, 0.7);
+    }
 
 
 /*News*/
@@ -286,13 +303,16 @@ div.news0 {
     width: 300px;
     height: 395px;
     display: inline-block;
-    background-color: #1f252b;
+    background-color: rgba(28, 32, 39, 0.5);
     background-repeat: no-repeat;
     border-left: 1px solid #2e3741;
     border-top: 1px solid #2e3741;
     border-right: 1px solid #2e3741;
     border-bottom: 4px solid #1b8bdf;
 }
+    div.news0:hover {
+        background-color: #15344d;
+    }
     div.news0 a {
         display: block;
         height: 100%;
@@ -305,13 +325,16 @@ div.news1 {
     height: 395px;
     margin: 0px 0px 0px 71px;
     display: inline-block;
-    background-color: #1f252b;
+    background-color: rgba(28, 32, 39, 0.5);
     background-repeat: no-repeat;
     border-left: 1px solid #2e3741;
     border-top: 1px solid #2e3741;
     border-right: 1px solid #2e3741;
     border-bottom: 4px solid #1b8bdf;
 }
+    div.news1:hover {
+        background-color: #15344d;
+    }
     div.news1 a {
         display: block;
         height: 100%;
@@ -478,90 +501,140 @@ span.readnews_date {
 
 /*NewsArchive*/
 div.newsarchive_wrapper {
-    padding: 20px 20px 0px 20px;
-    font-family: Verdana;
-}
-div.news_wrapper {
     position: relative;
-    width: 982px;
-    min-height: 169px;
+    width: 1056px;
+    height: 169px;
     background-repeat: no-repeat;
-    margin: 17px 17px 40px 17px;
+    margin: 0px 0px 30px 0px;
 }
     div.newsarchive_wrapper img {
         position: absolute;
         float: left;
     }
+
     div.newsarchive_wrapper a {
         width: 100%;
         height: 100%;
         position: absolute;
     }
+    div.newsarchive_wrapper:hover {
+        background-color: #0f4872;
+    }
+
+div.newscontent_wrapper {
+    position: absolute;
+    width: 752px;
+    height: 167px;
+    margin: 0px 0px 0px 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px solid #2e3741;
+    border-right: 4px solid #1b8bdf;
+    border-bottom: 1px solid #2e3741;
+    background-color: rgba(28, 32, 39, 0.5);
+}
 div.newsarchive_title {
-    width: 660px;
-    margin: 0px 0px 0px 320px;
+    width: 732px;
     font-family: OPKODAB;
     font-size: 21px;
     color: #fff343;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    padding: 10px 10px 0px 10px;
 }
-div.newsarchive_bodytext {
-    width: 660px;
-    max-height: 120px;
-    margin: 10px 0px 0px 320px;
+div.newsarchive_body {
+    width: 732px;
+    height: 100px;
+    padding: 5px 10px 5px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
     font-family: Verdana;
     font-size: 14px;
     color: #dcdcdc;
-    overflow: hidden;
-    text-align: justify;
 }
 div.newsarchive_readnext {
-    width: 660px;
-    margin: 0px 0px 0px 320px;
-    padding: 4px 0px 0px 0px;
+    width: 160px;
+    height: 20px;
+    margin: 5px 5px 5px 5px;
     font-family: OPKODAB;
     font-size: 21px;
     color: #ffffff;
-    text-align: right;
+    float: right;
 }
 
 
 /*Galleries*/
-div.galleries_wrapper {
-    padding: 20px 20px 20px 20px;
-    font-family: Verdana;
-}
-div.previewgallery_wrapper {
+div.gallery_wrapper0 {
     position: relative;
-    display: inline-block;
     width: 300px;
     height: 169px;
-    padding: 0px 0px 0px 0px;
-    margin: 17px 17px 40px 17px;
     background-repeat: no-repeat;
-    vertical-align: top;
+    display: inline-block;
+    margin: 0px 0px 60px 0px;
+    background-color: blue;
 }
-div.galleries_wrapper img {
-    position: absolute;
-}
-    div.galleries_wrapper a {
+    div.gallery_wrapper0 img {
         position: absolute;
-        display: block;
-        width: 100%;
-        height: 200px;
+        width: 300px;
+        height: 169px;
     }
-div.galleries_title {
+div.gallery_wrapper0 div.gallery_title {
     position: absolute;
-    margin: 169px 0px 0px 0px;
-    padding: 3px 0px 0px 0px;
-    min-height: 14px;
-    max-height: 28px;
-    font-family: OPKODAB;
-    font-size: 19px;
-    color: #fff343;
+    width: 288px;
+    min-height: 15px;
+    max-height: 35px;
+    margin: 120px 0px 0px 3px;
+    padding: 0px 3px 0px 3px;
     overflow: hidden;
+    background-color: rgba(0, 140, 227, 0.7);
+    text-decoration: none;
+    font-family: OPKODAB;
+    font-size: 21px;
+    color: #ffffff;
+}
+div.gallery_wrapper0:hover div.gallery_title {
+    background-color: rgba(255, 0, 0, 0.7);
+}
+
+div.gallery_wrapper1 {
+    position: relative;
+    width: 300px;
+    height: 169px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin: 0px 0px 60px 74px;
+    background-color: blue;
+}
+    div.gallery_wrapper1 img {
+        position: absolute;
+        width: 300px;
+        height: 169px;
+    }
+div.gallery_wrapper1 div.gallery_title {
+    position: absolute;
+    width: 288px;
+    min-height: 15px;
+    max-height: 35px;
+    margin: 120px 0px 0px 3px;
+    padding: 0px 3px 0px 3px;
+    overflow: hidden;
+    background-color: rgba(0, 140, 227, 0.7);
+    text-decoration: none;
+    font-family: OPKODAB;
+    font-size: 21px;
+    color: #ffffff;
+}
+
+div.gallery_wrapper1:hover div.gallery_title {
+    background-color: rgba(255, 0, 0, 0.7);
+}
+
+a.test {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -644,23 +717,147 @@ table.roster {
 
 
 /*Forum*/
+a.forum_blue {
+    font-family: OPKODAB;
+    font-size: 30px;
+    color: #ffffff;
+    background-color: rgba(0, 140, 227, 0.7);
+    padding: 5px 9px 5px 9px;
+    margin: 0px 0px 10px 0px;
+    text-decoration: none;
+}
+a.forum_red {
+    font-family: OPKODAB;
+    font-size: 30px;
+    color: #ffffff;
+    background-color: rgba(255, 0, 0, 0.7);
+    padding: 5px 9px 5px 9px;
+    margin: 0px 0px 0px 0px;
+    text-decoration: none;
+}
+
 div.forum_wrapper {
     width: 1056px;
-    padding: 4px 0px 0px 0px;
-    margin: 0px 0px 5px 0px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
-table.forum_main {
-    width: 100%;
-    margin: 30px 0px 30px 0px;
+div.forum_content {
+    margin: 0px 0px 0px 0px;
 }
-    table.forum_main td.section_title {
-        font-family: OPKODAB;
-        font-size: 23px;
+div.forum_section_SectionName {
+    width: 706px;
+    display: table-cell;
+    background-color: rgba(0, 140, 227, 0.7);
+    font-family: OPKODAB;
+    font-size: 23px;
+    color: #ffffff;
+    padding: 5px 5px 5px 5px;
+}
+div.forum_section_Topics {
+    width: 100px;
+    display: table-cell;
+    background-color: rgba(255, 0, 0, 0.7);
+    font-family: OPKODAB;
+    font-size: 19px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+div.forum_section_Replies {
+    width: 100px;
+    display: table-cell;
+    background-color: rgba(0, 140, 227, 0.7);
+    font-family: OPKODAB;
+    font-size: 19px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+div.forum_section_LastMessage {
+    width: 150px;
+    display: table-cell;
+    background-color: rgba(255, 0, 0, 0.7);
+    font-family: OPKODAB;
+    font-size: 19px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+
+div.forum_subsection_SubsectionName {
+    width: 706px;
+    display: table-cell;
+    background-color: rgba(28, 32, 39, 0.5);
+}
+    div.forum_subsection_SubsectionName a {
+        font-family: Verdana;
+        font-size: 14px;
         color: #ffffff;
-        background-color: rgba(0, 140, 227, 0.7);
-        padding: 5px;
-        margin: 0px;
+        text-decoration: none;
+        margin: 5px 5px 5px 5px;
     }
+    div.forum_subsection_SubsectionName a:hover {
+        text-decoration: underline;
+    }
+div.forum_subsection_Topics {
+    width: 100px;
+    display: table-cell;
+    background-color: rgba(28, 32, 39, 0.5);
+    font-family: Verdana;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+div.forum_subsection_Replies {
+    width: 100px;
+    display: table-cell;
+    background-color: rgba(28, 32, 39, 0.5);
+    font-family: Verdana;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+div.forum_subsection_LastMessage {
+    width: 150px;
+    display: table-cell;
+    background-color: rgba(28, 32, 39, 0.5);
+    font-family: Verdana;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+}
+
+div.forum_subsection_link_blue {
+    min-width: 70px;
+    max-width: 100px;
+    text-align: center;
+    display: table-cell;
+    background-color: rgba(0, 140, 227, 0.7);
+    font-family: OPKODAB;
+    font-size: 23px;
+    color: #ffffff;
+    padding: 5px 10px 5px 10px;
+}
+div.forum_subsection_link_red {
+    min-width: 100px;
+    max-width: 500px;
+    display: table-cell;
+    background-color: rgba(255, 0, 0, 0.7);
+    font-family: OPKODAB;
+    font-size: 23px;
+    color: #ffffff;
+    padding: 5px 10px 5px 10px;
+}
+div.forum_subsection_link_grey {
+    min-width: 456px;
+    max-width: 866px;
+    display: table-cell;
+    background-color: rgba(28, 32, 39, 0.5);
+    padding: 5px 10px 5px 10px;
+}
 
 
 @font-face {

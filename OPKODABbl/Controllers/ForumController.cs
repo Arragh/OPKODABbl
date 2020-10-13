@@ -24,6 +24,10 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> Index()
         {
             List<Section> sections = await _websiteDB.Sections.Include(s => s.Subsections).OrderBy(s => s.SectionPosition).ToListAsync();
+            foreach (var section in sections)
+            {
+                section.Subsections.OrderBy(s => s.SubsectionPosition);
+            }
 
             return View(sections);
         }
@@ -92,6 +96,7 @@ namespace OPKODABbl.Controllers
         {
             Topic topic = await _websiteDB.Topics.Include(t => t.User).ThenInclude(u => u.AvatarImage)
                                                  .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.Subsection)
                                                  .FirstOrDefaultAsync(t => t.Id == topicId);
 
             if (topic != null)

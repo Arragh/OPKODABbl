@@ -1,69 +1,77 @@
 ﻿@model OPKODABbl.Models.Forum.Topic
 
-<table border="1" width="100%">
-    <tr>
-        <td colspan="2">@Model.TopicName</td>
-    </tr>
-    @if (ViewBag.CurrentPage == 1)
-    {
+<div class="content_wrapper">
+
+    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a><!--
+    --><a class="content_wrapper_red" asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Subsection.Id">@Model.Subsection.SubsectionName</a>
+
+    <br /><br /><br />
+
+    <table border="1" width="100%">
         <tr>
-            <td width="20%">
-                @if (Model.User != null)
-                {
-                    @Model.User.Name
-                    <br />
-                    @if (Model.User.AvatarImage != null)
-                    {
-                        <img src="@Model.User.AvatarImage.ImagePath" />
-                    }
-                }
-                else
-                {
-                    <span>Anonymous</span>
-                }
-            </td>
-            <td>
-                @Model.TopicBody
-            </td>
+            <td colspan="2">@Model.TopicName</td>
         </tr>
-    }
-    @foreach (var reply in Model.Replies)
-    {
-        <tr>
-            <td>
-                @if (reply.User != null)
-                {
-                    @reply.User.Name
-                    <br />
-                    @if (reply.User.AvatarImage != null)
+        @if (ViewBag.CurrentPage == 1)
+        {
+            <tr>
+                <td width="20%">
+                    @if (Model.User != null)
                     {
-                        <img src="@reply.User.AvatarImage.ImagePath" />
+                        @Model.User.Name
+                        <br />
+                        @if (Model.User.AvatarImage != null)
+                        {
+                            <img src="@Model.User.AvatarImage.ImagePath" />
+                        }
                     }
-                }
-                else
-                {
-                    <span>Anonymous</span>
-                }
-            </td>
-            <td>
-                @reply.ReplyBody
-            </td>
-        </tr>
-    }
-</table>
+                    else
+                    {
+                        <span>Пользователь не найден</span>
+                    }
+                </td>
+                <td>
+                    @Model.TopicBody
+                </td>
+            </tr>
+        }
+        @foreach (var reply in Model.Replies)
+        {
+            <tr>
+                <td>
+                    @if (reply.User != null)
+                    {
+                        @reply.User.Name
+                        <br />
+                        @if (reply.User.AvatarImage != null)
+                        {
+                            <img src="@reply.User.AvatarImage.ImagePath" />
+                        }
+                    }
+                    else
+                    {
+                        <span>Пользователь не найден</span>
+                    }
+                </td>
+                <td>
+                    @reply.ReplyBody
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 
-<br /><br /><br />
+    <br /><br /><br />
 
-<form asp-action="AddReply" asp-controller="Forum" method="post">
-    <input type="hidden" name="TopicId" value="@Model.Id" />
-    <textarea name="ReplyBody"></textarea>
-    <input type="submit" value="Ответить" />
-</form>
+    <form asp-action="AddReply" asp-controller="Forum" method="post">
+        <input type="hidden" name="TopicId" value="@Model.Id" />
+        <textarea name="ReplyBody"></textarea>
+        <input type="submit" value="Ответить" />
+    </form>
 
-<br /><br /><br />
+    <br /><br /><br />
 
-<center>
-    <pre>
+    <center>
+        <pre>
         @for (int i = 1; i <= ViewBag.TotalPages; i++)
         {
             if (i != ViewBag.CurrentPage)
@@ -79,4 +87,4 @@
             }
         }
     </pre>
-</center>
+    </center>

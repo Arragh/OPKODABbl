@@ -1,25 +1,44 @@
 ﻿@model List<OPKODABbl.Models.Forum.Section>
 
-<div class="content_wrapper">
+<div class="forum_wrapper">
 
-    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a>
+    @*<a class="forum_blue" asp-action="Index" asp-controller="Forum">Форум</a>*@
 
-    <table class="forum_main">
+    <div class="forum_content">
         @foreach (var sec in Model)
         {
-            <tr>
-                <td class="section_title">
+            <div>
+                <div class="forum_section_SectionName">
                     @sec.SectionName
-                </td>
-            </tr>
-            @foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
+                </div>
+                <div class="forum_section_Topics">
+                    Topics
+                </div>
+                <div class="forum_section_Replies">
+                    Replies
+                </div>
+                <div class="forum_section_LastMessage">
+                    Last message
+                </div>
+            </div>
+            @foreach (var subsec in sec.Subsections)
             {
-                <tr>
-                    <td>
+                <div>
+                    <div class="forum_subsection_SubsectionName">
                         <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@subsec.Id">@subsec.SubsectionName</a>
-                    </td>
-                </tr>
+                    </div>
+                    <div class="forum_subsection_Topics">
+                        17
+                    </div>
+                    <div class="forum_subsection_Replies">
+                        201
+                    </div>
+                    <div class="forum_subsection_LastMessage">
+                        Administrator
+                    </div>
+                </div>
             }
         }
-    </table>
+    </div>
+
 </div>

@@ -1,22 +1,22 @@
 ﻿@model List<OPKODABbl.Models.Main.News>
 
-<div class="content_wrapper">
-    <a class="content_wrapper_blue" asp-action="NewsArchive" asp-controller="News">Новости</a><br />
-    <div class="newsarchive_wrapper">
-        @foreach (var news in Model)
+<div class="forum_wrapper">
+    @*<a class="content_wrapper_blue" asp-action="NewsArchive" asp-controller="News">Новости</a><br />*@
+    @foreach (var news in Model)
+    {
+        string previewImagePath = "/images/news_noimage.jpg";
+        if (news.NewsImages.Count > 0)
         {
-            string previewImagePath = "/images/news_noimage.jpg";
-            if (news.NewsImages.Count > 0)
-            {
-                previewImagePath = news.NewsImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.NewsId == news.Id).ImagePathScaled;
-            }
-            <div class="news_wrapper" style="background-image: url(@previewImagePath)">
-                <img src="~/images/news_img_border.png" /><span class="news_date">@news.NewsDate.ToShortDateString()</span>
-                <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@news.Id"></a>
-                <div class="newsarchive_title">@news.NewsTitle</div>
-                <div class="newsarchive_bodytext">@Html.Raw(news.NewsBody)</div>
-                <div class="newsarchive_readnext">Читать дальше...</div>
-            </div>
+            previewImagePath = news.NewsImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.NewsId == news.Id).ImagePathScaled;
         }
-    </div>
+        <div class="newsarchive_wrapper" style="background-image: url(@previewImagePath);">
+            <img src="~/images/news_img_border.png" /><span class="news_date">@news.NewsDate.ToShortDateString()</span>
+                <div class="newscontent_wrapper">
+                    <div class="newsarchive_title">@news.NewsTitle</div>
+                    <div class="newsarchive_body">@Html.Raw(news.NewsBody)</div>
+                    <div class="newsarchive_readnext">Читать дальше...</div>
+                </div>
+            <a asp-action="ReadNews" asp-controller="News" asp-route-newsId="@news.Id"></a>
+        </div>
+    }
 </div>

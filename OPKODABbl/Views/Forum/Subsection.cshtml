@@ -1,11 +1,18 @@
 ﻿@model OPKODABbl.Models.Forum.Subsection
 
-<div class="content_wrapper">
+<div class="forum_wrapper">
 
-    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a><!--
-    --><a class="content_wrapper_red" asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
+    <div>
+        <div class="forum_subsection_link_blue">
+            Форум
+        </div>
+        <div class="forum_subsection_link_red">
+            @Model.SubsectionName
+        </div>
+        <div class="forum_subsection_link_grey">
 
-    <br /><br /><br />
+        </div>
+    </div>
     @Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
 
     <table class="forum_main">

@@ -1,4 +1,8 @@
 ﻿
+@{
+    string controllerName = ViewContext.HttpContext.Request.RouteValues["controller"].ToString();
+}
+
 <div class="login_header">
     @if (User.Identity.IsAuthenticated)
     {
@@ -36,4 +40,18 @@
         <li><a href="#">Вступить</a></li>
         <li><a asp-action="Index" asp-controller="Forum">Форум</a></li>
     </ul>
+    <div class="navigation">
+        @if (controllerName == "News")
+        {
+            <a class="navigation" asp-action="NewsArchive" asp-controller="News">Архив новостей</a>
+        }
+        @if (controllerName == "Gallery")
+        {
+            <a class="navigation" asp-action="Galleries" asp-controller="Gallery">Галерея</a>
+        }
+        @if (controllerName == "Forum")
+        {
+            <a class="navigation" asp-action="Index" asp-controller="Forum">Форум</a>
+        }
+    </div>
 </div>

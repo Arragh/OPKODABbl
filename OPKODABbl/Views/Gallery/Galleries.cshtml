@@ -1,20 +1,63 @@
 ﻿@model List<OPKODABbl.Models.Gallery.Gallery>
 
-<div class="content_wrapper">
-	<a class="content_wrapper_blue" asp-action="Galleries" asp-controller="Gallery">Галерея</a><br />
-    <div class="galleries_wrapper">
-        @foreach (var gallery in Model)
+@{ 
+    int galleryCount = 0;
+}
+
+<div class="forum_wrapper">
+
+    @foreach (var gallery in Model)
+    {
+        string previewImagePath = "/images/news_noimage.jpg";
+        if (gallery.GalleryImages.Count > 0)
         {
-            string previewImagePath = "/images/news_noimage.jpg";
-            if (gallery.GalleryImages.Count > 0)
+            previewImagePath = gallery.GalleryImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.GalleryId == gallery.Id).ImagePathScaled;
+        }
+        if (galleryCount % 3 == 0)
+        {
+            <div class="gallery_wrapper0" style="background-image: url(@previewImagePath)">
+                <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
+                <div class="gallery_title">@gallery.GalleryTitle</div>
+                <a class="test" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
+            </div>
+        }
+        else
+        {
+            <div class="gallery_wrapper1" style="background-image: url(@previewImagePath)">
+                <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
+                <div class="gallery_title">@gallery.GalleryTitle</div>
+                <a class="test" asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
+            </div>
+        }
+        galleryCount++;
+    }
+    
+
+    @*<div class="galleries_wrapper">
+            @foreach (var gallery in Model)
             {
-                previewImagePath = gallery.GalleryImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.GalleryId == gallery.Id).ImagePathScaled;
+                string previewImagePath = "/images/news_noimage.jpg";
+                if (gallery.GalleryImages.Count > 0)
+                {
+                    previewImagePath = gallery.GalleryImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.GalleryId == gallery.Id).ImagePathScaled;
+                }
+                if (galleryCount % 3 == 0)
+                {
+                    <div class="previewgallery_wrapper0" style="background-image: url(@previewImagePath)">
+                        <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
+                        <div class="galleries_title">@gallery.GalleryTitle</div>
+                        <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
+                    </div>
+                }
+                else
+                {
+                    <div class="previewgallery_wrapper1" style="background-image: url(@previewImagePath)">
+                        <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
+                        <div class="galleries_title">@gallery.GalleryTitle</div>
+                        <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
+                    </div>
+                }
+                galleryCount++;
             }
-			<div class="previewgallery_wrapper" style="background-image: url(@previewImagePath)">
-				<img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
-				<div class="galleries_title">@gallery.GalleryTitle</div>
-                <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
-			</div>
-		}
-    </div>
+        </div>*@
 </div>
