@@ -37,6 +37,8 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            ViewBag.Title = "Регистрация нового пользователя";
+
             SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
@@ -49,6 +51,8 @@ namespace OPKODABbl.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            ViewBag.Title = "Регистрация нового пользователя";
+
             // Проверка имени пользователя на наличие запрещенных символов
             if (!string.IsNullOrWhiteSpace(model.Name))
             {
@@ -138,6 +142,8 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewBag.Title = "Авторизация";
+
             return View();
         }
         #endregion
@@ -147,6 +153,8 @@ namespace OPKODABbl.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            ViewBag.Title = "Авторизация";
+
             if (ModelState.IsValid)
             {
                 User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == model.Name && u.Password == model.Password.HashString());
@@ -186,6 +194,8 @@ namespace OPKODABbl.Controllers
             // Проверяем, чтобы пользователь не был NUll и чтобы имя залогиненного пользователя совпадало с полученным в методе
             if (User.Identity.Name == userName && user != null)
             {
+                ViewBag.Title = $"Редактирование профиля {user.Name}";
+
                 // Создаем модель для передачи в представление
                 EditProfileViewModel model = new EditProfileViewModel()
                 {
@@ -228,6 +238,8 @@ namespace OPKODABbl.Controllers
             // Проверяем, что такой юзер существует
             if (user != null)
             {
+                ViewBag.Title = $"Редактирование профиля {user.Name}";
+
                 // Проверяем подтверждающий пароль
                 if (!string.IsNullOrWhiteSpace(model.Password) && model.Password.HashString() != user.Password)
                 {
@@ -380,6 +392,8 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult AccountConfirmation()
         {
+            ViewBag.Title = "Подтверждение регистрации";
+
             return View();
         }
         #endregion
@@ -388,6 +402,8 @@ namespace OPKODABbl.Controllers
         [HttpPost]
         public async Task<IActionResult> AccountConfirmation(AccountConfirmationViewModel model)
         {
+            ViewBag.Title = "Подтверждение регистрации";
+
             User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user != null)
@@ -413,6 +429,8 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public IActionResult ResetPassword()
         {
+            ViewBag.Title = "Восстановление пароля";
+
             return View();
         }
         #endregion
@@ -421,6 +439,8 @@ namespace OPKODABbl.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
+            ViewBag.Title = "Восстановление пароля";
+
             if (ModelState.IsValid)
             {
                 User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == model.Name && u.Email == model.Email);
@@ -538,7 +558,9 @@ namespace OPKODABbl.Controllers
         #region ConfirmationStatus
         public IActionResult ConfirmationStatus(string message)
         {
+            ViewBag.Title = "Статус регистрации";
             ViewBag.Message = message;
+
             return View();
         }
         #endregion

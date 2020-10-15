@@ -4,41 +4,68 @@
 
     @*<a class="forum_blue" asp-action="Index" asp-controller="Forum">Форум</a>*@
 
-    <div class="forum_content">
+    <table border="1" width="100%">
         @foreach (var sec in Model)
         {
-            <div>
-                <div class="forum_section_SectionName">
+            <tr style="background-color: darkgray;">
+                <td style="width: 600px;">
                     @sec.SectionName
-                </div>
-                <div class="forum_section_Topics">
+                </td>
+                <td align="center">
                     Topics
-                </div>
-                <div class="forum_section_Replies">
+                </td>
+                <td align="center">
                     Replies
-                </div>
-                <div class="forum_section_LastMessage">
-                    Last message
-                </div>
-            </div>
-            @foreach (var subsec in sec.Subsections)
+                </td>
+                <td align="center">
+                    Last Message
+                </td>
+            </tr>
+            foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
             {
-                <div>
-                    <div class="forum_subsection_SubsectionName">
+                <tr style="background-color: azure;">
+                    <td>
                         <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@subsec.Id">@subsec.SubsectionName</a>
-                    </div>
-                    <div class="forum_subsection_Topics">
-                        17
-                    </div>
-                    <div class="forum_subsection_Replies">
-                        201
-                    </div>
-                    <div class="forum_subsection_LastMessage">
-                        Administrator
-                    </div>
-                </div>
+                    </td>
+                    <td align="center">
+                        @subsec.Topics.Count()
+                    </td>
+                    <td align="center">
+                        @subsec.Topics.SelectMany(t => t.Replies).Count()
+                    </td>
+                    <td align="center">
+                        @if (subsec.Topics.SelectMany(t => t.Replies).Count() > 0)
+                        {
+                            @subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name
+                            @*if (subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User != null)
+                            {
+                                @subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name
+                            }
+                            else
+                            {
+                                <font>Аноним</font>
+                            }*@
+                        }
+                        else if (subsec.Topics.Count > 0)
+                        {
+                            @subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name
+                            @*if (subsec.Topics.OrderByDescending(t => t.TopicDate).First().User != null)
+                            {
+                                @subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name
+                            }
+                            else
+                            {
+                                <font>Аноним</font>
+                            }*@
+                        }
+                        else
+                        {
+                            <font>-----</font>
+                        }
+                    </td>
+                </tr>
             }
         }
-    </div>
+    </table>
 
 </div>

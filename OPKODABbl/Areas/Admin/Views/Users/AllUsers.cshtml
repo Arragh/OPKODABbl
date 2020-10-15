@@ -26,6 +26,12 @@
                 <td>
                     <a asp-action="EditUser" asp-controller="Users" asp-route-userId="@user.Id">Изменить</a>
                 </td>
+                <td>
+                    <a asp-action="DeleteUserWith" asp-controller="Users" asp-route-userId="@user.Id">Удалить с сообщениями</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteUserWithout" asp-controller="Users" asp-route-userId="@user.Id">Удалить без сообщений</a>
+                </td>
             </tr>
         }
     </table>

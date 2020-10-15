@@ -22,6 +22,8 @@ namespace OPKODABbl.Controllers
         {
             List<User> users = await _websiteDB.Users.Include(u => u.Role).Include(u => u.CharacterClass).Where(u => u.Role.AccessLevel >= 2 && u.Name != "Administrator").OrderByDescending(u => u.Role.AccessLevel).ToListAsync();
 
+            ViewBag.Title = "Состав гильдии ОРКОДАВЫ";
+
             return View(users);
         }
         #endregion

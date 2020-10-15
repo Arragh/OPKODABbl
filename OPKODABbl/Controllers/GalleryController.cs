@@ -23,6 +23,8 @@ namespace OPKODABbl.Controllers
         {
             List<Gallery> galleries = await _websiteDB.Galleries.Include(g => g.GalleryImages).OrderByDescending(g => g.GalleryDate).ToListAsync();
 
+            ViewBag.Title = "Галерея";
+
             return View(galleries);
         }
         #endregion
@@ -34,7 +36,7 @@ namespace OPKODABbl.Controllers
 
             if (gallery != null)
             {
-                ViewBag.NavigationTitle = gallery.GalleryTitle;
+                ViewBag.Title = gallery.GalleryTitle;
 
                 gallery.GalleryImages = gallery.GalleryImages.OrderBy(i => i.ImageDate).ToList();
 

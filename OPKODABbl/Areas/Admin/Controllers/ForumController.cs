@@ -57,7 +57,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         {
             Section section = await _websiteDB.Sections.FirstOrDefaultAsync(s => s.Id == sectionId);
 
-            int position = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).CountAsync() + 1;
+            int position = await _websiteDB.Subsections.Where(s => s.Section == section).CountAsync() + 1;
 
             if (section != null && !string.IsNullOrWhiteSpace(subsectionName))
             {
@@ -65,7 +65,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                 {
                     Id = Guid.NewGuid(),
                     SubsectionName = subsectionName,
-                    SectionId = section.Id,
+                    Section = section,
                     SubsectionPosition = position
                 };
 
@@ -142,7 +142,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг подраздела вверх
         public async Task<IActionResult> MoveSubsectionUp(Guid sectionId, Guid subsectionId)
         {
-            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
+            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.Section.Id == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
             Subsection subsection = subsections.FirstOrDefault(s => s.Id == subsectionId);
 
             if (subsection != null && subsection.SubsectionPosition > 1)
@@ -171,7 +171,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Сдвиг подраздела вниз
         public async Task<IActionResult> MoveSubsectionDown(Guid sectionId, Guid subsectionId)
         {
-            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.SectionId == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
+            List<Subsection> subsections = await _websiteDB.Subsections.Where(s => s.Section.Id == sectionId).OrderBy(s => s.SubsectionPosition).ToListAsync();
             Subsection subsection = subsections.FirstOrDefault(s => s.Id == subsectionId);
 
             int maxPosition = subsections.Count();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using OPKODABbl.Areas.Admin.ViewModels.Users;
 using OPKODABbl.Helpers;
 using OPKODABbl.Models.Account;
@@ -95,6 +96,53 @@ namespace OPKODABbl.Areas.Admin.Controllers
             }
 
             return Redirect("/Main/PageNotFound");
+        }
+        #endregion
+
+        #region Удалить пользователя со всеми его сообщениями[POST]
+        public async Task<IActionResult> DeleteUserWith(Guid userId)
+        {
+            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)//.FirstOrDefaultAsync(u => u.Id == userId);
+                                              .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                _websiteDB.Replies.RemoveRange(user.Replies);
+
+                foreach (var topic in user.Topics)
+                {
+                    _websiteDB.RemoveRange(topic.Replies);
+                }
+                _websiteDB.Topics.RemoveRange(user.Topics);
+                _websiteDB.Users.Remove(user);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("AllUsers", "Users");
+        }
+        #endregion
+
+        #region Удалить пользователя и оставить сообщения[POST]
+        public async Task<IActionResult> DeleteUserWithout(Guid userId)
+        {
+            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)//.FirstOrDefaultAsync(u => u.Id == userId);
+                                              .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                foreach (var reply in user.Replies)
+                {
+                    reply.User = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == "Anonymous");
+                }
+
+                foreach (var topic in user.Topics)
+                {
+                    topic.User = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == "Anonymous");
+                }
+
+                _websiteDB.Users.Remove(user);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("AllUsers", "Users");
         }
         #endregion
 

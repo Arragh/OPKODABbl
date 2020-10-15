@@ -1,70 +1,80 @@
 ﻿@model OPKODABbl.Models.Forum.Topic
 
 <div class="content_wrapper">
-
-    <a class="content_wrapper_blue" asp-action="Index" asp-controller="Forum">Форум</a><!--
-    --><a class="content_wrapper_red" asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Subsection.Id">@Model.Subsection.SubsectionName</a>
-
-    <br /><br /><br />
-
-    <table border="1" width="100%">
-        <tr>
-            <td colspan="2">@Model.TopicName</td>
-        </tr>
-        @if (ViewBag.CurrentPage == 1)
-        {
-            <tr>
-                <td width="20%">
-                    @if (Model.User != null)
-                    {
-                        @Model.User.Name
-                        <br />
-                        @if (Model.User.AvatarImage != null)
-                        {
-                            <img src="@Model.User.AvatarImage.ImagePath" />
-                        }
-                    }
-                    else
-                    {
-                        <span>Пользователь не найден</span>
-                    }
-                </td>
-                <td>
-                    @Model.TopicBody
-                </td>
-            </tr>
-        }
-        @foreach (var reply in Model.Replies)
-        {
-            <tr>
-                <td>
-                    @if (reply.User != null)
-                    {
-                        @reply.User.Name
-                        <br />
-                        @if (reply.User.AvatarImage != null)
-                        {
-                            <img src="@reply.User.AvatarImage.ImagePath" />
-                        }
-                    }
-                    else
-                    {
-                        <span>Пользователь не найден</span>
-                    }
-                </td>
-                <td>
-                    @reply.ReplyBody
-                </td>
-            </tr>
-        }
-    </table>
+    <a asp-action="Index" asp-controller="Forum">Форум</a>
+    <font color="white">>>>>></font>
+    <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Subsection.Id">@Model.Subsection.SubsectionName</a>
+    <font color="white">>>>>></font>
+    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@Model.Id">@Model.TopicName</a>
 </div>
+
+<table border="1" width="100%">
+    <tr style="background-color: darkgray;">
+        <td colspan="2">@Model.TopicName</td>
+    </tr>
+    @if (ViewBag.CurrentPage == 1)
+    {
+        <tr style="background-color: azure;">
+            <td width="20%">
+                @if (Model.User != null)
+                {
+                    @Model.User.Name
+                    if (Model.User.Name != "Anonymous")
+                    {
+                        <br />
+                        <font color="@Model.User.Role.Color">@Model.User.Role.Rank</font>
+                    }
+                    <br />
+                    @if (Model.User.AvatarImage != null)
+                    {
+                        <img src="@Model.User.AvatarImage.ImagePath" />
+                    }
+                }
+                else
+                {
+                    <span>Пользователь не найден</span>
+                }
+            </td>
+            <td>
+                @Model.TopicBody
+            </td>
+        </tr>
+    }
+    @foreach (var reply in Model.Replies)
+    {
+        <tr style="background-color: azure;">
+            <td>
+                @if (reply.User != null)
+                {
+                    @reply.User.Name
+                    if (reply.User.Name != "Anonymous")
+                    {
+                        <br />
+                        <font color="@reply.User.Role.Color">@reply.User.Role.Rank</font>
+                    }
+                    <br />
+                    @if (reply.User.AvatarImage != null)
+                    {
+                        <img src="@reply.User.AvatarImage.ImagePath" />
+                    }
+                }
+                else
+                {
+                    <span>Пользователь не найден</span>
+                }
+            </td>
+            <td>
+                @reply.ReplyBody
+            </td>
+        </tr>
+    }
+</table>
 
     <br /><br /><br />
 
     <form asp-action="AddReply" asp-controller="Forum" method="post">
         <input type="hidden" name="TopicId" value="@Model.Id" />
-        <textarea name="ReplyBody"></textarea>
+        <textarea style="width: 700px; height: 300px;" name="ReplyBody"></textarea><br />
         <input type="submit" value="Ответить" />
     </form>
 

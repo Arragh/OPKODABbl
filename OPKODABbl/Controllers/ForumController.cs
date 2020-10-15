@@ -23,11 +23,8 @@ namespace OPKODABbl.Controllers
         #region Главная страница форума
         public async Task<IActionResult> Index()
         {
-            List<Section> sections = await _websiteDB.Sections.Include(s => s.Subsections).OrderBy(s => s.SectionPosition).ToListAsync();
-            foreach (var section in sections)
-            {
-                section.Subsections.OrderBy(s => s.SubsectionPosition);
-            }
+            List<Section> sections = await _websiteDB.Sections.Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User)
+                                                              .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.User).OrderBy(s => s.SectionPosition).ToListAsync();
 
             return View(sections);
         }
@@ -36,7 +33,8 @@ namespace OPKODABbl.Controllers
         #region Просмотр раздела форума
         public async Task<IActionResult> Subsection(Guid subsectionId)
         {
-            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == subsectionId);
+            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User)
+                                                                .Include(s => s.Topics).ThenInclude(t => t.User).FirstOrDefaultAsync(s => s.Id == subsectionId);
             if (subsection != null)
             {
                 ViewBag.SubsectionId = subsection.Id;
@@ -74,10 +72,11 @@ namespace OPKODABbl.Controllers
                     Topic topic = new Topic()
                     {
                         Id = Guid.NewGuid(),
-                        SubsectionId = model.SubsectionId,
+                        Subsection = subsection,
                         TopicName = model.TopicName,
                         TopicBody = model.TopicBody,
-                        UserId = user.Id
+                        TopicDate = DateTime.Now,
+                        User = user
                     };
 
                     await _websiteDB.Topics.AddAsync(topic);
@@ -95,7 +94,9 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> ViewTopic(Guid topicId, int page = 1)
         {
             Topic topic = await _websiteDB.Topics.Include(t => t.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.User).ThenInclude(u => u.Role)
                                                  .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
                                                  .Include(t => t.Subsection)
                                                  .FirstOrDefaultAsync(t => t.Id == topicId);
 
@@ -128,8 +129,8 @@ namespace OPKODABbl.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ReplyBody = model.ReplyBody,
-                        TopicId = model.TopicId,
-                        UserId = user.Id,
+                        Topic = topic,
+                        User = user,
                         ReplyDate = DateTime.Now
                     };
 

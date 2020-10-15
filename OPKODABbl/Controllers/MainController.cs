@@ -23,6 +23,8 @@ namespace OPKODABbl.Controllers
         #region Главная страница
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "ОРКОДАВЫ";
+
             List<News> news = await _websiteDB.News.Include(n => n.NewsImages).OrderByDescending(n => n.NewsDate).Take(3).ToListAsync();
             List<Gallery> galleries = await _websiteDB.Galleries.OrderByDescending(g => g.GalleryDate).Take(3).ToListAsync();
 
@@ -45,6 +47,8 @@ namespace OPKODABbl.Controllers
         #region 404(Page Not Found)
         public IActionResult PageNotFound()
         {
+            ViewBag.Title = "Ошибка 404";
+
             return View();
         }
         #endregion

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OPKODABbl.Models.Forum;
+using System;
+using System.Collections.Generic;
 
 namespace OPKODABbl.Models.Account
 {
@@ -15,6 +17,8 @@ namespace OPKODABbl.Models.Account
         public Role Role { get; set; }
         public Guid CharacterClassId { get; set; }
         public CharacterClass CharacterClass { get; set; }
+        public List<Topic> Topics { get; set; }
+        public List<Reply> Replies { get; set; }
         public AvatarImage AvatarImage { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using OPKODABbl.Models.Gallery;
 using OPKODABbl.Models.Main;
 using OPKODABbl.Models.Forum;
 using System;
+using System.Linq;
 
 namespace OPKODABbl.Service
 {
@@ -156,6 +157,15 @@ namespace OPKODABbl.Service
                 CharacterClassId = paladin.Id
             };
 
+            User Anonymous = new User()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Anonymous",
+                IsConfirmed = true,
+                RoleId = user.Id,
+                CharacterClassId = paladin.Id
+            };
+
             User user1 = new User()
             {
                 Id = Guid.NewGuid(),
@@ -195,8 +205,15 @@ namespace OPKODABbl.Service
 
             modelBuilder.Entity<CharacterClass>().HasData(new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock });
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, officer, member, recruit, user });
-            modelBuilder.Entity<User>().HasData(new User[] { Administrator, user1, user2, user3 });
+            modelBuilder.Entity<User>().HasData(new User[] { Administrator, Anonymous, user1, user2, user3 });
+
             base.OnModelCreating(modelBuilder);
+
+            //foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //{
+            //    foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            //}
+
         }
     }
 }

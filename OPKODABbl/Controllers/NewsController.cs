@@ -28,6 +28,8 @@ namespace OPKODABbl.Controllers
             // Проверяем, существует ли такая запись в БД
             if (news != null)
             {
+                ViewBag.Title = news.NewsTitle;
+
                 int newsTitleLength = 60;
                 // Если длина заголовка больше отображаемого лимита
                 if (news.NewsTitle.Length > newsTitleLength)
@@ -56,6 +58,8 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> NewsArchive()
         {
             List<News> news = await _websiteDB.News.Include(n => n.NewsImages).OrderByDescending(n => n.NewsDate).ToListAsync();
+
+            ViewBag.Title = "Архив новостей";
 
             // Удаляем лишние теги из текста
             foreach (var item in news)

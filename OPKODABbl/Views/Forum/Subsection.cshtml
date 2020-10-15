@@ -1,29 +1,59 @@
 ﻿@model OPKODABbl.Models.Forum.Subsection
 
-<div class="forum_wrapper">
-
-    <div>
-        <div class="forum_subsection_link_blue">
-            Форум
-        </div>
-        <div class="forum_subsection_link_red">
-            @Model.SubsectionName
-        </div>
-        <div class="forum_subsection_link_grey">
-
-        </div>
-    </div>
-    @Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
-
-    <table class="forum_main">
-        @foreach (var topic in Model.Topics)
-        {
-            <tr>
-                <td>
-                    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
-                </td>
-            </tr>
-        }
-    </table>
-
+<div class="content_wrapper">
+    <a asp-action="Index" asp-controller="Forum">Форум</a>
+    <font color="white">>>>>></font>
+    <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
 </div>
+
+@Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
+
+<table border="1" width="100%">
+    <tr style="background-color: darkgray;">
+        <td style="width: 600px;">
+            Topic Name
+        </td>
+        <td align="center">
+            Author
+        </td>
+        <td align="center">
+            Views
+        </td>
+        <td align="center">
+            Replies
+        </td>
+        <td align="center">
+            Last Message
+        </td>
+    </tr>
+    @foreach (var topic in Model.Topics)
+    {
+        <tr style="background-color: azure;">
+            <td>
+                <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+            </td>
+            <td align="center">
+                @if (topic.User != null)
+                {
+                    @topic.User.Name
+                }
+            </td>
+            <td align="center">
+                54
+            </td>
+            <td align="center">
+                @topic.Replies.Count()
+            </td>
+            <td align="center">
+                @if (topic.Replies.Count() > 0)
+                {
+                    @topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name
+                }
+                else
+                {
+                    <font>-----</font>
+                }
+            </td>
+        </tr>
+    }
+</table>
