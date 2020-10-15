@@ -28,12 +28,13 @@ namespace OPKODABbl.Controllers
             // Проверяем, существует ли такая запись в БД
             if (news != null)
             {
+                int newsTitleLength = 60;
                 // Если длина заголовка больше отображаемого лимита
-                if (news.NewsTitle.Length > 40)
+                if (news.NewsTitle.Length > newsTitleLength)
                 {
                     // Ограничиваем длину заголовка и всё что сверх меры - переносим на новую отдельную строку
-                    string shortTitle = new string(news.NewsTitle.Take(40).ToArray()) + "...";
-                    string titleOverflow = "..." + new string(news.NewsTitle.Skip(40).ToArray()) + "<br /><br />";
+                    string shortTitle = new string(news.NewsTitle.Take(newsTitleLength).ToArray()) + "...";
+                    string titleOverflow = "..." + new string(news.NewsTitle.Skip(newsTitleLength).ToArray()) + "<br /><br />";
 
                     news.NewsTitle = shortTitle;
                     news.NewsBody = titleOverflow + news.NewsBody;

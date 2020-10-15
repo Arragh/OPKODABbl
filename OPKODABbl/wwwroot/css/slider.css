@@ -4,6 +4,32 @@
     position: relative;
     overflow: hidden;
 }
+.slider div.title_wrapper {
+    display: inline-block;
+    max-width: 700px;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+    background-color: rgba(0, 140, 227, 0.7);
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+    padding: 7px 12px 0px 12px;
+}
+    .slider:hover div.title_wrapper {
+        background-color: rgba(255, 0, 0, 0.7);
+    }
+.slider div.date_wrapper {
+    display: inline-block;
+    height: 40px;
+    background-color: rgba(255, 0, 0, 0.7);
+    font-family: OPKODAB;
+    font-size: 40px;
+    color: #ffffff;
+    padding: 7px 12px 0px 12px;
+}
 
 a.slider_link {
     position: absolute;
@@ -80,29 +106,7 @@ div.item_title_date {
     width: 100%;
     margin: 160px 0px 0px 3px;
 }
-div.title_wrapper {
-    display: inline-block;
-    max-width: 700px;
-    height: 40px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    float: left;
-    background-color: rgba(0, 140, 227, 0.7);
-    font-family: OPKODAB;
-    font-size: 40px;
-    color: #ffffff;
-    padding: 7px 12px 0px 12px;
-}
-div.date_wrapper {
-    display: inline-block;
-    height: 40px;
-    background-color: rgba(255, 0, 0, 0.7);
-    font-family: OPKODAB;
-    font-size: 40px;
-    color: #ffffff;
-    padding: 7px 12px 0px 12px;
-}
+
 /*span.item_title {
     background-color: rgba(0, 140, 227, 0.7);
     padding: 5px 11px 5px 11px;

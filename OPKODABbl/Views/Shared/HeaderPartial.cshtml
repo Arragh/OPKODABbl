@@ -31,27 +31,33 @@
     }
 </div>
 <div class="logo"></div>
-<div class="main_menu">
-    <ul>
-        <li><a asp-action="Index" asp-controller="Main">Главная</a></li>
-        <li><a href="#">О нас</a></li>
-        <li><a asp-action="Galleries" asp-controller="Gallery">Галерея</a></li>
-        <li><a asp-action="Roster" asp-controller="Page">Состав</a></li>
-        <li><a href="#">Вступить</a></li>
-        <li><a asp-action="Index" asp-controller="Forum">Форум</a></li>
-    </ul>
+<div class="main_menu_wrapper">
+    <div class="main_menu">
+        <ul>
+            <li><a asp-action="Index" asp-controller="Main">Главная</a></li>
+            <li><a href="#">О нас</a></li>
+            <li><a asp-action="Galleries" asp-controller="Gallery">Галерея</a></li>
+            <li><a asp-action="Roster" asp-controller="Page">Состав</a></li>
+            <li><a href="#">Вступить</a></li>
+            <li><a asp-action="Index" asp-controller="Forum">Форум</a></li>
+        </ul>
+    </div>
     <div class="navigation">
+        @*@if (!string.IsNullOrEmpty(ViewBag.NavigationTitle))
+        {
+            <div class="navigation_title">@ViewBag.NavigationTitle</div>
+        }*@
         @if (controllerName == "News")
         {
-            <a class="navigation" asp-action="NewsArchive" asp-controller="News">Архив новостей</a>
+            <div class="navigation_red"><a class="navigation_super" asp-action="NewsArchive" asp-controller="News">Архив новостей</a></div>
         }
         @if (controllerName == "Gallery")
         {
-            <a class="navigation" asp-action="Galleries" asp-controller="Gallery">Галерея</a>
+            <div class="navigation_red"><a class="navigation_super" asp-action="Galleries" asp-controller="Gallery">Галерея</a></div>
         }
         @if (controllerName == "Forum")
         {
-            <a class="navigation" asp-action="Index" asp-controller="Forum">Форум</a>
+            <div class="navigation_red"><a class="navigation_super" asp-action="Index" asp-controller="Forum">Форум</a></div>
         }
     </div>
 </div>

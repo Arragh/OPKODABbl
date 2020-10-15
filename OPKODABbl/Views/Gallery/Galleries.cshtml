@@ -5,7 +5,6 @@
 }
 
 <div class="forum_wrapper">
-
     @foreach (var gallery in Model)
     {
         string previewImagePath = "/images/news_noimage.jpg";
@@ -31,33 +30,4 @@
         }
         galleryCount++;
     }
-    
-
-    @*<div class="galleries_wrapper">
-            @foreach (var gallery in Model)
-            {
-                string previewImagePath = "/images/news_noimage.jpg";
-                if (gallery.GalleryImages.Count > 0)
-                {
-                    previewImagePath = gallery.GalleryImages.OrderBy(i => i.ImageDate).FirstOrDefault(i => i.GalleryId == gallery.Id).ImagePathScaled;
-                }
-                if (galleryCount % 3 == 0)
-                {
-                    <div class="previewgallery_wrapper0" style="background-image: url(@previewImagePath)">
-                        <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
-                        <div class="galleries_title">@gallery.GalleryTitle</div>
-                        <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
-                    </div>
-                }
-                else
-                {
-                    <div class="previewgallery_wrapper1" style="background-image: url(@previewImagePath)">
-                        <img src="~/images/img_preview_border.png" /><span class="news_date">@gallery.GalleryDate.ToShortDateString()</span>
-                        <div class="galleries_title">@gallery.GalleryTitle</div>
-                        <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@gallery.Id"></a>
-                    </div>
-                }
-                galleryCount++;
-            }
-        </div>*@
 </div>

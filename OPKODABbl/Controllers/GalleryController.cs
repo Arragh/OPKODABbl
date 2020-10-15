@@ -34,6 +34,10 @@ namespace OPKODABbl.Controllers
 
             if (gallery != null)
             {
+                ViewBag.NavigationTitle = gallery.GalleryTitle;
+
+                gallery.GalleryImages = gallery.GalleryImages.OrderBy(i => i.ImageDate).ToList();
+
                 // Урезание заголовка до 40 символов
                 if (gallery.GalleryTitle.Length > 40)
                 {
