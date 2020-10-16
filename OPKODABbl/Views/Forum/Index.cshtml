@@ -36,7 +36,7 @@
                     <td align="center">
                         @if (subsec.Topics.SelectMany(t => t.Replies).Count() > 0)
                         {
-                            @subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name
+                            <font color="@subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor">@subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name</font>
                             @*if (subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User != null)
                             {
                                 @subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name
@@ -48,7 +48,7 @@
                         }
                         else if (subsec.Topics.Count > 0)
                         {
-                            @subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name
+                            <font color="@subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor">@subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name</font>
                             @*if (subsec.Topics.OrderByDescending(t => t.TopicDate).First().User != null)
                             {
                                 @subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name

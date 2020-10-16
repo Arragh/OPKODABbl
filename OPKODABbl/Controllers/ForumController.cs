@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +24,19 @@ namespace OPKODABbl.Controllers
         #region Главная страница форума
         public async Task<IActionResult> Index()
         {
-            List<Section> sections = await _websiteDB.Sections.Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User)
-                                                              .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.User).OrderBy(s => s.SectionPosition).ToListAsync();
+            int userAccessLevel = 1;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                if (user != null)
+                {
+                    userAccessLevel = user.Role.AccessLevel;
+                }
+            }
+
+            List<Section> sections = await _websiteDB.Sections.Where(s => s.SectionAccessLevel <= userAccessLevel).Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                        .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).OrderBy(s => s.SectionPosition).ToListAsync();
 
             return View(sections);
         }
@@ -33,12 +45,63 @@ namespace OPKODABbl.Controllers
         #region Просмотр раздела форума
         public async Task<IActionResult> Subsection(Guid subsectionId)
         {
-            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User)
-                                                                .Include(s => s.Topics).ThenInclude(t => t.User).FirstOrDefaultAsync(s => s.Id == subsectionId);
+            int userAccessLevel = 1;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                if (user != null)
+                {
+                    userAccessLevel = user.Role.AccessLevel;
+                }
+            }
+
+            Subsection subsection = await _websiteDB.Subsections.Where(s => s.SubsectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                                .Include(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).FirstOrDefaultAsync(s => s.Id == subsectionId);
+
             if (subsection != null)
             {
                 ViewBag.SubsectionId = subsection.Id;
                 return View(subsection);
+            }
+
+            return Redirect("/Main/PageNotFound");
+        }
+        #endregion
+
+        #region Просмотр топика
+        public async Task<IActionResult> ViewTopic(Guid topicId, int page = 1)
+        {
+            int userAccessLevel = 1;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                if (user != null)
+                {
+                    userAccessLevel = user.Role.AccessLevel;
+                }
+            }
+
+            Topic topic = await _websiteDB.Topics.Where(t => t.TopicAccessLevel <= userAccessLevel)
+                                                 .Include(t => t.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.User).ThenInclude(u => u.Role)
+                                                 .Include(t => t.User).ThenInclude(u => u.CharacterClass)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                 .Include(t => t.Subsection)
+                                                 .FirstOrDefaultAsync(t => t.Id == topicId);
+
+            if (topic != null)
+            {
+                int count = topic.Replies.Count();
+                int pageSize = 10;
+                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+                ViewBag.CurrentPage = page;
+
+                return View(topic);
             }
 
             return Redirect("/Main/PageNotFound");
@@ -63,7 +126,7 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == model.SubsectionId); //.Include(s => s.Topics)
             if (subsection != null)
             {
                 User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
@@ -75,6 +138,7 @@ namespace OPKODABbl.Controllers
                         Subsection = subsection,
                         TopicName = model.TopicName,
                         TopicBody = model.TopicBody,
+                        TopicAccessLevel = subsection.SubsectionAccessLevel,
                         TopicDate = DateTime.Now,
                         User = user
                     };
@@ -84,31 +148,6 @@ namespace OPKODABbl.Controllers
 
                     return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
                 }
-            }
-
-            return Redirect("/Main/PageNotFound");
-        }
-        #endregion
-
-        #region Просмотр топика
-        public async Task<IActionResult> ViewTopic(Guid topicId, int page = 1)
-        {
-            Topic topic = await _websiteDB.Topics.Include(t => t.User).ThenInclude(u => u.AvatarImage)
-                                                 .Include(t => t.User).ThenInclude(u => u.Role)
-                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
-                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
-                                                 .Include(t => t.Subsection)
-                                                 .FirstOrDefaultAsync(t => t.Id == topicId);
-
-            if (topic != null)
-            {
-                int count = topic.Replies.Count();
-                int pageSize = 10;
-                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-                ViewBag.CurrentPage = page;
-
-                return View(topic);
             }
 
             return Redirect("/Main/PageNotFound");

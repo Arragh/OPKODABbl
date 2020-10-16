@@ -35,7 +35,7 @@
             <td align="center">
                 @if (topic.User != null)
                 {
-                    @topic.User.Name
+                    <font color="@topic.User.CharacterClass.ClassColor">@topic.User.Name</font>
                 }
             </td>
             <td align="center">
@@ -47,7 +47,7 @@
             <td align="center">
                 @if (topic.Replies.Count() > 0)
                 {
-                    @topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name
+                    <font color="@topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor">@topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name</font>
                 }
                 else
                 {

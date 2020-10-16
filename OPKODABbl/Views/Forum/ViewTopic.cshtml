@@ -18,7 +18,7 @@
             <td width="20%">
                 @if (Model.User != null)
                 {
-                    @Model.User.Name
+                    <font color="@Model.User.CharacterClass.ClassColor">@Model.User.Name</font>
                     if (Model.User.Name != "Anonymous")
                     {
                         <br />
@@ -46,7 +46,7 @@
             <td>
                 @if (reply.User != null)
                 {
-                    @reply.User.Name
+                    <font color="@reply.User.CharacterClass.ClassColor">@reply.User.Name</font>
                     if (reply.User.Name != "Anonymous")
                     {
                         <br />

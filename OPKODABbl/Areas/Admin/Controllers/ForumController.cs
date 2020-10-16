@@ -29,7 +29,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #endregion
 
         #region Создание раздела
-        public async Task<IActionResult> CreateSection(string sectionName)
+        public async Task<IActionResult> CreateSection(string sectionName, int sectionAccessLevel)
         {
             if (!string.IsNullOrWhiteSpace(sectionName))
             {
@@ -39,7 +39,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                 {
                     Id = Guid.NewGuid(),
                     SectionName = sectionName,
-                    SectionPosition = position
+                    SectionPosition = position,
+                    SectionAccessLevel = sectionAccessLevel
                 };
 
                 await _websiteDB.Sections.AddAsync(section);
@@ -66,7 +67,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     Id = Guid.NewGuid(),
                     SubsectionName = subsectionName,
                     Section = section,
-                    SubsectionPosition = position
+                    SubsectionPosition = position,
+                    SubsectionAccessLevel = section.SectionAccessLevel
                 };
 
                 await _websiteDB.Subsections.AddAsync(subsection);
