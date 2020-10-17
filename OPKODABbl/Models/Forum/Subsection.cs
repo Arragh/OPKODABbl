@@ -10,7 +10,6 @@ namespace OPKODABbl.Models.Forum
         public Guid Id { get; set; }
         public string SubsectionName { get; set; }
         public int SubsectionPosition { get; set; }
-        public int SubsectionAccessLevel { get; set; }
         public Section Section { get; set; }
         public List<Topic> Topics { get; set; }
     }

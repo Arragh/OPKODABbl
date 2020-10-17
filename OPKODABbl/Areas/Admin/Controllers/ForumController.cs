@@ -67,8 +67,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     Id = Guid.NewGuid(),
                     SubsectionName = subsectionName,
                     Section = section,
-                    SubsectionPosition = position,
-                    SubsectionAccessLevel = section.SectionAccessLevel
+                    SubsectionPosition = position
+                    //SubsectionAccessLevel = section.SectionAccessLevel
                 };
 
                 await _websiteDB.Subsections.AddAsync(subsection);

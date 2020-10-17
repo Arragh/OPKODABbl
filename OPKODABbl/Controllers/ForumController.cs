@@ -56,7 +56,7 @@ namespace OPKODABbl.Controllers
                 }
             }
 
-            Subsection subsection = await _websiteDB.Subsections.Where(s => s.SubsectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+            Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
                                                                 .Include(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).FirstOrDefaultAsync(s => s.Id == subsectionId);
 
             if (subsection != null)
@@ -83,7 +83,7 @@ namespace OPKODABbl.Controllers
                 }
             }
 
-            Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.SubsectionAccessLevel <= userAccessLevel)
+            Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
                                                  .Include(t => t.User).ThenInclude(u => u.AvatarImage)
                                                  .Include(t => t.User).ThenInclude(u => u.Role)
                                                  .Include(t => t.User).ThenInclude(u => u.CharacterClass)
@@ -112,49 +112,59 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateTopic(Guid subsectionId)
         {
-            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId);
-            if (subsection != null)
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
+                Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == subsectionId);
+                if (subsection != null)
                 {
-                    ViewBag.SubsectionId = subsection.Id;
-                    return View();
+                    User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+
+                    if (subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
+                    {
+                        ViewBag.SubsectionId = subsection.Id;
+                        return View();
+                    }
                 }
 
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Main/PageNotFound");
             }
 
-            return Redirect("/Main/PageNotFound");
+            return RedirectToAction("Login", "Account");
         }
         #endregion
 
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
-            if (subsection != null)
+            if (User.Identity.IsAuthenticated)
             {
-                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
-                if (user != null)
+                Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+                if (subsection != null)
                 {
-                    Topic topic = new Topic()
+                    User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                    if (user != null && subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
                     {
-                        Id = Guid.NewGuid(),
-                        Subsection = subsection,
-                        TopicName = model.TopicName,
-                        TopicBody = model.TopicBody,
-                        TopicDate = DateTime.Now,
-                        User = user
-                    };
+                        Topic topic = new Topic()
+                        {
+                            Id = Guid.NewGuid(),
+                            Subsection = subsection,
+                            TopicName = model.TopicName,
+                            TopicBody = model.TopicBody,
+                            TopicDate = DateTime.Now,
+                            User = user
+                        };
 
-                    await _websiteDB.Topics.AddAsync(topic);
-                    await _websiteDB.SaveChangesAsync();
+                        await _websiteDB.Topics.AddAsync(topic);
+                        await _websiteDB.SaveChangesAsync();
 
-                    return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                        return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                    }
                 }
+
+                return Redirect("/Main/PageNotFound");
             }
 
-            return Redirect("/Main/PageNotFound");
+            return RedirectToAction("Login", "Account");
         }
         #endregion
 
