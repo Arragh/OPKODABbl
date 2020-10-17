@@ -115,8 +115,13 @@ namespace OPKODABbl.Controllers
             Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId);
             if (subsection != null)
             {
-                ViewBag.SubsectionId = subsection.Id;
-                return View();
+                if (User.Identity.IsAuthenticated)
+                {
+                    ViewBag.SubsectionId = subsection.Id;
+                    return View();
+                }
+
+                return RedirectToAction("Login", "Account");
             }
 
             return Redirect("/Main/PageNotFound");
@@ -126,7 +131,7 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == model.SubsectionId); //.Include(s => s.Topics)
+            Subsection subsection = await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
             if (subsection != null)
             {
                 User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
@@ -138,7 +143,6 @@ namespace OPKODABbl.Controllers
                         Subsection = subsection,
                         TopicName = model.TopicName,
                         TopicBody = model.TopicBody,
-                        //TopicAccessLevel = subsection.SubsectionAccessLevel,
                         TopicDate = DateTime.Now,
                         User = user
                     };

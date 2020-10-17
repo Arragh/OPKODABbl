@@ -102,7 +102,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Удалить пользователя со всеми его сообщениями[POST]
         public async Task<IActionResult> DeleteUserWith(Guid userId)
         {
-            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)//.FirstOrDefaultAsync(u => u.Id == userId);
+            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)
                                               .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
             if (user != null)
             {
@@ -124,7 +124,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Удалить пользователя и оставить сообщения[POST]
         public async Task<IActionResult> DeleteUserWithout(Guid userId)
         {
-            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)//.FirstOrDefaultAsync(u => u.Id == userId);
+            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)
                                               .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
             if (user != null)
             {

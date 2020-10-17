@@ -208,12 +208,6 @@ namespace OPKODABbl.Service
             modelBuilder.Entity<User>().HasData(new User[] { Administrator, Anonymous, user1, user2, user3 });
 
             base.OnModelCreating(modelBuilder);
-
-            //foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            //{
-            //    foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
-            //}
-
         }
     }
 }
