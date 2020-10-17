@@ -83,7 +83,7 @@ namespace OPKODABbl.Controllers
                 }
             }
 
-            Topic topic = await _websiteDB.Topics.Where(t => t.TopicAccessLevel <= userAccessLevel)
+            Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.SubsectionAccessLevel <= userAccessLevel)
                                                  .Include(t => t.User).ThenInclude(u => u.AvatarImage)
                                                  .Include(t => t.User).ThenInclude(u => u.Role)
                                                  .Include(t => t.User).ThenInclude(u => u.CharacterClass)
@@ -138,7 +138,7 @@ namespace OPKODABbl.Controllers
                         Subsection = subsection,
                         TopicName = model.TopicName,
                         TopicBody = model.TopicBody,
-                        TopicAccessLevel = subsection.SubsectionAccessLevel,
+                        //TopicAccessLevel = subsection.SubsectionAccessLevel,
                         TopicDate = DateTime.Now,
                         User = user
                     };
