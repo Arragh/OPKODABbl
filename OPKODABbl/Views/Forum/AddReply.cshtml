@@ -1,0 +1,13 @@
+﻿@model OPKODABbl.ViewModels.Forum.AddReplyViewModel
+
+<form asp-action="AddReply" asp-controller="Forum" method="post">
+    <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
+    <textarea style="width: 700px; height: 300px;" asp-for="ReplyBody"></textarea><br />
+    <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
+    <input type="submit" value="Ответить" />
+</form>
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

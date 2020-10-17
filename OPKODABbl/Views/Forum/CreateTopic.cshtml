@@ -3,6 +3,13 @@
 <form asp-action="CreateTopic" asp-controller="Forum" method="post">
     <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
     <input type="text" asp-for="TopicName" /><br />
-    <textarea asp-for="TopicBody"></textarea>
+    <span class="wrong_data" asp-validation-for="TopicName"></span><br />
+    <textarea style="width: 700px; height: 300px;" asp-for="TopicBody"></textarea><br />
+    <span class="wrong_data" asp-validation-for="TopicBody"></span><br />
     <input type="submit" value="Создать тему" />
 </form>
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

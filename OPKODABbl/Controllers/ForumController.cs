@@ -136,25 +136,74 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            if (User.Identity.IsAuthenticated)
+            if (ModelState.IsValid)
             {
-                Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
-                if (subsection != null)
+                if (User.Identity.IsAuthenticated)
                 {
-                    User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
-                    if (user != null && subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
+                    Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+                    if (subsection != null)
                     {
-                        Topic topic = new Topic()
+                        User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                        if (user != null && subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
+                        {
+                            Topic topic = new Topic()
+                            {
+                                Id = Guid.NewGuid(),
+                                Subsection = subsection,
+                                TopicName = model.TopicName,
+                                TopicBody = model.TopicBody,
+                                TopicDate = DateTime.Now,
+                                User = user
+                            };
+
+                            await _websiteDB.Topics.AddAsync(topic);
+                            await _websiteDB.SaveChangesAsync();
+
+                            return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                        }
+                    }
+
+                    return Redirect("/Main/PageNotFound");
+                }
+
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View(model);
+        }
+        #endregion
+
+        #region Ответить [GET]
+        public IActionResult AddReply(Guid topicId)
+        {
+            ViewBag.TopicId = topicId;
+
+            return View();
+        }
+        #endregion
+
+        #region Ответить [POST]
+        [HttpPost]
+        public async Task<IActionResult> AddReply(AddReplyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
+                if (topic != null)
+                {
+                    User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                    if (user != null)
+                    {
+                        Reply reply = new Reply()
                         {
                             Id = Guid.NewGuid(),
-                            Subsection = subsection,
-                            TopicName = model.TopicName,
-                            TopicBody = model.TopicBody,
-                            TopicDate = DateTime.Now,
-                            User = user
+                            ReplyBody = model.ReplyBody,
+                            Topic = topic,
+                            User = user,
+                            ReplyDate = DateTime.Now
                         };
 
-                        await _websiteDB.Topics.AddAsync(topic);
+                        await _websiteDB.Replies.AddAsync(reply);
                         await _websiteDB.SaveChangesAsync();
 
                         return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
@@ -164,37 +213,7 @@ namespace OPKODABbl.Controllers
                 return Redirect("/Main/PageNotFound");
             }
 
-            return RedirectToAction("Login", "Account");
-        }
-        #endregion
-
-        #region Ответить
-        [HttpPost]
-        public async Task<IActionResult> AddReply(AddReplyViewModel model)
-        {
-            Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
-            if (topic != null)
-            {
-                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
-                if (user != null)
-                {
-                    Reply reply = new Reply()
-                    {
-                        Id = Guid.NewGuid(),
-                        ReplyBody = model.ReplyBody,
-                        Topic = topic,
-                        User = user,
-                        ReplyDate = DateTime.Now
-                    };
-
-                    await _websiteDB.Replies.AddAsync(reply);
-                    await _websiteDB.SaveChangesAsync();
-
-                    return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
-                }
-            }
-
-            return Redirect("/Main/PageNotFound");
+            return View(model);
         }
         #endregion
 
