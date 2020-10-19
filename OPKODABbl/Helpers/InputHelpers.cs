@@ -59,7 +59,7 @@ namespace OPKODABbl.Helpers
         }
         #endregion
 
-        #region Хеширование строеи
+        #region Хеширование строки
         public static string HashString(this string password)
         {
             MD5 crypto = MD5.Create();

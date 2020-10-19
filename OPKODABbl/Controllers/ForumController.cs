@@ -108,6 +108,13 @@ namespace OPKODABbl.Controllers
                 topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView()));
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+                // Если нет ни одного ответа, задаем максимальное страниц вручную, равное 1 (для отображения в постраничной навигации)
+                if (ViewBag.TotalPages == 0)
+                {
+                    ViewBag.TotalPages = 1;
+                }
+
                 ViewBag.CurrentPage = page;
 
                 return View(topic);
