@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OPKODABbl.Helpers;
 using OPKODABbl.Models.Account;
 using OPKODABbl.Models.Forum;
 using OPKODABbl.Service;
@@ -59,6 +60,8 @@ namespace OPKODABbl.Controllers
             Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
                                                                 .Include(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).FirstOrDefaultAsync(s => s.Id == subsectionId);
 
+            subsection.Topics = subsection.Topics.OrderByDescending(t => t.TopicDate).ToList();
+
             if (subsection != null)
             {
                 ViewBag.SubsectionId = subsection.Id;
@@ -98,6 +101,12 @@ namespace OPKODABbl.Controllers
                 int count = topic.Replies.Count();
                 int pageSize = 10;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Замена символов в содержании темы
+                topic.TopicBody = topic.TopicBody.SpecSymbolsToView();
+                // B в каждом ответе
+                topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView()));
+
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
                 ViewBag.CurrentPage = page;
 

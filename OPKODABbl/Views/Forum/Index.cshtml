@@ -1,71 +1,85 @@
 ﻿@model List<OPKODABbl.Models.Forum.Section>
 
-<div class="forum_wrapper">
+    <div class="forum_navigation">
+        <a asp-action="Index" asp-controller="Forum">Все разделы</a>
+    </div>
 
-    @*<a class="forum_blue" asp-action="Index" asp-controller="Forum">Форум</a>*@
+<table class="viewsubsection">
 
-    <table border="1" width="100%">
-        @foreach (var sec in Model)
+
+    @foreach (var sec in Model)
+    {
+        <tr>
+            <td class="header_title" style="width: 664px;">
+                @sec.SectionName
+            </td>
+            <td class="header" style="width: 80px;">
+                Topics
+            </td>
+            <td class="header" style="width: 80px;">
+                Replies
+            </td>
+            <td class="header" style="width: 150px;">
+                Last Message
+            </td>
+        </tr>
+        foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
         {
-            <tr style="background-color: darkgray;">
-                <td style="width: 600px;">
-                    @sec.SectionName
+            var topicsCount = subsec.Topics.Count();
+            var repliesCount = subsec.Topics.SelectMany(t => t.Replies).Count();
+
+            <tr>
+                <td class="content">
+                    <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@subsec.Id">@subsec.SubsectionName</a>
                 </td>
-                <td align="center">
-                    Topics
+                <td class="content" style="text-align: center;">
+                    @subsec.Topics.Count()
                 </td>
-                <td align="center">
-                    Replies
+                <td class="content" style="text-align: center;">
+                    @subsec.Topics.SelectMany(t => t.Replies).Count()
                 </td>
-                <td align="center">
-                    Last Message
-                </td>
-            </tr>
-            foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
-            {
-                <tr style="background-color: azure;">
-                    <td>
-                        <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@subsec.Id">@subsec.SubsectionName</a>
-                    </td>
-                    <td align="center">
-                        @subsec.Topics.Count()
-                    </td>
-                    <td align="center">
-                        @subsec.Topics.SelectMany(t => t.Replies).Count()
-                    </td>
-                    <td align="center">
-                        @if (subsec.Topics.SelectMany(t => t.Replies).Count() > 0)
+                <td class="content_lastmessage" style="text-align: center;">
+                    @if (repliesCount > 0)
+                    {
+                        var topicDate = subsec.Topics.OrderByDescending(t => t.TopicDate).First().TopicDate;
+                        var replyDate = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().ReplyDate;
+
+                        if (topicDate < replyDate)
                         {
-                            <font color="@subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor">@subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name</font>
-                            @*if (subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User != null)
-                            {
-                                @subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name
-                            }
-                            else
-                            {
-                                <font>Аноним</font>
-                            }*@
-                        }
-                        else if (subsec.Topics.Count > 0)
-                        {
-                            <font color="@subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor">@subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name</font>
-                            @*if (subsec.Topics.OrderByDescending(t => t.TopicDate).First().User != null)
-                            {
-                                @subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name
-                            }
-                            else
-                            {
-                                <font>Аноним</font>
-                            }*@
+                            var classColor = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
+                            var userName = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name;
+
+                            <font color="@classColor">@userName</font>
+                            <br />
+                            @replyDate.ToShortDateString()
                         }
                         else
                         {
-                            <font>-----</font>
-                        }
-                    </td>
-                </tr>
-            }
-        }
-    </table>
+                            var classColor = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor;
+                            var userName = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name;
 
-</div>
+                            <font color="@classColor">@userName</font>
+                            <br />
+                            @topicDate.ToShortDateString()
+                        }
+                    }
+                    else if (topicsCount > 0)
+                    {
+                        var topicDate = subsec.Topics.OrderByDescending(t => t.TopicDate).First().TopicDate;
+                        var classColor = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor;
+                        var userName = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.Name;
+
+                        <font color="@classColor">@userName</font>
+                        <br />
+                        @topicDate.ToShortDateString()
+                    }
+                    else
+                    {
+                        <font>-----</font>
+                    }
+                </td>
+            </tr>
+        }
+    }
+
+</table>

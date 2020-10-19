@@ -1,24 +1,22 @@
 ﻿@model OPKODABbl.Models.Forum.Topic
 
-<div class="content_wrapper">
-    <a asp-action="Index" asp-controller="Forum">Форум</a>
-    <font color="white">>>>>></font>
+
+<div class="forum_navigation">
+    <a asp-action="Index" asp-controller="Forum">Все разделы</a>
+    <font color="white">»</font>
     <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Subsection.Id">@Model.Subsection.SubsectionName</a>
-    <font color="white">>>>>></font>
+    <font color="white">»</font>
     <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@Model.Id">@Model.TopicName</a>
 </div>
 
-<table border="1" width="100%">
-    <tr style="background-color: darkgray;">
-        <td colspan="2">@Model.TopicName</td>
-    </tr>
+<table class="viewtopic">
     @if (ViewBag.CurrentPage == 1)
     {
-        <tr style="background-color: azure;">
-            <td width="20%">
+        <tr>
+            <td class="author">
                 @if (Model.User != null)
                 {
-                    <font color="@Model.User.CharacterClass.ClassColor">@Model.User.Name</font>
+                    <b><font color="@Model.User.CharacterClass.ClassColor">@Model.User.Name</font></b>
                     if (Model.User.Name != "Anonymous")
                     {
                         <br />
@@ -35,18 +33,18 @@
                     <span>Пользователь не найден</span>
                 }
             </td>
-            <td>
-                @Model.TopicBody
+            <td class="message">
+                @Html.Raw(Model.TopicBody)
             </td>
         </tr>
     }
     @foreach (var reply in Model.Replies)
     {
-        <tr style="background-color: azure;">
-            <td>
+        <tr>
+            <td class="author">
                 @if (reply.User != null)
                 {
-                    <font color="@reply.User.CharacterClass.ClassColor">@reply.User.Name</font>
+                    <b><font color="@reply.User.CharacterClass.ClassColor">@reply.User.Name</font></b>
                     if (reply.User.Name != "Anonymous")
                     {
                         <br />
@@ -63,8 +61,8 @@
                     <span>Пользователь не найден</span>
                 }
             </td>
-            <td>
-                @reply.ReplyBody
+            <td class="message">
+                @Html.Raw(reply.ReplyBody)
             </td>
         </tr>
     }

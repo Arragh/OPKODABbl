@@ -1,59 +1,67 @@
 ﻿@model OPKODABbl.Models.Forum.Subsection
 
-<div class="content_wrapper">
-    <a asp-action="Index" asp-controller="Forum">Форум</a>
-    <font color="white">>>>>></font>
+<div class="forum_navigation">
+    <a asp-action="Index" asp-controller="Forum">Все разделы</a>
+    <font color="white">»</font>
     <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
 </div>
 
 @Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
 
-<table border="1" width="100%">
-    <tr style="background-color: darkgray;">
-        <td style="width: 600px;">
+<br />
+
+<table class="viewsubsection">
+    <tr>
+        <td class="header" style="width: 440px;">
             Topic Name
         </td>
-        <td align="center">
+        <td class="header" style="width: 150px;">
             Author
         </td>
-        <td align="center">
+        <td class="header" style="width: 80px;">
             Views
         </td>
-        <td align="center">
+        <td class="header" style="width: 80px;">
             Replies
         </td>
-        <td align="center">
+        <td class="header" style="width: 150px;">
             Last Message
         </td>
     </tr>
-    @foreach (var topic in Model.Topics)
-    {
-        <tr style="background-color: azure;">
-            <td>
-                <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
-            </td>
-            <td align="center">
-                @if (topic.User != null)
-                {
-                    <font color="@topic.User.CharacterClass.ClassColor">@topic.User.Name</font>
-                }
-            </td>
-            <td align="center">
-                54
-            </td>
-            <td align="center">
-                @topic.Replies.Count()
-            </td>
-            <td align="center">
-                @if (topic.Replies.Count() > 0)
-                {
-                    <font color="@topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor">@topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name</font>
-                }
-                else
-                {
-                    <font>-----</font>
-                }
-            </td>
-        </tr>
-    }
+        @foreach (var topic in Model.Topics)
+        {
+            <tr>
+                <td class="content">
+                    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+                </td>
+                <td class="content" style="text-align: center;">
+                    @if (topic.User != null)
+                    {
+                        <font color="@topic.User.CharacterClass.ClassColor">@topic.User.Name</font>
+                    }
+                </td>
+                <td class="content" style="text-align: center;">
+                    54
+                </td>
+                <td class="content" style="text-align: center;">
+                    @topic.Replies.Count()
+                </td>
+                <td class="content_lastmessage" style="text-align: center;">
+                    @if (topic.Replies.Count() > 0)
+                    {
+                        var classColor = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
+                        var userName = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name;
+                        var replyDate = topic.Replies.OrderByDescending(r => r.ReplyDate).First().ReplyDate;
+
+                        <font color="@classColor">@userName</font>
+                        <br />
+                        @replyDate.ToShortDateString()
+                    }
+                    else
+                    {
+                        <font>-----</font>
+                    }
+                </td>
+            </tr>
+        }
 </table>
