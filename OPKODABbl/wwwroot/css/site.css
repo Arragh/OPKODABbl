@@ -978,12 +978,21 @@ table.viewtopic {
         border: 1px solid #2e3741;
     }
 div.message_info {
-    width: 100%;
+    width: 800px;
     font-size: 10px;
     color: #ffffff;
-    text-align: right;
     margin: 0px 0px 10px 0px;
+    padding: 0px 2px 2px 2px;
 }
+    div.message_info div.date {
+        width: 150px;
+        display: inline-block;
+    }
+    div.message_info div.buttons {
+        width: 646px;
+        display: inline-block;
+        text-align: right;
+    }
 div.pages {
     width: 1046px;
     margin: auto;

@@ -84,7 +84,12 @@
             </td>
             <td class="message">
                 <div class="message_info">
-                    @reply.ReplyDate.ToShortDateString()
+                    <div class="date">
+                        @reply.ReplyDate.ToShortTimeString() <b>@reply.ReplyDate.ToShortDateString()</b>
+                    </div>
+                    <div class="buttons">
+                        цитировать
+                    </div>
                 </div>
                 @Html.Raw(reply.ReplyBody)
             </td>
