@@ -28,37 +28,6 @@
 </div>
 
 <table class="viewtopic">
-    @*@if (ViewBag.CurrentPage == 1)
-    {
-        <tr>
-            <td class="author">
-                @if (Model.User != null)
-                {
-                    <b><font color="@Model.User.CharacterClass.ClassColor">@Model.User.Name</font></b>
-                    if (Model.User.Name != "Anonymous")
-                    {
-                        <br />
-                        <font color="@Model.User.Role.Color">@Model.User.Role.Rank</font>
-                    }
-                    <br />
-                    @if (Model.User.AvatarImage != null)
-                    {
-                        <img src="@Model.User.AvatarImage.ImagePath" />
-                    }
-                }
-                else
-                {
-                    <span>Пользователь не найден</span>
-                }
-            </td>
-            <td class="message">
-                <div class="message_info">
-                    @Model.TopicDate.ToShortDateString()
-                </div>
-                @Html.Raw(Model.TopicBody)
-            </td>
-        </tr>
-    }*@
     @foreach (var reply in Model.Replies)
     {
         <tr>
@@ -122,24 +91,3 @@
         <textarea style="width: 700px; height: 300px;" name="ReplyBody"></textarea><br />
         <input type="submit" value="Ответить" />
     </form>
-
-    <br /><br /><br />
-
-    @*<center>
-        <pre>
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-        {
-            if (i != ViewBag.CurrentPage)
-            {
-                string space = " ";
-                @Html.ActionLink(i.ToString(), "ViewTopic", "Forum", new { topicId = Model.Id, page = i })
-                @space
-            }
-            else
-            {
-                string space = i + " ";
-                @space
-            }
-        }
-    </pre>
-    </center>*@

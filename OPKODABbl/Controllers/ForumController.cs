@@ -25,20 +25,26 @@ namespace OPKODABbl.Controllers
         #region Главная страница форума
         public async Task<IActionResult> Index()
         {
+            // Уровень доступа пользователя по умолчанию
             int userAccessLevel = 1;
 
+            // Если пользователь аутентифицирован, у него может оказаться более высокий уровень доступа
             if (User.Identity.IsAuthenticated)
             {
                 User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
                 if (user != null)
                 {
+                    // Устанавливаем уровень доступа для авторизированного пользователя
                     userAccessLevel = user.Role.AccessLevel;
                 }
             }
 
-            List<Section> sections = await _websiteDB.Sections.Where(s => s.SectionAccessLevel <= userAccessLevel).Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+            // Формируем список разделов в соответствии с уровнем доступа юзера, включая подраздела, последние темы и сообщения в нём
+            List<Section> sections = await _websiteDB.Sections.Where(s => s.SectionAccessLevel <= userAccessLevel)
+                                                              .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
                                                               .OrderBy(s => s.SectionPosition).ToListAsync();
 
+            // Передаем в представление
             return View(sections);
         }
         #endregion
@@ -63,17 +69,27 @@ namespace OPKODABbl.Controllers
             // Проверяем, чтобы такой подраздел существовал
             if (await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId) != null)
             {
-                // Создаем модель подраздела с проверкой уровня доступа, а так же со всеми темами, находящимися в подразделе и пр.
-                Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                // Формируем модель подраздела с проверкой уровня доступа, а так же со всеми темами, находящимися в подразделе и пр.
+                Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel)
+                                                                    .Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
                                                                     .FirstOrDefaultAsync(s => s.Id == subsectionId);
 
-                // Сортировка тем в подразделе по дате последнего ответа
-                subsection.Topics.ForEach(s => s.Replies.OrderByDescending(r => r.ReplyDate));
-                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.First().ReplyDate).ToList();
+                // Проверяем существование подраздела для данного пользователя (при недостатке прав он будет равен null)
+                if (subsection != null)
+                {
+                    // Сортировка ответов в каждой теме по дате
+                    subsection.Topics.ForEach(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
+                    // Сортировка тем в подразделе по дате последнего ответа
+                    subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
 
-                // Передаем в представление
-                ViewBag.SubsectionId = subsection.Id;
-                return View(subsection);
+                    ViewBag.SubsectionId = subsection.Id;
+
+                    // Передаем в представление
+                    return View(subsection);
+                }
+
+                // Если у пользователя нет прав на просмотр подраздела, отправляем ему ошибку 404
+                return Redirect("/Main/PageNotFound");
             }
 
             // Если подраздел не был найден, возвращаем ошибку 404
@@ -84,26 +100,32 @@ namespace OPKODABbl.Controllers
         #region Просмотр топика
         public async Task<IActionResult> ViewTopic(Guid topicId, int page = 1)
         {
+            // Уровень доступа пользователя по умолчанию
             int userAccessLevel = 1;
 
+            // Если пользователь аутентифицирован, у него может оказаться более высокий уровень доступа
             if (User.Identity.IsAuthenticated)
             {
                 User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
                 if (user != null)
                 {
+                    // Устанавливаем уровень доступа для авторизированного пользователя
                     userAccessLevel = user.Role.AccessLevel;
                 }
             }
 
-            Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
-                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
-                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
-                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
-                                                 .Include(t => t.Subsection)
-                                                 .FirstOrDefaultAsync(t => t.Id == topicId);
-
-            if (topic != null)
+            // Если такой топик существует, выполняем дальше
+            if (await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == topicId) != null)
             {
+                // Формируем модель топика со всеми ответами и пользователями в нём. И обязательно проверка на уровень доступа пользователя, для избежания неавторизованного просмотра по прямой ссылке
+                Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
+                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
+                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                     .Include(t => t.Subsection)
+                                                     .FirstOrDefaultAsync(t => t.Id == topicId);
+
+                // Разбиваем ответы по страницам
                 int count = topic.Replies.Count();
                 int pageSize = 10;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -112,12 +134,12 @@ namespace OPKODABbl.Controllers
                 topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView()));
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
                 ViewBag.CurrentPage = page;
 
                 return View(topic);
             }
 
+            // Если топик не существует, выводим сообщение об ошибке
             return Redirect("/Main/PageNotFound");
         }
         #endregion
@@ -126,23 +148,32 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateTopic(Guid subsectionId)
         {
+            // Проверка, чтобы пользователь был авторизован
             if (User.Identity.IsAuthenticated)
             {
+                // Формируем модель подраздела
                 Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == subsectionId);
+
+                // Проверяем, что такой подраздел существует
                 if (subsection != null)
                 {
+                    // Формируем модель пользователя с уровнем доступа для проверки
                     User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
 
+                    // Проверяем, может ли пользователь просматривать данный подраздел
                     if (subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
                     {
+                        // Если может, то возвращаем ему представление
                         ViewBag.SubsectionId = subsection.Id;
                         return View();
                     }
                 }
 
+                // А если не может, то возвращаем ему ошибку 404
                 return Redirect("/Main/PageNotFound");
             }
 
+            // Если юзер не авторизован, перенаправляем его на страницу авторизации
             return RedirectToAction("Login", "Account");
         }
         #endregion
@@ -150,26 +181,32 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
-            if (ModelState.IsValid)
+            // Проверяем, чтобы пользователь был авторизован
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
+                // Проверка валидации модели
+                if (ModelState.IsValid)
                 {
+                    // Формируем модель подраздела
                     Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+                    // Проверяем, чтобы такой существовал
                     if (subsection != null)
                     {
+                        // Формируем омдель авторизованного пользователя с его ролью
                         User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                        // Проверяем, чтобы уровень доступа пользователя был не ниже уровня раздела
                         if (user != null && subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
                         {
+                            // Создаем модель топика
                             Topic topic = new Topic()
                             {
                                 Id = Guid.NewGuid(),
                                 Subsection = subsection,
                                 TopicName = model.TopicName,
-                                //TopicBody = model.TopicBody,
                                 TopicDate = DateTime.Now,
-                                //User = user
                             };
 
+                            // И модель первого в нём сообщения, которое и будет сообщением только что созданной темы
                             Reply reply = new Reply()
                             {
                                 Id = Guid.NewGuid(),
@@ -179,21 +216,26 @@ namespace OPKODABbl.Controllers
                                 Topic = topic
                             };
 
+                            // Добавляем всё в базу и сохраняем
                             await _websiteDB.Topics.AddAsync(topic);
                             await _websiteDB.Replies.AddAsync(reply);
                             await _websiteDB.SaveChangesAsync();
 
+                            // Редирект в только что созданную тему
                             return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
                         }
                     }
 
+                    // Ошибка 404, если подраздел не найден
                     return Redirect("/Main/PageNotFound");
                 }
 
-                return RedirectToAction("Login", "Account");
+                // Это должен быть возврат модели с ошибками. Пока не закончено!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                return View(model);
             }
 
-            return View(model);
+            // Если пользователь не авторизован, перенаправляем его на страницу авторизации
+            return RedirectToAction("Login", "Account");
         }
         #endregion
 
@@ -210,34 +252,52 @@ namespace OPKODABbl.Controllers
         [HttpPost]
         public async Task<IActionResult> AddReply(AddReplyViewModel model)
         {
-            if (ModelState.IsValid)
+            // Проверяем, чтобы пользователь был авторизован
+            if (User.Identity.IsAuthenticated)
             {
-                Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
-                if (topic != null)
+                // Проверка валидации модели
+                if (ModelState.IsValid)
                 {
-                    User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
-                    if (user != null)
+                    // Формируем модель топика
+                    Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
+
+                    // Проверяем, чтобы такой существовал
+                    if (topic != null)
                     {
-                        Reply reply = new Reply()
+                        // Формируем модель пользователя
+                        User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+
+                        // Проверяем, что такой действительно существует
+                        if (user != null)
                         {
-                            Id = Guid.NewGuid(),
-                            ReplyBody = model.ReplyBody,
-                            Topic = topic,
-                            User = user,
-                            ReplyDate = DateTime.Now
-                        };
+                            // Создаем модель ответа
+                            Reply reply = new Reply()
+                            {
+                                Id = Guid.NewGuid(),
+                                ReplyBody = model.ReplyBody,
+                                Topic = topic,
+                                User = user,
+                                ReplyDate = DateTime.Now
+                            };
 
-                        await _websiteDB.Replies.AddAsync(reply);
-                        await _websiteDB.SaveChangesAsync();
+                            // Добавляем в базу и сохраняем
+                            await _websiteDB.Replies.AddAsync(reply);
+                            await _websiteDB.SaveChangesAsync();
 
-                        return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                            // Редирект на тему
+                            return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                        }
                     }
+
+                    // Если топик или пользователь не найдены, выдаём ошибку 404
+                    return Redirect("/Main/PageNotFound");
                 }
 
-                return Redirect("/Main/PageNotFound");
+                return View(model);
             }
 
-            return View(model);
+            // Если пользователь не авторизован, перенаправляем его на страницу авторизации
+            return RedirectToAction("Login", "Account");
         }
         #endregion
 

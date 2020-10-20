@@ -10,9 +10,7 @@ namespace OPKODABbl.Models.Forum
     {
         public Guid Id { get; set; }
         public string TopicName { get; set; }
-        //public string TopicBody { get; set; }
         public DateTime TopicDate { get; set; }
-        //public User User { get; set; }
         public Subsection Subsection { get; set; }
         public List<Reply> Replies { get; set; }
     }

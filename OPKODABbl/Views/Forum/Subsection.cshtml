@@ -37,7 +37,7 @@
                 <td class="content" style="text-align: center;">
                     @if (topic.Replies.Count > 0)
                     {
-                        var firstReplyUser = @topic.Replies.OrderBy(r => r.ReplyDate).First().User;
+                        var firstReplyUser = @topic.Replies.First().User;
                         <font color="@firstReplyUser.CharacterClass.ClassColor">@firstReplyUser.Name</font>
                     }
                 </td>
@@ -53,9 +53,9 @@
                 <td class="content_lastmessage" style="text-align: center;">
                     @if (topic.Replies.Count() > 1)
                     {
-                        var classColor = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
-                        var userName = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name;
-                        var replyDate = topic.Replies.OrderByDescending(r => r.ReplyDate).First().ReplyDate;
+                        var classColor = topic.Replies.Last().User.CharacterClass.ClassColor;
+                        var userName = topic.Replies.Last().User.Name;
+                        var replyDate = topic.Replies.Last().ReplyDate;
 
                         <font color="@classColor">@userName</font>
                         <br />
