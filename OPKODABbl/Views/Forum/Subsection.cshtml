@@ -35,19 +35,23 @@
                     <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
                 </td>
                 <td class="content" style="text-align: center;">
-                    @if (topic.User != null)
+                    @if (topic.Replies.Count > 0)
                     {
-                        <font color="@topic.User.CharacterClass.ClassColor">@topic.User.Name</font>
+                        var firstReplyUser = @topic.Replies.OrderBy(r => r.ReplyDate).First().User;
+                        <font color="@firstReplyUser.CharacterClass.ClassColor">@firstReplyUser.Name</font>
                     }
                 </td>
                 <td class="content" style="text-align: center;">
                     54
                 </td>
                 <td class="content" style="text-align: center;">
-                    @topic.Replies.Count()
+                    @{ 
+                        var repliesCount = topic.Replies.Count() - 1;
+                    }
+                    @repliesCount
                 </td>
                 <td class="content_lastmessage" style="text-align: center;">
-                    @if (topic.Replies.Count() > 0)
+                    @if (topic.Replies.Count() > 1)
                     {
                         var classColor = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
                         var userName = topic.Replies.OrderByDescending(r => r.ReplyDate).First().User.Name;

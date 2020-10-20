@@ -28,7 +28,7 @@
 </div>
 
 <table class="viewtopic">
-    @if (ViewBag.CurrentPage == 1)
+    @*@if (ViewBag.CurrentPage == 1)
     {
         <tr>
             <td class="author">
@@ -58,7 +58,7 @@
                 @Html.Raw(Model.TopicBody)
             </td>
         </tr>
-    }
+    }*@
     @foreach (var reply in Model.Replies)
     {
         <tr>

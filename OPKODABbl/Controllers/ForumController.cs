@@ -37,7 +37,7 @@ namespace OPKODABbl.Controllers
             }
 
             List<Section> sections = await _websiteDB.Sections.Where(s => s.SectionAccessLevel <= userAccessLevel).Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
-                                                        .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).OrderBy(s => s.SectionPosition).ToListAsync();
+                                                              .OrderBy(s => s.SectionPosition).ToListAsync();
 
             return View(sections);
         }
@@ -46,28 +46,37 @@ namespace OPKODABbl.Controllers
         #region Просмотр раздела форума
         public async Task<IActionResult> Subsection(Guid subsectionId)
         {
+            // Уровень доступа пользователя по умолчанию
             int userAccessLevel = 1;
 
+            // Если пользователь аутентифицирован, у него может оказаться более высокий уровень доступа
             if (User.Identity.IsAuthenticated)
             {
                 User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
                 if (user != null)
                 {
+                    // Устанавливаем уровень доступа для авторизированного пользователя
                     userAccessLevel = user.Role.AccessLevel;
                 }
             }
 
-            Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
-                                                                .Include(s => s.Topics).ThenInclude(t => t.User).ThenInclude(u => u.CharacterClass).FirstOrDefaultAsync(s => s.Id == subsectionId);
-
-            subsection.Topics = subsection.Topics.OrderByDescending(t => t.TopicDate).ToList();
-
-            if (subsection != null)
+            // Проверяем, чтобы такой подраздел существовал
+            if (await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId) != null)
             {
+                // Создаем модель подраздела с проверкой уровня доступа, а так же со всеми темами, находящимися в подразделе и пр.
+                Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel).Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                                    .FirstOrDefaultAsync(s => s.Id == subsectionId);
+
+                // Сортировка тем в подразделе по дате последнего ответа
+                subsection.Topics.ForEach(s => s.Replies.OrderByDescending(r => r.ReplyDate));
+                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.First().ReplyDate).ToList();
+
+                // Передаем в представление
                 ViewBag.SubsectionId = subsection.Id;
                 return View(subsection);
             }
 
+            // Если подраздел не был найден, возвращаем ошибку 404
             return Redirect("/Main/PageNotFound");
         }
         #endregion
@@ -87,9 +96,6 @@ namespace OPKODABbl.Controllers
             }
 
             Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
-                                                 .Include(t => t.User).ThenInclude(u => u.AvatarImage)
-                                                 .Include(t => t.User).ThenInclude(u => u.Role)
-                                                 .Include(t => t.User).ThenInclude(u => u.CharacterClass)
                                                  .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
                                                  .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
                                                  .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
@@ -102,18 +108,10 @@ namespace OPKODABbl.Controllers
                 int pageSize = 10;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-                // Замена символов в содержании темы
-                topic.TopicBody = topic.TopicBody.SpecSymbolsToView();
-                // B в каждом ответе
+                // Замена символов в каждом ответе
                 topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView()));
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-                // Если нет ни одного ответа, задаем максимальное страниц вручную, равное 1 (для отображения в постраничной навигации)
-                if (ViewBag.TotalPages == 0)
-                {
-                    ViewBag.TotalPages = 1;
-                }
 
                 ViewBag.CurrentPage = page;
 
@@ -167,12 +165,22 @@ namespace OPKODABbl.Controllers
                                 Id = Guid.NewGuid(),
                                 Subsection = subsection,
                                 TopicName = model.TopicName,
-                                TopicBody = model.TopicBody,
+                                //TopicBody = model.TopicBody,
                                 TopicDate = DateTime.Now,
-                                User = user
+                                //User = user
+                            };
+
+                            Reply reply = new Reply()
+                            {
+                                Id = Guid.NewGuid(),
+                                ReplyBody = model.TopicBody,
+                                ReplyDate = DateTime.Now,
+                                User = user,
+                                Topic = topic
                             };
 
                             await _websiteDB.Topics.AddAsync(topic);
+                            await _websiteDB.Replies.AddAsync(reply);
                             await _websiteDB.SaveChangesAsync();
 
                             return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });

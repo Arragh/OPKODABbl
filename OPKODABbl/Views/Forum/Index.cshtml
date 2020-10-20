@@ -36,7 +36,10 @@
                     @subsec.Topics.Count()
                 </td>
                 <td class="content" style="text-align: center;">
-                    @subsec.Topics.SelectMany(t => t.Replies).Count()
+                    @{ 
+                        int resultCount = repliesCount - topicsCount;
+                    }
+                    @resultCount
                 </td>
                 <td class="content_lastmessage" style="text-align: center;">
                     @if (repliesCount > 0)
@@ -44,15 +47,15 @@
                         var topicDate = subsec.Topics.OrderByDescending(t => t.TopicDate).First().TopicDate;
                         var replyDate = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().ReplyDate;
 
-                        if (topicDate < replyDate)
-                        {
-                            var classColor = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
-                            var userName = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name;
+                        //if (topicDate < replyDate)
+                        //{
+                        var classColor = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
+                        var userName = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name;
 
                             <font color="@classColor">@userName</font>
                             <br />
                             @replyDate.ToShortDateString()
-                        }
+                        @*}
                         else
                         {
                             var classColor = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor;
@@ -61,9 +64,9 @@
                             <font color="@classColor">@userName</font>
                             <br />
                             @topicDate.ToShortDateString()
-                        }
+                        }*@
                     }
-                    else if (topicsCount > 0)
+                    @*else if (topicsCount > 0)
                     {
                         var topicDate = subsec.Topics.OrderByDescending(t => t.TopicDate).First().TopicDate;
                         var classColor = subsec.Topics.OrderByDescending(t => t.TopicDate).First().User.CharacterClass.ClassColor;
@@ -72,7 +75,7 @@
                         <font color="@classColor">@userName</font>
                         <br />
                         @topicDate.ToShortDateString()
-                    }
+                    }*@
                     else
                     {
                         <font>-----</font>

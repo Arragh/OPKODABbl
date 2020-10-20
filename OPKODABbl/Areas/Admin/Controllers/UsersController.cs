@@ -133,10 +133,10 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     reply.User = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == "Anonymous");
                 }
 
-                foreach (var topic in user.Topics)
-                {
-                    topic.User = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == "Anonymous");
-                }
+                //foreach (var topic in user.Topics)
+                //{
+                //    topic.User = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == "Anonymous");
+                //}
 
                 _websiteDB.Users.Remove(user);
                 await _websiteDB.SaveChangesAsync();
