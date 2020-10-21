@@ -14,13 +14,13 @@
                 @sec.SectionName
             </td>
             <td class="header" style="width: 80px;">
-                Topics
+                Тем
             </td>
             <td class="header" style="width: 80px;">
-                Replies
+                Ответов
             </td>
             <td class="header" style="width: 150px;">
-                Last Message
+                Последнее сообщение
             </td>
         </tr>
         foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
@@ -53,7 +53,7 @@
 
                         <font color="@classColor">@userName</font>
                         <br />
-                        @replyDate.ToShortDateString()
+                        @replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()
 
                     }
                     else

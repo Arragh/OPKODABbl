@@ -66,33 +66,26 @@ namespace OPKODABbl.Controllers
                 }
             }
 
-            // Проверяем, чтобы такой подраздел существовал
-            if (await _websiteDB.Subsections.FirstOrDefaultAsync(s => s.Id == subsectionId) != null)
+            // Формируем модель подраздела с проверкой уровня доступа, а так же со всеми темами, находящимися в подразделе и пр.
+            Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel)
+                                                                .Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                                .FirstOrDefaultAsync(s => s.Id == subsectionId);
+
+            // Проверяем существование подраздела в общем и для данного пользователя в частности (при недостатке прав он будет равен null)
+            if (subsection != null)
             {
-                // Формируем модель подраздела с проверкой уровня доступа, а так же со всеми темами, находящимися в подразделе и пр.
-                Subsection subsection = await _websiteDB.Subsections.Where(s => s.Section.SectionAccessLevel <= userAccessLevel)
-                                                                    .Include(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
-                                                                    .FirstOrDefaultAsync(s => s.Id == subsectionId);
+                // Сортировка ответов в каждой теме по дате
+                subsection.Topics.ForEach(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
+                // Сортировка тем в подразделе по дате последнего ответа
+                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
 
-                // Проверяем существование подраздела для данного пользователя (при недостатке прав он будет равен null)
-                if (subsection != null)
-                {
-                    // Сортировка ответов в каждой теме по дате
-                    subsection.Topics.ForEach(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
-                    // Сортировка тем в подразделе по дате последнего ответа
-                    subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
+                ViewBag.SubsectionId = subsection.Id;
 
-                    ViewBag.SubsectionId = subsection.Id;
-
-                    // Передаем в представление
-                    return View(subsection);
-                }
-
-                // Если у пользователя нет прав на просмотр подраздела, отправляем ему ошибку 404
-                return Redirect("/Main/PageNotFound");
+                // Передаем в представление
+                return View(subsection);
             }
 
-            // Если подраздел не был найден, возвращаем ошибку 404
+            // Если такого раздела не существует или у пользователя нет прав на просмотр подраздела, отправляем ему ошибку 404
             return Redirect("/Main/PageNotFound");
         }
         #endregion

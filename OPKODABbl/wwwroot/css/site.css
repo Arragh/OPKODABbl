@@ -127,6 +127,7 @@ input.login_pass {
     input.login_pass:focus {
         outline: none;
     }
+
 input.login_button {
     padding: 5px 10px 5px 10px;
     margin: 0px 0px 0px 0px;
@@ -140,6 +141,10 @@ input.login_button {
     input.login_button:focus {
         outline: none;
     }
+    input.login_button:hover {
+        color: #ffffff;
+        background-color: #1b8bdf;
+    }
 input.logout_button {
     padding: 5px 10px 5px 10px;
     margin: 0px 0px 0px 0px;
@@ -150,9 +155,12 @@ input.logout_button {
     font-size: 19px;
     color: #ff0000;
 }
-
     input.logout_button:focus {
         outline: none;
+    }
+    input.logout_button:hover {
+        color: #ffffff;
+        background-color: #ff0000;
     }
 a.login_pass_register {
     font-family: OPKODAB;
