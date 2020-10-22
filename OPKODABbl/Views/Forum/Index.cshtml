@@ -44,16 +44,16 @@
                 <td class="content_lastmessage" style="text-align: center;">
                     @if (repliesCount > 0)
                     {
-                        var topicDate = subsec.Topics.OrderByDescending(t => t.TopicDate).First().TopicDate;
-                        var replyDate = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().ReplyDate;
+                        var replyDate = subsec.Topics.SelectMany(t => t.Replies).Last().ReplyDate;
+                        string testLink = $"/Forum/ViewTopic?topicId={subsec.Topics.Last().Id}&page={(int)Math.Ceiling(subsec.Topics.Last().Replies.Count() / (double)10)}#{subsec.Topics.Last().Replies.Count()}";
 
 
-                        var classColor = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.CharacterClass.ClassColor;
-                        var userName = subsec.Topics.SelectMany(t => t.Replies).OrderByDescending(r => r.ReplyDate).First().User.Name;
+                        var classColor = subsec.Topics.SelectMany(t => t.Replies).Last().User.CharacterClass.ClassColor;
+                        var userName = subsec.Topics.SelectMany(t => t.Replies).Last().User.Name;
 
                         <font color="@classColor">@userName</font>
                         <br />
-                        @replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()
+                        <a href="@testLink">@replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()</a>
 
                     }
                     else

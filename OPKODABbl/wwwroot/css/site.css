@@ -1020,6 +1020,44 @@ div.pages {
         text-decoration: none;
     }
 
+form.reply {
+    width: 1056px;
+    margin: 20px 0px 20px 0px;
+    text-align: center;
+}
+form.reply textarea {
+    width: 700px;
+    height: 300px;
+    font-family: Verdana;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 5px 5px 5px 5px;
+    border: 2px solid #ffffff;
+    background-color: rgba(49, 51, 54, 0.6);
+}
+    form.reply textarea:focus {
+        outline: none;
+    }
+form.reply input {
+    padding: 5px 10px 5px 10px;
+    margin: 10px 0px 10px 0px;
+    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 15px;
+    font-family: OPKODAB;
+    font-size: 19px;
+    color: #1b8bdf;
+}
+form.reply input:focus {
+    outline: none;
+}
+form.reply input:hover {
+    color: #ffffff;
+    background-color: #1b8bdf;
+}
+
+
+
             @font-face {
                 font-family: OPKODAB;
                 src: url("../css/futurespore_cyrillic.otf");
