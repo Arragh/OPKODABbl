@@ -5,10 +5,9 @@
     <font color="white">»</font>
     <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
 </div>
-
-@Html.ActionLink("Создать тему", "CreateTopic", "Forum", new { subsectionId = ViewBag.SubsectionId })
-
-<br />
+<div class="newtopic_link">
+    <a asp-action="CreateTopic" asp-controller="Forum" asp-route-subsectionId="@Model.Id">Новая тема</a>
+</div>
 
 <table class="viewsubsection">
     <tr>
@@ -30,7 +29,9 @@
     </tr>
         @foreach (var topic in Model.Topics)
         {
-            int totalPages = (int)Math.Ceiling(topic.Replies.Count() / (double)10);
+            int pageSize = 2;
+
+            int totalPages = (int)Math.Ceiling(topic.Replies.Count() / (double)pageSize);
             // Формирование ссылки на последнее сообщение в подразделе
             string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={totalPages}#{topic.Replies.Count()}";
 

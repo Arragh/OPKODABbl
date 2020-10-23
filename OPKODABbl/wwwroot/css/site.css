@@ -1035,6 +1035,26 @@ div.pages {
         text-decoration: none;
     }
 
+div.newtopic_link {
+    margin: 20px 0px 15px 0px;
+    width: 100%;
+    text-align: center;
+}
+    div.newtopic_link a {
+        padding: 5px 10px 5px 10px;
+        border: 2px solid #ffffff;
+        background-color: #ffffff;
+        border-radius: 15px;
+        font-family: OPKODAB;
+        font-size: 19px;
+        color: #1b8bdf;
+        text-decoration: none;
+    }
+        div.newtopic_link a:hover {
+            color: #ffffff;
+            background-color: #1b8bdf;
+        }
+
 form.reply {
     width: 1056px;
     margin: 20px 0px 20px 0px;

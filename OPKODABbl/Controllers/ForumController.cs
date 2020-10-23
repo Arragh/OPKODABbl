@@ -103,7 +103,7 @@ namespace OPKODABbl.Controllers
                 // Сортировка тем в подразделе по дате последнего ответа
                 subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
 
-                ViewBag.SubsectionId = subsection.Id;
+                //ViewBag.SubsectionId = subsection.Id;
 
                 // Передаем в представление
                 return View(subsection);
@@ -144,7 +144,7 @@ namespace OPKODABbl.Controllers
 
                 // Разбиваем ответы по страницам
                 int count = topic.Replies.Count();
-                int pageSize = 10;
+                int pageSize = 2;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 // Замена символов в каждом ответе
