@@ -144,7 +144,7 @@ namespace OPKODABbl.Controllers
 
                 // Разбиваем ответы по страницам
                 int count = topic.Replies.Count();
-                int pageSize = 2;
+                int pageSize = 10;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 // Замена символов в каждом ответе
@@ -257,9 +257,26 @@ namespace OPKODABbl.Controllers
         #endregion
 
         #region Ответить [GET]
-        public IActionResult AddReply(Guid topicId)
+        [HttpGet]
+        public async Task<IActionResult> AddReply(Guid topicId, Guid? quoteMessageId)
         {
             ViewBag.TopicId = topicId;
+
+            if (quoteMessageId != null)
+            {
+                Reply reply = await _websiteDB.Replies.Include(r => r.User).FirstOrDefaultAsync(r => r.Id == quoteMessageId);
+
+                if (reply != null)
+                {
+                    AddReplyViewModel model = new AddReplyViewModel()
+                    {
+                        TopicId = topicId,
+                        ReplyBody = $"[quote={reply.User.Name}]{reply.ReplyBody}[/quote]" + "<br>".SpecSymbolsToEdit()
+                    };
+
+                    return View(model);
+                }
+            }
 
             return View();
         }

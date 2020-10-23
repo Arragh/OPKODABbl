@@ -29,7 +29,7 @@
     </tr>
         @foreach (var topic in Model.Topics)
         {
-            int pageSize = 2;
+            int pageSize = 10;
 
             int totalPages = (int)Math.Ceiling(topic.Replies.Count() / (double)pageSize);
             // Формирование ссылки на последнее сообщение в подразделе

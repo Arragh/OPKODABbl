@@ -23,8 +23,8 @@ namespace OPKODABbl.Helpers
                        .Replace("<", "&lt;")
                        .Replace(">", "&gt;")
                        .Replace("\r\n", "<br>")
-                       .Replace("\\", "&#x5C")
-                       .Replace("  ", "&nbsp;&nbsp;");
+                       .Replace("\\", "&#x5C");
+                       //.Replace("  ", "&nbsp;&nbsp;");
         }
 
         public static string SpecSymbolsToEdit(this string text)

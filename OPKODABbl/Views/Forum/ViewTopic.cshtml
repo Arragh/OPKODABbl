@@ -62,7 +62,7 @@
                         <a href="@link" name="@htmlAnchor">@reply.ReplyDate.ToShortDateString()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@reply.ReplyDate.ToShortTimeString()</a>
                     </div>
                     <div class="buttons">
-                        цитировать
+                        <a asp-action="AddReply" asp-controller="Forum" asp-route-topicId="@Model.Id" asp-route-quoteMessageId="@reply.Id">Цитировать</a>
                     </div>
                 </div>
                 @Html.Raw(reply.ReplyBody)
