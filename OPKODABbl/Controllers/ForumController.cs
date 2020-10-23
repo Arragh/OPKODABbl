@@ -44,10 +44,6 @@ namespace OPKODABbl.Controllers
                                                               .Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
                                                               .OrderBy(s => s.SectionPosition).ToListAsync();
 
-
-
-
-
             // Придется прибегнуть к такому говнокоду для разгрузки страницы Index от кода рпи формировании
             foreach (var section in sections)
             {
@@ -63,10 +59,6 @@ namespace OPKODABbl.Controllers
                     subsection.Topics = subsection.Topics.OrderBy(t => t.Replies.Last().ReplyDate).ToList();
                 }
             }
-
-
-
-
 
             // Передаем в представление
             return View(sections);

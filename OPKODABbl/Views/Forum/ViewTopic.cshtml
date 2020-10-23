@@ -59,7 +59,7 @@
                 <div class="message_info">
                     <div class="date">
                         @{ string link = $"ViewTopic?topicId={Model.Id}&page={ViewBag.CurrentPage}#{htmlAnchor}"; }
-                        <a href="@link" name="@htmlAnchor">@reply.ReplyDate.ToShortDateString()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@reply.ReplyDate.ToShortTimeString()</a>
+                        <a class="anchor_link" href="@link" name="@htmlAnchor">@reply.ReplyDate.ToShortDateString() - @reply.ReplyDate.ToShortTimeString()</a>
                     </div>
                     <div class="buttons">
                         <a asp-action="AddReply" asp-controller="Forum" asp-route-topicId="@Model.Id" asp-route-quoteMessageId="@reply.Id">Цитировать</a>

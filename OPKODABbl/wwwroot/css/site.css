@@ -1016,6 +1016,20 @@ div.message_info {
         display: inline-block;
         text-align: right;
     }
+        div.message_info div.buttons a {
+            padding: 1px 5px 2px 5px;
+            border: 1px solid #ffffff;
+            background-color: #1b8bdf;
+            border-radius: 8px;
+            font-family: Verdana;
+            font-size: 11px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+            div.message_info div.buttons a:hover {
+                color: #1b8bdf;
+                background-color: #ffffff;
+            }
 div.pages {
     width: 1046px;
     margin: auto;
@@ -1093,9 +1107,20 @@ form.reply input:hover {
 
 div.quote {
     margin: 3px 0px 10px 0px;
-    padding: 5px 10px 5px 10px;
+    padding: 3px 5px 3px 5px;
     border: 1px solid #ffffff;
     background-color: rgba(0, 140, 227, 0.7);
+    color: #dcdcdc;
+}
+
+a.anchor_link {
+    font-family: Verdana;
+    font-size: 10px;
+    color: #ffffff;
+    text-decoration: underline;
+}
+a.anchor_link:hover {
+    text-decoration: none;
 }
 
 
