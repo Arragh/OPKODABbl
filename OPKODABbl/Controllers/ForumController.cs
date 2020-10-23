@@ -169,6 +169,8 @@ namespace OPKODABbl.Controllers
                 // Проверяем, что такой подраздел существует
                 if (subsection != null)
                 {
+                    ViewBag.SubsectionName = subsection.SubsectionName;
+
                     // Формируем модель пользователя с уровнем доступа для проверки
                     User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
 

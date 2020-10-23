@@ -992,6 +992,10 @@ table.viewtopic {
     margin: 0px 0px 0px -10px;
     border-spacing: 10px;
 }
+    table.viewtopic td.line {
+        height: 4px;
+        background-color: rgba(0, 140, 227, 0.7);
+    }
     table.viewtopic td.author {
         width: 180px;
         background-color: rgba(28, 32, 39, 0.5);
@@ -1004,7 +1008,7 @@ table.viewtopic {
     }
     table.viewtopic td.message {
         background-color: rgba(28, 32, 39, 0.5);
-        padding: 10px 20px 35px 20px;
+        padding: 20px 20px 35px 20px;
         font-family: Verdana;
         font-size: 14px;
         color: #cdcdcd;
@@ -1029,9 +1033,7 @@ div.message_info {
     }
         div.message_info div.buttons a {
             padding: 1px 5px 2px 5px;
-            border: 1px solid #ffffff;
             background-color: #1b8bdf;
-            border-radius: 8px;
             font-family: Verdana;
             font-size: 11px;
             color: #ffffff;
@@ -1081,26 +1083,28 @@ div.newtopic_link {
         }
 
 form.reply {
-    width: 1056px;
-    margin: 20px 0px 20px 0px;
+    width: 100%;
+    margin: 10px 0px 0px 0px;
     text-align: center;
 }
-form.reply textarea {
-    width: 700px;
-    height: 300px;
-    font-family: Verdana;
-    color: #ffffff;
-    font-size: 13px;
-    padding: 5px 5px 5px 5px;
-    border: 2px solid #ffffff;
-    background-color: rgba(49, 51, 54, 0.6);
-}
+    form.reply textarea {
+        min-width: 760px;
+        max-width: 760px;
+        min-height: 300px;
+        max-height: 300px;
+        font-family: Verdana;
+        color: #ffffff;
+        font-size: 13px;
+        padding: 5px 5px 5px 5px;
+        border: 2px solid #ffffff;
+        background-color: rgba(49, 51, 54, 0.6);
+    }
     form.reply textarea:focus {
         outline: none;
     }
 form.reply input {
     padding: 5px 10px 5px 10px;
-    margin: 10px 0px 10px 0px;
+    margin: 10px 0px 0px 0px;
     border: 2px solid #ffffff;
     background-color: #ffffff;
     border-radius: 15px;
@@ -1135,25 +1139,28 @@ a.anchor_link:hover {
 }
 
 form.createtopic {
-    width: 1056px;
-    margin: 20px 0px 20px 0px;
+    width: 100%;
+    margin: 10px 0px 0px 0px;
     text-align: center;
 }
     form.createtopic input.topicname {
-        width: 700px;
+        width: 760px;
         padding: 5px 5px 5px 5px;
         border: 2px solid #ffffff;
         background-color: rgba(49, 51, 54, 0.6);
         font-family: Verdana;
         color: #ffffff;
         font-size: 13px;
+        outline: none;
     }
         forum.createtopic input.topicname:focus {
             outline: none;
         }
     form.createtopic textarea {
-        width: 700px;
-        height: 300px;
+        min-width: 760px;
+        max-width: 760px;
+        min-height: 300px;
+        max-height: 300px;
         margin: 10px 0px 0px 0px;
         font-family: Verdana;
         color: #ffffff;
@@ -1167,7 +1174,7 @@ form.createtopic {
         }
     form.createtopic input.button {
         padding: 5px 10px 5px 10px;
-        margin: 10px 0px 10px 0px;
+        margin: 10px 0px -10px 0px;
         border: 2px solid #ffffff;
         background-color: #ffffff;
         border-radius: 15px;
@@ -1178,10 +1185,39 @@ form.createtopic {
         form.createtopic input.button:focus {
             outline: none;
         }
-        form.createtopic input:hover {
-            color: #ffffff;
-            background-color: #1b8bdf;
-        }
+
+table.new_message {
+    width: 1076px;
+    padding: 0px;
+    margin: 0px 0px 0px -10px;
+    border-spacing: 10px;
+}
+
+    table.new_message td.line {
+        height: 4px;
+        background-color: rgba(0, 140, 227, 0.7);
+    }
+
+    table.new_message td.author {
+        width: 180px;
+        background-color: rgba(28, 32, 39, 0.5);
+        text-align: center;
+        padding: 10px 10px 10px 10px;
+        font-family: Verdana;
+        font-size: 14px;
+        vertical-align: top;
+        border: 1px solid #2e3741;
+    }
+
+    table.new_message td.message {
+        background-color: rgba(28, 32, 39, 0.5);
+        padding: 20px 20px 35px 20px;
+        font-family: Verdana;
+        font-size: 14px;
+        color: #cdcdcd;
+        vertical-align: top;
+        border: 1px solid #2e3741;
+    }
 
 
             @font-face {

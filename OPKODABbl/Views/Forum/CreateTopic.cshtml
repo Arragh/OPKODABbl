@@ -1,13 +1,39 @@
 ﻿@model OPKODABbl.ViewModels.Forum.CreateTopicViewModel
 
-<form class="createtopic" asp-action="CreateTopic" asp-controller="Forum" method="post">
-    <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
-    <input class="topicname" type="text" asp-for="TopicName" /><br />
-    <span class="wrong_data" asp-validation-for="TopicName"></span><br />
-    <textarea asp-for="TopicBody"></textarea><br />
-    <span class="wrong_data" asp-validation-for="TopicBody"></span><br />
-    <input class="button" type="submit" value="Создать тему" />
-</form>
+<div class="forum_navigation">
+    <a asp-action="Index" asp-controller="Forum">Все разделы</a>
+    <font color="white">»</font>
+    <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@ViewBag.SubsectionId">@ViewBag.SubsectionName</a>
+    <font color="white">»</font>
+    <a href="#">Создать новую тему</a>
+</div>
+
+<table class="new_message">
+    <tr>
+        <td class="line" colspan="2">
+        </td>
+    </tr>
+    <tr>
+        <td class="message">
+
+            <form class="createtopic" asp-action="CreateTopic" asp-controller="Forum" method="post">
+                <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
+                <input class="topicname" type="text" asp-for="TopicName" /><br />
+                <span class="wrong_data" asp-validation-for="TopicName"></span><br />
+                <textarea asp-for="TopicBody"></textarea><br />
+                <span class="wrong_data" asp-validation-for="TopicBody"></span><br />
+                <input class="button" type="submit" value="Создать тему" />
+            </form>
+
+        </td>
+        <td class="author">
+        </td>
+    </tr>
+    <tr>
+        <td class="line" colspan="2">
+        </td>
+    </tr>
+</table>
 
 @section scripts
 {

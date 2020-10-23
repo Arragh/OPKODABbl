@@ -10,12 +10,31 @@
     <a href="#">Ответить</a>
 </div>
 
-<form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
-    <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
-    <textarea asp-for="ReplyBody"></textarea><br />
-    <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
-    <input type="submit" value="Ответить" />
-</form>
+<table class="new_message">
+    <tr>
+        <td class="line" colspan="2">
+        </td>
+    </tr>
+    <tr>
+        <td class="message">
+
+            <form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
+                <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
+                <textarea asp-for="ReplyBody"></textarea><br />
+                <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
+                <input type="submit" value="Ответить" />
+            </form>
+
+        </td>
+        <td class="author">
+
+        </td>
+    </tr>
+    <tr>
+        <td class="line" colspan="2">
+        </td>
+    </tr>
+</table>
 
 @section scripts
 {
