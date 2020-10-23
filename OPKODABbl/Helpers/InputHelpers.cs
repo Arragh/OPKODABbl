@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -44,6 +45,9 @@ namespace OPKODABbl.Helpers
         public static string BbCode(this string text)
         {
             return text
+                       // Цитирование
+                       .Replace("[quote]", "<div class=\"quote\">")
+                       .Replace("[/quote]", "</div>")
                        // Жирный текст
                        .Replace("[b]", "<b>")
                        .Replace("[/b]", "</b>")

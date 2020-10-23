@@ -148,7 +148,7 @@ namespace OPKODABbl.Controllers
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 // Замена символов в каждом ответе
-                topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView()));
+                topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.BbCode()));
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
                 ViewBag.CurrentPage = page;
@@ -271,7 +271,7 @@ namespace OPKODABbl.Controllers
                     AddReplyViewModel model = new AddReplyViewModel()
                     {
                         TopicId = topicId,
-                        ReplyBody = $"[quote={reply.User.Name}]{reply.ReplyBody}[/quote]" + "<br>".SpecSymbolsToEdit()
+                        ReplyBody = $"{reply.User.Name} писал(а):<br>".SpecSymbolsToEdit() + $"[quote]{reply.ReplyBody}[/quote]" + "<br>".SpecSymbolsToEdit()
                     };
 
                     return View(model);

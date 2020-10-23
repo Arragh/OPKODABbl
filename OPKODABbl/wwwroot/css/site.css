@@ -1091,6 +1091,12 @@ form.reply input:hover {
     background-color: #1b8bdf;
 }
 
+div.quote {
+    margin: 3px 0px 10px 0px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #ffffff;
+    background-color: rgba(0, 140, 227, 0.7);
+}
 
 
             @font-face {
