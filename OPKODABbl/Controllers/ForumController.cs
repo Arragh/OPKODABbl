@@ -66,7 +66,7 @@ namespace OPKODABbl.Controllers
         #endregion
 
         #region Просмотр подраздела форума
-        public async Task<IActionResult> Subsection(Guid subsectionId)
+        public async Task<IActionResult> Subsection(Guid subsectionId, int page = 1)
         {
             // Уровень доступа пользователя по умолчанию
             int userAccessLevel = 1;
@@ -92,10 +92,13 @@ namespace OPKODABbl.Controllers
             {
                 // Сортировка ответов в каждой теме по дате
                 subsection.Topics.ForEach(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
-                // Сортировка тем в подразделе по дате последнего ответа
-                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
+                // Сортировка тем в подразделе по дате последнего ответа и разбив по страницам
+                int count = subsection.Topics.Count();
+                int pageSize = 10;
+                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-                //ViewBag.SubsectionId = subsection.Id;
+                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+                ViewBag.CurrentPage = page;
 
                 // Передаем в представление
                 return View(subsection);
@@ -139,8 +142,8 @@ namespace OPKODABbl.Controllers
                 int pageSize = 10;
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-                // Замена символов в каждом ответе
-                topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.BbCode()));
+                // Замена символов и ББ-код в каждом ответе
+                topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView().BbCode()));
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
                 ViewBag.CurrentPage = page;
@@ -253,7 +256,10 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> AddReply(Guid topicId, Guid? quoteMessageId)
         {
             ViewBag.TopicId = topicId;
+            Topic topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == topicId);
+            ViewBag.Topic = topic;
 
+            // Цитирование
             if (quoteMessageId != null)
             {
                 Reply reply = await _websiteDB.Replies.Include(r => r.User).FirstOrDefaultAsync(r => r.Id == quoteMessageId);
@@ -263,7 +269,7 @@ namespace OPKODABbl.Controllers
                     AddReplyViewModel model = new AddReplyViewModel()
                     {
                         TopicId = topicId,
-                        ReplyBody = $"{reply.User.Name} писал(а):<br>".SpecSymbolsToEdit() + $"[quote]{reply.ReplyBody}[/quote]" + "<br>".SpecSymbolsToEdit()
+                        ReplyBody = $"{reply.User.Name} писал(а):<br>".SpecSymbolsToEdit() + "[quote]" + reply.ReplyBody + "[/quote]" + "<br>".SpecSymbolsToEdit()
                     };
 
                     return View(model);
@@ -285,7 +291,7 @@ namespace OPKODABbl.Controllers
                 if (ModelState.IsValid)
                 {
                     // Формируем модель топика
-                    Topic topic = await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == model.TopicId);
+                    Topic topic = await _websiteDB.Topics.Include(t => t.Replies).FirstOrDefaultAsync(t => t.Id == model.TopicId);
 
                     // Проверяем, чтобы такой существовал
                     if (topic != null)
@@ -310,8 +316,13 @@ namespace OPKODABbl.Controllers
                             await _websiteDB.Replies.AddAsync(reply);
                             await _websiteDB.SaveChangesAsync();
 
+
+                            // Формирование ссылки на последнее сообщение в теме (которое должно быть нашим сообщением)
+                            string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={(int)Math.Ceiling(topic.Replies.Count() / (double)10)}#{topic.Replies.Count()}";
+
+
                             // Редирект на тему
-                            return RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
+                            return Redirect(lastMessageLink); //RedirectToAction("ViewTopic", "Forum", new { topicId = topic.Id });
                         }
                     }
 

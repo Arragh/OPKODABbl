@@ -51,19 +51,22 @@
 
 <div class="spacer_link"><a asp-action="NewsArchive" asp-controller="News">Архив новостей</a></div>
 
-@for (int i = 0; i < 5; i++)
+@foreach (var topic in Model.Topics)
 {
+    // Формирование ссылки на последнее сообщение в подразделе
+    string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={(int)Math.Ceiling(topic.Replies.Count() / (double)10)}#{topic.Replies.Count()}";
+
     <div class="forum_last_messages">
         <img class="forum_last_messages_icon" src="~/images/forum_topic_icon.png" />
-        <a class="forum_last_messages_title" href="#">Хочу вступить к вам</a>
-        <span class="forum_last_messages_message">Здравствуйте, хочу вступить в вашу гильду. Вы просто супер, а Мнемоник - лучший!!!</span>
-        <a class="forum_last_messages_nickname" href="#">ВасяЛолПРО</a>
-        <span class="forum_last_messages_date">12.07.2021</span>
-        <a href="#"><img class="forum_last_messages_next_icon" src="~/images/forum_next_icon.png" /></a>
+        <a class="forum_last_messages_title" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+        <span class="forum_last_messages_message">@topic.Replies.First().ReplyBody</span>
+        <span class="forum_last_messages_nickname" style="color: @topic.Replies.Last().User.CharacterClass.ClassColor;">@topic.Replies.Last().User.Name</span>
+        <span class="forum_last_messages_date">@topic.Replies.Last().ReplyDate.ToShortDateString() - @topic.Replies.Last().ReplyDate.ToShortTimeString()</span>
+        <a href="@lastMessageLink"><img class="forum_last_messages_next_icon" src="~/images/forum_next_icon.png" /></a>
     </div>
 }
 
-<div class="spacer_link"><a href="#">Перейти на форум</a></div>
+<div class="spacer_link"><a asp-action="Index" asp-controller="Forum">Перейти на форум</a></div>
 
 <div class="slider">
     <div class="slider__wrapper">

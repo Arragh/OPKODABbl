@@ -5,8 +5,27 @@
     <font color="white">»</font>
     <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@Model.Id">@Model.SubsectionName</a>
 </div>
+
 <div class="newtopic_link">
     <a asp-action="CreateTopic" asp-controller="Forum" asp-route-subsectionId="@Model.Id">Новая тема</a>
+</div>
+
+<div class="pages">
+    Страницы:
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        if (i != ViewBag.CurrentPage)
+        {
+            string space = " ";
+            @Html.ActionLink(i.ToString(), "Subsection", "Forum", new { subsectionId = Model.Id, page = i })
+            @space
+        }
+        else
+        {
+            string space = i + " ";
+            @space
+        }
+    }
 </div>
 
 <table class="viewsubsection">
@@ -85,3 +104,21 @@
             </tr>
         }
 </table>
+
+<div class="pages">
+    Страницы:
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        if (i != ViewBag.CurrentPage)
+        {
+            string space = " ";
+            @Html.ActionLink(i.ToString(), "Subsection", "Forum", new { subsectionId = Model.Id, page = i })
+            @space
+        }
+        else
+        {
+            string space = i + " ";
+            @space
+        }
+    }
+</div>

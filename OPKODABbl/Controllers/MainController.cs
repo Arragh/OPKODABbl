@@ -27,26 +27,32 @@ namespace OPKODABbl.Controllers
         {
             ViewBag.Title = "ОРКОДАВЫ";
 
-            //// Уровень доступа пользователя по умолчанию
-            //int userAccessLevel = 1;
+            // Уровень доступа пользователя по умолчанию
+            int userAccessLevel = 1;
 
-            //// Если пользователь аутентифицирован, у него может оказаться более высокий уровень доступа
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
-            //    if (user != null)
-            //    {
-            //        // Устанавливаем уровень доступа для авторизированного пользователя
-            //        userAccessLevel = user.Role.AccessLevel;
-            //    }
-            //}
+            // Если пользователь аутентифицирован, у него может оказаться более высокий уровень доступа
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await _websiteDB.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                if (user != null)
+                {
+                    // Устанавливаем уровень доступа для авторизированного пользователя
+                    userAccessLevel = user.Role.AccessLevel;
+                }
+            }
 
-            //List<Topic> topics = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
-            //                                     .Include(t => t.Replies).ThenInclude(r => r.User)
-            //                                     .Include(t => t.Subsection).ToListAsync();
+            List<Topic> topics = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                 .Include(t => t.Subsection).ToListAsync();
 
-            //topics.SelectMany(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
-            //topics = topics.OrderBy(t => t.Replies.Last().ReplyDate).Take(5).ToList();
+            foreach (var topic in topics)
+            {
+                // Упорядочиваем все ответы в теме по дате
+                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).ToList();
+            }
+            // Упорядочиваем все темы в разделе по дате последнего ответа (ответы уже упорядочили выше)
+            topics = topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();
+            topics = topics.Take(5).ToList();
 
             List<News> news = await _websiteDB.News.Include(n => n.NewsImages).OrderByDescending(n => n.NewsDate).Take(3).ToListAsync();
             List<Gallery> galleries = await _websiteDB.Galleries.OrderByDescending(g => g.GalleryDate).Take(3).ToListAsync();
@@ -60,6 +66,7 @@ namespace OPKODABbl.Controllers
             IndexViewModel model = new IndexViewModel()
             {
                 News = news,
+                Topics = topics,
                 Galleries = galleries
             };
 

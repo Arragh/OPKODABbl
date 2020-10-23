@@ -1,8 +1,18 @@
 ﻿@model OPKODABbl.ViewModels.Forum.AddReplyViewModel
 
-<form asp-action="AddReply" asp-controller="Forum" method="post">
+<div class="forum_navigation">
+    <a asp-action="Index" asp-controller="Forum">Все разделы</a>
+    <font color="white">»</font>
+    <a asp-action="Subsection" asp-controller="Forum" asp-route-subsectionId="@ViewBag.Topic.Subsection.Id">@ViewBag.Topic.Subsection.SubsectionName</a>
+    <font color="white">»</font>
+    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@ViewBag.Topic.Id">@ViewBag.Topic.TopicName</a>
+    <font color="white">»</font>
+    <a href="#">Ответить</a>
+</div>
+
+<form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
     <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
-    <textarea style="width: 700px; height: 300px;" asp-for="ReplyBody"></textarea><br />
+    <textarea asp-for="ReplyBody"></textarea><br />
     <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
     <input type="submit" value="Ответить" />
 </form>

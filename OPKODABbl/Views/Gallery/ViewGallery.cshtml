@@ -10,18 +10,6 @@
                 @Html.Raw(Model.GalleryDescription)
             </div>
         }
-        @*<div class="viewgallery_image_wrapper">
-                @foreach (var image in Model.GalleryImages.OrderByDescending(i => i.ImageDate))
-                {
-                    <div class="viewgallery_image" style="background-image: url(@image.ImagePathScaled)">
-                        <a class="readnews_image_link" href="@image.ImagePathOriginal"></a>
-                        <img src="~/images/img_preview_border.png" />
-                    </div>
-                }
-            </div>*@
-
-
-        <span class="readnews_author">@Model.GalleryUserName</span>
     </div>
 </div>
 
