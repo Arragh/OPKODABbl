@@ -28,7 +28,10 @@
 </div>
 
 <table class="viewtopic">
-    @{ int tempLink = 1 + 10 * (ViewBag.CurrentPage - 1); }
+    @{
+        // хтмл-якорь для прямой ссылки на последнее сообщение в разделе
+        int htmlAnchor = 1 + 10 * (ViewBag.CurrentPage - 1);
+    }
     @foreach (var reply in Model.Replies)
     {
         <tr>
@@ -55,8 +58,8 @@
             <td class="message">
                 <div class="message_info">
                     <div class="date">
-                        @{ string link = $"ViewTopic?topicId={Model.Id}&page={ViewBag.CurrentPage}#{tempLink}"; }
-                        <a href="@link" name="@tempLink">@reply.ReplyDate.ToShortDateString()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@reply.ReplyDate.ToShortTimeString()</a>
+                        @{ string link = $"ViewTopic?topicId={Model.Id}&page={ViewBag.CurrentPage}#{htmlAnchor}"; }
+                        <a href="@link" name="@htmlAnchor">@reply.ReplyDate.ToShortDateString()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@reply.ReplyDate.ToShortTimeString()</a>
                     </div>
                     <div class="buttons">
                         цитировать
@@ -65,7 +68,7 @@
                 @Html.Raw(reply.ReplyBody)
             </td>
         </tr>
-        tempLink++;
+        htmlAnchor++;
     }
 </table>
 

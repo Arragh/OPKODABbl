@@ -951,14 +951,29 @@ table.viewsubsection {
         color: #ffffff;
         border: 1px solid #2e3741;
     }
+        table.viewsubsection td.content a.pagelink {
+            font-family: Verdana;
+            font-size: 11px;
+            color: #fff343;
+            text-decoration: none;
+        }
+            table.viewsubsection td.content a.pagelink:hover {
+                text-decoration: underline;
+            }
         table.viewsubsection td.content a {
             font-family: Verdana;
             font-size: 14px;
             color: #fff343;
+            text-decoration: none;
         }
             table.viewsubsection td.content a:hover {
-                text-decoration: none;
+                text-decoration: underline;
             }
+        table.viewsubsection td.content font.pages {
+            font-family: Verdana;
+            font-size: 11px;
+            color: #ffffff;
+        }
 
 table.viewtopic {
     width: 1076px;

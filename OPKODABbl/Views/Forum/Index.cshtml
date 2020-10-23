@@ -45,7 +45,9 @@
                     @if (repliesCount > 0)
                     {
                         var replyDate = subsec.Topics.SelectMany(t => t.Replies).Last().ReplyDate;
-                        string testLink = $"/Forum/ViewTopic?topicId={subsec.Topics.Last().Id}&page={(int)Math.Ceiling(subsec.Topics.Last().Replies.Count() / (double)10)}#{subsec.Topics.Last().Replies.Count()}";
+
+                        // Формирование ссылки на последнее сообщение в подразделе
+                        string lastMessageLink = $"/Forum/ViewTopic?topicId={subsec.Topics.Last().Id}&page={(int)Math.Ceiling(subsec.Topics.Last().Replies.Count() / (double)10)}#{subsec.Topics.Last().Replies.Count()}";
 
 
                         var classColor = subsec.Topics.SelectMany(t => t.Replies).Last().User.CharacterClass.ClassColor;
@@ -53,7 +55,7 @@
 
                         <font color="@classColor">@userName</font>
                         <br />
-                        <a href="@testLink">@replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()</a>
+                        <a href="@lastMessageLink">@replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()</a>
 
                     }
                     else

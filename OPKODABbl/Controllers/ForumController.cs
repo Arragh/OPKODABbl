@@ -73,7 +73,7 @@ namespace OPKODABbl.Controllers
         }
         #endregion
 
-        #region Просмотр раздела форума
+        #region Просмотр подраздела форума
         public async Task<IActionResult> Subsection(Guid subsectionId)
         {
             // Уровень доступа пользователя по умолчанию

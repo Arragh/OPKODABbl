@@ -30,9 +30,24 @@
     </tr>
         @foreach (var topic in Model.Topics)
         {
+            int totalPages = (int)Math.Ceiling(topic.Replies.Count() / (double)10);
+            // Формирование ссылки на последнее сообщение в подразделе
+            string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={totalPages}#{topic.Replies.Count()}";
+
             <tr>
                 <td class="content">
-                    <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
+                    <a class="topicname" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a><br />
+                    @if (totalPages > 1)
+                    {
+                        <font class="pages">Страницы:</font>
+                        for (int i = 1; i <= totalPages; i++)
+                        {
+                            string space = " ";
+                            <a class="pagelink" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id" asp-route-page="@i">@i</a>
+                            @space
+                        }
+                    }
+
                 </td>
                 <td class="content" style="text-align: center;">
                     @if (topic.Replies.Count > 0)
@@ -59,7 +74,7 @@
 
                         <font color="@classColor">@userName</font>
                         <br />
-                        @replyDate.ToShortDateString()
+                        <a href="@lastMessageLink">@replyDate.ToShortDateString()<b> - </b>@replyDate.ToShortTimeString()</a>
                     }
                     else
                     {
