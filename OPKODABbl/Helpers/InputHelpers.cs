@@ -65,7 +65,7 @@ namespace OPKODABbl.Helpers
                        .Replace("[u]", "<u>")
                        .Replace("[/u]", "</u>")
                        // Вставка изображения ссылкой
-                       .Replace("[img]", "<img style=\"max-width:800px; height:auto;\" src=") // max-width надо как-нибудь привязать к ширине таблицы !!!!!!!!!!!!!!!!!!!!!!!
+                       .Replace("[img]", "<img style=\"max-width:400px; height:auto;\" src=") // max-width надо как-нибудь привязать к ширине таблицы !!!!!!!!!!!!!!!!!!!!!!!
                        .Replace("[/img]", ">");
         }
         #endregion

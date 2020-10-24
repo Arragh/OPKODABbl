@@ -20,6 +20,7 @@
 
             <form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
                 <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
+                <label asp-for="ReplyBody"></label><br />
                 <textarea asp-for="ReplyBody"></textarea><br />
                 <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
                 <input type="submit" value="Ответить" />
@@ -27,7 +28,7 @@
 
         </td>
         <td class="author">
-
+            @await Html.PartialAsync("BBcodeButtonsPartial")
         </td>
     </tr>
     <tr>
@@ -38,5 +39,8 @@
 
 @section scripts
 {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_BBcodeScriptPartial");
+    }
 }
