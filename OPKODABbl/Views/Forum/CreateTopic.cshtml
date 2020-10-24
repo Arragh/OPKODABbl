@@ -20,13 +20,14 @@
                 <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
                 <input class="topicname" type="text" asp-for="TopicName" /><br />
                 <span class="wrong_data" asp-validation-for="TopicName"></span><br />
-                <textarea asp-for="TopicBody"></textarea><br />
+                <textarea id="textarea" asp-for="TopicBody"></textarea><br />
                 <span class="wrong_data" asp-validation-for="TopicBody"></span><br />
                 <input class="button" type="submit" value="Создать тему" />
             </form>
 
         </td>
         <td class="author">
+            @await Html.PartialAsync("BBcodeButtonsPartial")
         </td>
     </tr>
     <tr>
@@ -37,5 +38,8 @@
 
 @section scripts
 {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_BBcodeScriptPartial");
+     }
 }

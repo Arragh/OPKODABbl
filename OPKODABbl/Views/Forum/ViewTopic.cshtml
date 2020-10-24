@@ -100,7 +100,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
+    <form class="quickreply" asp-action="AddReply" asp-controller="Forum" method="post">
         <input type="hidden" name="TopicId" value="@Model.Id" />
         <textarea name="ReplyBody"></textarea><br />
         <input type="submit" value="Ответить" />

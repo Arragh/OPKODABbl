@@ -11,7 +11,14 @@ namespace OPKODABbl.Helpers
         public static string DeleteTags(this string text)
         {
             return text.Replace("<br>", " ")
-                       .Replace("&nbsp;&nbsp;", " ");
+                       .Replace("[b]", "")
+                       .Replace("[/b]", "")
+                       .Replace("[i]", "")
+                       .Replace("[/i]", "")
+                       .Replace("[u]", "")
+                       .Replace("[/u]", "")
+                       .Replace("[img]", "")
+                       .Replace("[/img]", "");
         }
         #endregion
 
@@ -58,7 +65,7 @@ namespace OPKODABbl.Helpers
                        .Replace("[u]", "<u>")
                        .Replace("[/u]", "</u>")
                        // Вставка изображения ссылкой
-                       .Replace("[img]", "<img style=\"max-width:700px; height:auto;\" src=") // max-width надо как-нибудь привязать к ширине таблицы !!!!!!!!!!!!!!!!!!!!!!!
+                       .Replace("[img]", "<img style=\"max-width:800px; height:auto;\" src=") // max-width надо как-нибудь привязать к ширине таблицы !!!!!!!!!!!!!!!!!!!!!!!
                        .Replace("[/img]", ">");
         }
         #endregion

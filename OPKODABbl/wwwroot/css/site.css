@@ -279,7 +279,7 @@ div.register_attention {
 span.wrong_data {
     font-family: Verdana;
     font-size: 14px;
-    color: #fff343;
+    color: #ff0000;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
@@ -563,6 +563,22 @@ img.forum_last_messages_next_icon {
     position: absolute;
     margin: 12px 0px 0px 1017px;
 }
+a.test_link {
+    width: 21px;
+    height: 30px;
+    position: absolute;
+    margin: 9px 0px 0px 1017px;
+    padding: 0px 0px 0px 9px;
+    background-color: #1b8bdf;
+    border-radius: 15px;
+    font-family: Arial;
+    font-size: 24px;
+    color: #ffffff;
+    text-decoration: none;
+}
+    a.test_link:hover {
+        background-color: #ff0000;
+    }
 
 
 /*ReadNews*/
@@ -1008,7 +1024,7 @@ table.viewtopic {
     }
     table.viewtopic td.message {
         background-color: rgba(28, 32, 39, 0.5);
-        padding: 20px 20px 35px 20px;
+        padding: 20px 20px 20px 20px;
         font-family: Verdana;
         font-size: 14px;
         color: #cdcdcd;
@@ -1104,7 +1120,7 @@ form.reply {
     }
 form.reply input {
     padding: 5px 10px 5px 10px;
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0px -10px 0px;
     border: 2px solid #ffffff;
     background-color: #ffffff;
     border-radius: 15px;
@@ -1119,6 +1135,44 @@ form.reply input:hover {
     color: #ffffff;
     background-color: #1b8bdf;
 }
+
+form.quickreply {
+    width: 100%;
+    margin: 10px 0px 0px 0px;
+    text-align: center;
+}
+    form.quickreply textarea {
+        min-width: 760px;
+        max-width: 760px;
+        min-height: 300px;
+        max-height: 300px;
+        font-family: Verdana;
+        color: #ffffff;
+        font-size: 13px;
+        padding: 5px 5px 5px 5px;
+        border: 2px solid #ffffff;
+        background-color: rgba(49, 51, 54, 0.6);
+    }
+        form.quickreply textarea:focus {
+            outline: none;
+        }
+    form.quickreply input {
+        padding: 5px 10px 5px 10px;
+        margin: 10px 0px 10px 0px;
+        border: 2px solid #ffffff;
+        background-color: #ffffff;
+        border-radius: 15px;
+        font-family: OPKODAB;
+        font-size: 19px;
+        color: #1b8bdf;
+    }
+        form.quickreply input:focus {
+            outline: none;
+        }
+        form.quickreply input:hover {
+            color: #ffffff;
+            background-color: #1b8bdf;
+        }
 
 div.quote {
     margin: 3px 0px 10px 0px;
@@ -1182,6 +1236,10 @@ form.createtopic {
         font-size: 19px;
         color: #1b8bdf;
     }
+        form.createtopic input.button:hover {
+            color: #ffffff;
+            background-color: rgba(0, 140, 227, 0.7);
+        }
         form.createtopic input.button:focus {
             outline: none;
         }
@@ -1218,6 +1276,19 @@ table.new_message {
         vertical-align: top;
         border: 1px solid #2e3741;
     }
+
+a.readlast_link {
+    padding: 0px 0px 0px 0px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    font-family: OPKODAB;
+    font-size: 19px;
+    color: #1b8bdf;
+    text-decoration: none;
+}
+a.readlast_link:hover {
+
+}
 
 
             @font-face {

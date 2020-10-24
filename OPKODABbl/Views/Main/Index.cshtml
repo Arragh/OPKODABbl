@@ -1,4 +1,5 @@
-﻿@model OPKODABbl.ViewModels.Main.IndexViewModel
+﻿@using OPKODABbl.Helpers
+@model OPKODABbl.ViewModels.Main.IndexViewModel
 
 @{
     int newsPosition = 0;
@@ -59,10 +60,11 @@
     <div class="forum_last_messages">
         <img class="forum_last_messages_icon" src="~/images/forum_topic_icon.png" />
         <a class="forum_last_messages_title" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
-        <span class="forum_last_messages_message">@topic.Replies.First().ReplyBody</span>
+        <span class="forum_last_messages_message">@topic.Replies.First().ReplyBody.DeleteTags()</span>
         <span class="forum_last_messages_nickname" style="color: @topic.Replies.Last().User.CharacterClass.ClassColor;">@topic.Replies.Last().User.Name</span>
         <span class="forum_last_messages_date">@topic.Replies.Last().ReplyDate.ToShortDateString() - @topic.Replies.Last().ReplyDate.ToShortTimeString()</span>
-        <a href="@lastMessageLink"><img class="forum_last_messages_next_icon" src="~/images/forum_next_icon.png" /></a>
+        @*<a href="@lastMessageLink"><img class="forum_last_messages_next_icon" src="~/images/forum_next_icon.png" /></a>*@
+        <a class="test_link" href="@lastMessageLink">»</a>
     </div>
 }
 
