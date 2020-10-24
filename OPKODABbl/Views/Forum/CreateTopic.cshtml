@@ -19,7 +19,15 @@
             <form class="createtopic" asp-action="CreateTopic" asp-controller="Forum" method="post">
                 <input type="hidden" asp-for="SubsectionId" value="@ViewBag.SubsectionId" />
                 <label asp-for="TopicName"></label><br />
-                <input class="topicname" type="text" asp-for="TopicName" /><br />
+                @if (User.IsInRole("admin"))
+                {
+                    <input class="topicname_adm" type="text" asp-for="TopicName" />
+                    <input type="checkbox" asp-for="Announcement" value="True" /><label asp-for="Announcement"></label><br />
+                }
+                else
+                {
+                    <input class="topicname" type="text" asp-for="TopicName" /><br />
+                }
                 <span class="wrong_data" asp-validation-for="TopicName"></span><br />
                 <label asp-for="TopicBody"></label><br />
                 <textarea id="textarea" asp-for="TopicBody"></textarea><br />

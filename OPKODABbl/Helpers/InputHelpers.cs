@@ -18,7 +18,9 @@ namespace OPKODABbl.Helpers
                        .Replace("[u]", "")
                        .Replace("[/u]", "")
                        .Replace("[img]", "")
-                       .Replace("[/img]", "");
+                       .Replace("[/img]", "")
+                       .Replace("[quote]", "")
+                       .Replace("[/quote]", "");
         }
         #endregion
 

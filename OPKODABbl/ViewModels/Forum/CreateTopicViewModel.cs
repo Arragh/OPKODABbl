@@ -21,5 +21,8 @@ namespace OPKODABbl.ViewModels.Forum
         [DataType(DataType.Text)]
         [StringLength(5000, ErrorMessage = "Текст сообщения должен быть от {2} до {1} символов.", MinimumLength = 4)]
         public string TopicBody { get; set; }
+
+        [Display(Name = "Объявление")]
+        public bool Announcement { get; set; }
     }
 }

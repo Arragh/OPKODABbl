@@ -49,6 +49,8 @@ namespace OPKODABbl.Controllers
             {
                 // Упорядочиваем все ответы в теме по дате
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).ToList();
+                // удаляем bb-теги из первого сообщения для показа на главной
+                topic.Replies.First().ReplyBody = topic.Replies.First().ReplyBody.DeleteTags();
             }
             // Упорядочиваем все темы в разделе по дате последнего ответа (ответы уже упорядочили выше)
             topics = topics.OrderByDescending(t => t.Replies.Last().ReplyDate).ToList();

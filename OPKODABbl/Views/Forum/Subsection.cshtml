@@ -30,7 +30,7 @@
 
 <table class="viewsubsection">
     <tr>
-        <td class="header" style="width: 440px;">
+        <td class="header" style="width: 440px;" colspan="2">
             Topic Name
         </td>
         <td class="header" style="width: 150px;">
@@ -55,8 +55,18 @@
             string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={totalPages}#{topic.Replies.Count()}";
 
             <tr>
+                <td class="content" style="width: 20px;" valign="middle">
+                    @if (topic.Announcement)
+                    {
+                        <img src="~/images/forum_announcement_icon.png" />
+                    }
+                    else
+                    {
+                        <img src="~/images/forum_topic_icon.png" />
+                    }
+                </td>
                 <td class="content">
-                    <a class="topicname" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a><br />
+                    &nbsp;<a class="topicname" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a><br />
                     @if (totalPages > 1)
                     {
                         <font class="pages">Страницы:</font>
@@ -67,7 +77,6 @@
                             @space
                         }
                     }
-
                 </td>
                 <td class="content" style="text-align: center;">
                     @if (topic.Replies.Count > 0)

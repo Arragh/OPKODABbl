@@ -218,6 +218,7 @@ namespace OPKODABbl.Controllers
                                 Subsection = subsection,
                                 TopicName = model.TopicName,
                                 TopicDate = DateTime.Now,
+                                Announcement = model.Announcement
                             };
 
                             // И модель первого в нём сообщения, которое и будет сообщением только что созданной темы
