@@ -95,7 +95,7 @@ namespace OPKODABbl.Controllers
                 // Сортировка тем в подразделе по дате последнего ответа и разбив по страницам
                 int count = subsection.Topics.Count();
                 int pageSize = 10;
-                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Replies.Last().ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Announcement).ThenByDescending(t => t.Replies.Last().ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
                 ViewBag.CurrentPage = page;
@@ -126,22 +126,22 @@ namespace OPKODABbl.Controllers
                 }
             }
 
-            // Если такой топик существует, выполняем дальше
-            if (await _websiteDB.Topics.FirstOrDefaultAsync(t => t.Id == topicId) != null)
-            {
-                // Формируем модель топика со всеми ответами и пользователями в нём. И обязательно проверка на уровень доступа пользователя, для избежания неавторизованного просмотра по прямой ссылке
-                Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
-                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
-                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
-                                                     .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
-                                                     .Include(t => t.Subsection)
-                                                     .FirstOrDefaultAsync(t => t.Id == topicId);
+            // Формируем модель топика со всеми ответами и пользователями в нём. И обязательно проверка на уровень доступа пользователя, для избежания неавторизованного просмотра по прямой ссылке
+            Topic topic = await _websiteDB.Topics.Where(t => t.Subsection.Section.SectionAccessLevel <= userAccessLevel)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.AvatarImage)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.Role)
+                                                 .Include(t => t.Replies).ThenInclude(r => r.User).ThenInclude(u => u.CharacterClass)
+                                                 .Include(t => t.Subsection)
+                                                 .FirstOrDefaultAsync(t => t.Id == topicId);
 
+            // Если у юзера недостаточно прав для просмотра, то топик будет null
+            if (topic != null)
+            {
                 // Разбиваем ответы по страницам
                 int count = topic.Replies.Count();
                 int pageSize = 10;
-                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
+                topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 // Замена символов и ББ-код в каждом ответе
                 topic.Replies.ForEach(r => r.ReplyBody = r.ReplyBody.Replace(r.ReplyBody, r.ReplyBody.SpecSymbolsToView().BbCode()));
 
@@ -151,7 +151,7 @@ namespace OPKODABbl.Controllers
                 return View(topic);
             }
 
-            // Если топик не существует, выводим сообщение об ошибке
+            // Если топик не существует для пользователя, выводим сообщение об ошибке
             return Redirect("/Main/PageNotFound");
         }
         #endregion

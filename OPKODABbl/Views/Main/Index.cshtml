@@ -58,7 +58,14 @@
     string lastMessageLink = $"/Forum/ViewTopic?topicId={topic.Id}&page={(int)Math.Ceiling(topic.Replies.Count() / (double)10)}#{topic.Replies.Count()}";
 
     <div class="forum_last_messages">
-        <img class="forum_last_messages_icon" src="~/images/forum_topic_icon.png" />
+        @if (topic.Announcement)
+        {
+            <img class="forum_last_messages_icon" src="~/images/forum_announcement_icon_big.png" />
+        }
+        else
+        {
+            <img class="forum_last_messages_icon" src="~/images/forum_topic_icon_big.png" />
+        }
         <a class="forum_last_messages_title" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a>
         <span class="forum_last_messages_message">@topic.Replies.First().ReplyBody</span>
         <span class="forum_last_messages_nickname" style="color: @topic.Replies.Last().User.CharacterClass.ClassColor;">@topic.Replies.Last().User.Name</span>
