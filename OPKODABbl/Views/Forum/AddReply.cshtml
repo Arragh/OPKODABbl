@@ -19,7 +19,7 @@
         <td class="message">
 
             <form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
-                <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
+                <input type="hidden" asp-for="TopicId" value="@Model.TopicId" />
                 <label asp-for="ReplyBody"></label><br />
                 <textarea id="textarea" asp-for="ReplyBody"></textarea><br />
                 <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />
