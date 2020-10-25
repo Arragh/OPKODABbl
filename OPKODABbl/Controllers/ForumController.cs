@@ -169,6 +169,7 @@ namespace OPKODABbl.Controllers
                 // Проверяем, что такой подраздел существует
                 if (subsection != null)
                 {
+                    ViewBag.SubsectionId = subsection.Id;
                     ViewBag.SubsectionName = subsection.SubsectionName;
 
                     // Формируем модель пользователя с уровнем доступа для проверки
@@ -178,7 +179,7 @@ namespace OPKODABbl.Controllers
                     if (subsection.Section.SectionAccessLevel <= user.Role.AccessLevel)
                     {
                         // Если может, то возвращаем ему представление
-                        ViewBag.SubsectionId = subsection.Id;
+                        //ViewBag.SubsectionId = subsection.Id;
                         return View();
                     }
                 }
@@ -195,14 +196,18 @@ namespace OPKODABbl.Controllers
         #region Создать топик [POST]
         public async Task<IActionResult> CreateTopic(CreateTopicViewModel model)
         {
+            // Формируем модель подраздела
+            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+            ViewBag.SubsectionId = subsection.Id;
+            ViewBag.SubsectionName = subsection.SubsectionName;
+
             // Проверяем, чтобы пользователь был авторизован
             if (User.Identity.IsAuthenticated)
             {
                 // Проверка валидации модели
                 if (ModelState.IsValid)
                 {
-                    // Формируем модель подраздела
-                    Subsection subsection = await _websiteDB.Subsections.Include(s => s.Section).FirstOrDefaultAsync(s => s.Id == model.SubsectionId);
+                    
                     // Проверяем, чтобы такой существовал
                     if (subsection != null)
                     {
