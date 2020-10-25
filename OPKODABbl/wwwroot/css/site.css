@@ -1142,6 +1142,24 @@ form.quickreply {
     margin: 10px 0px 0px 0px;
     text-align: center;
 }
+    form.quickreply label {
+        font-family: Verdana;
+        font-size: 14px;
+        color: #cdcdcd;
+        margin: 0px 10px 0px 0px;
+    }
+    form.quickreply a {
+        font-family: OPKODAB;
+        font-size: 19px;
+        color: #ffffff;
+        margin: 0px 10px 0px 0px;
+        padding: 3px 5px 3px 5px;
+        background-color: rgba(0, 140, 227, 0.7);
+        text-decoration: none;
+    }
+        form.quickreply a:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
     form.quickreply textarea {
         min-width: 760px;
         max-width: 760px;
@@ -1150,6 +1168,7 @@ form.quickreply {
         font-family: Verdana;
         color: #ffffff;
         font-size: 13px;
+        margin: 10px 0px 0px 0px;
         padding: 5px 5px 5px 5px;
         border: 2px solid #ffffff;
         background-color: rgba(49, 51, 54, 0.6);

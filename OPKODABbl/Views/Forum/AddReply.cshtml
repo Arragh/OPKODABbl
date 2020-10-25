@@ -7,7 +7,7 @@
     <font color="white">»</font>
     <a asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@ViewBag.Topic.Id">@ViewBag.Topic.TopicName</a>
     <font color="white">»</font>
-    <a href="#">Ответить</a>
+    <a href="#">Развёрнутый ответ</a>
 </div>
 
 <table class="new_message">
@@ -19,7 +19,7 @@
         <td class="message">
 
             <form class="reply" asp-action="AddReply" asp-controller="Forum" method="post">
-                <input type="hidden" asp-for="TopicId" value="@Model.TopicId" />
+                <input type="hidden" asp-for="TopicId" value="@ViewBag.TopicId" />
                 <label asp-for="ReplyBody"></label><br />
                 <textarea id="textarea" asp-for="ReplyBody"></textarea><br />
                 <span class="wrong_data" asp-validation-for="ReplyBody"></span><br />

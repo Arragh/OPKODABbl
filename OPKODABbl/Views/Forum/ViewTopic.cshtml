@@ -102,6 +102,7 @@
 {
     <form class="quickreply" asp-action="AddReply" asp-controller="Forum" method="post">
         <input type="hidden" name="TopicId" value="@Model.Id" />
+        <label>Быстрый ответ</label><a asp-action="AddReply" asp-controller="Forum" asp-route-topicId="@Model.Id">Развёрнутый ответ</a><br />
         <textarea name="ReplyBody"></textarea><br />
         <input type="submit" value="Ответить" />
     </form>

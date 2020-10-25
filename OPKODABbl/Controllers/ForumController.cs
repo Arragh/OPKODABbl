@@ -258,7 +258,7 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> AddReply(Guid topicId, Guid? quoteMessageId)
         {
-            //ViewBag.TopicId = topicId;
+            ViewBag.TopicId = topicId;
             Topic topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == topicId);
             ViewBag.Topic = topic;
 
@@ -287,12 +287,13 @@ namespace OPKODABbl.Controllers
         [HttpPost]
         public async Task<IActionResult> AddReply(AddReplyViewModel model)
         {
-            //Topic topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
-            ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
-
             // Проверяем, чтобы пользователь был авторизован
             if (User.Identity.IsAuthenticated)
             {
+                // Эти 2 вьюбага необходимы для работы колбасы ссылок навигации на странице
+                ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
+                ViewBag.TopicId = model.TopicId;
+
                 // Проверка валидации модели
                 if (ModelState.IsValid)
                 {
