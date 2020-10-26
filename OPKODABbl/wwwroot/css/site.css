@@ -1155,12 +1155,12 @@ form.quickreply {
         color: #ffffff;
         margin: 0px 0px 0px 0px;
         padding: 3px 5px 3px 5px;
-        background-color: rgba(0, 140, 227, 0.7);
+        background-color: #1b8bdf; /*rgba(0, 140, 227, 0.7);*/
         text-decoration: none;
         float: right;
     }
         form.quickreply a:hover {
-            background-color: rgba(255, 0, 0, 0.8);
+            background-color: #ff0000; /*rgba(255, 0, 0, 0.8);*/
         }
     form.quickreply textarea {
         min-width: 760px;

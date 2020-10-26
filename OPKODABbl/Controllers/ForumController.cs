@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -339,6 +338,82 @@ namespace OPKODABbl.Controllers
                     }
 
                     // Если топик или пользователь не найдены, выдаём ошибку 404
+                    return Redirect("/Main/PageNotFound");
+                }
+
+                return View(model);
+            }
+
+            // Если пользователь не авторизован, перенаправляем его на страницу авторизации
+            return RedirectToAction("Login", "Account");
+        }
+        #endregion
+
+        #region Редактировать [GET]
+        [HttpGet]
+        public async Task<IActionResult> EditReply(Guid topicId, Guid replyId, int htmlAnchor)
+        {
+            // Эти 2 вьюбага необходимы для работы колбасы ссылок навигации на странице
+            ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == topicId);
+            ViewBag.TopicId = topicId;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+
+                if (user != null)
+                {
+                    Reply reply = await _websiteDB.Replies.Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == replyId && r.Topic.Id == topicId && r.User.Id == user.Id);
+
+                    if (reply != null)
+                    {
+                        EditReplyViewModel model = new EditReplyViewModel()
+                        {
+                            ReplyId = reply.Id,
+                            TopicId = reply.Topic.Id,
+                            ReplyBody = reply.ReplyBody,
+                            HtmlAnchor = htmlAnchor
+                        };
+
+                        return View(model);
+                    }
+                }
+
+                return Redirect("/Main/PageNotFound");
+            }
+
+            // Если пользователь не авторизован, перенаправляем его на страницу авторизации
+            return RedirectToAction("Login", "Account");
+        }
+        #endregion
+
+        #region Редактировать [POST]
+        [HttpPost]
+        public async Task<IActionResult> EditReply(EditReplyViewModel model)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Эти 2 вьюбага необходимы для работы колбасы ссылок навигации на странице
+                ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
+                ViewBag.TopicId = model.TopicId;
+
+                if (ModelState.IsValid)
+                {
+                    Reply reply = await _websiteDB.Replies.Include(r => r.Topic).ThenInclude(t => t.Replies).FirstOrDefaultAsync(r => r.Id == model.ReplyId && r.Topic.Id == model.TopicId && r.User.Name == User.Identity.Name);
+
+                    if (reply != null)
+                    {
+                        reply.ReplyBody = model.ReplyBody;
+
+                        _websiteDB.Replies.Update(reply);
+                        await _websiteDB.SaveChangesAsync();
+
+                        string EditedMessageLink = $"/Forum/ViewTopic?topicId={model.TopicId}&page={(int)Math.Ceiling(reply.Topic.Replies.Count() / (double)10)}#{model.HtmlAnchor}";
+
+                        return Redirect(EditedMessageLink);
+                    }
+
+                    // Если ответ не найден, выдаём ошибку 404
                     return Redirect("/Main/PageNotFound");
                 }
 
