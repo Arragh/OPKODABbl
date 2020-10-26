@@ -1138,24 +1138,26 @@ form.reply input:hover {
 }
 
 form.quickreply {
-    width: 100%;
-    margin: 10px 0px 0px 0px;
+    width: 774px;
+    margin: auto;
+    margin-top: 10px;
     text-align: center;
 }
     form.quickreply label {
         font-family: Verdana;
         font-size: 14px;
         color: #cdcdcd;
-        margin: 0px 10px 0px 0px;
+        margin: 0px 0px 0px 170px;
     }
     form.quickreply a {
         font-family: OPKODAB;
         font-size: 19px;
         color: #ffffff;
-        margin: 0px 10px 0px 0px;
+        margin: 0px 0px 0px 0px;
         padding: 3px 5px 3px 5px;
         background-color: rgba(0, 140, 227, 0.7);
         text-decoration: none;
+        float: right;
     }
         form.quickreply a:hover {
             background-color: rgba(255, 0, 0, 0.8);
@@ -1323,7 +1325,181 @@ a.readlast_link:hover {
 }
 
 
-            @font-face {
-                font-family: OPKODAB;
-                src: url("../css/futurespore_cyrillic.otf");
-            }
+/*BB Buttons*/
+input.bb_buttons {
+    margin: 2px 0px 2px 0px;
+    width: 110px;
+    height: 24px;
+    border-radius: 12px;
+    border: 0px;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: #ffffff;
+    color: #1b8bdf;
+}
+    input.bb_buttons:hover {
+        background-color: #1b8bdf;
+        color: #ffffff;
+    }
+    input.bb_buttons:focus {
+        outline: none;
+    }
+
+input.bb_button_paladin {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #f58cba;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_paladin:hover {
+        background-color: #f58cba;
+    }
+    input.bb_button_paladin:focus {
+        outline: none;
+    }
+
+input.bb_button_warrior {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #c79c6e;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_warrior:hover {
+        background-color: #c79c6e;
+    }
+    input.bb_button_warrior:focus {
+        outline: none;
+    }
+
+input.bb_button_hunter {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #abd473;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_hunter:hover {
+        background-color: #abd473;
+    }
+    input.bb_button_hunter:focus {
+        outline: none;
+    }
+
+input.bb_button_shaman {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #0070de;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_shaman:hover {
+        background-color: #0070de;
+    }
+    input.bb_button_shaman:focus {
+        outline: none;
+    }
+
+input.bb_button_rogue {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #fff569;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_rogue:hover {
+        background-color: #fff569;
+    }
+    input.bb_button_rogue:focus {
+        outline: none;
+    }
+
+input.bb_button_druid {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #ff7d0a;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_druid:hover {
+        background-color: #ff7d0a;
+    }
+    input.bb_button_druid:focus {
+        outline: none;
+    }
+
+input.bb_button_priest {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #ffffff;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_priest:hover {
+        background-color: #ffffff;
+    }
+    input.bb_button_priest:focus {
+        outline: none;
+    }
+
+input.bb_button_mage {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #69ccf0;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_mage:hover {
+        background-color: #69ccf0;
+    }
+    input.bb_button_mage:focus {
+        outline: none;
+    }
+
+input.bb_button_warlock {
+    margin: 2px 0px 2px 0px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #9482c9;
+    font-family: Verdana;
+    font-size: 12px;
+    background-color: transparent;
+}
+    input.bb_button_warlock:hover {
+        background-color: #9482c9;
+    }
+    input.bb_button_warlock:focus {
+        outline: none;
+    }
+
+
+    @font-face {
+        font-family: OPKODAB;
+        src: url("../css/futurespore_cyrillic.otf");
+    }

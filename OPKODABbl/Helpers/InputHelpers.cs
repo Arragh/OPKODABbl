@@ -11,6 +11,16 @@ namespace OPKODABbl.Helpers
         public static string DeleteTags(this string text)
         {
             return text.Replace("<br>", " ")
+                       .Replace("[color=paladin]", "")
+                       .Replace("[color=warrior]", "")
+                       .Replace("[color=hunter]", "")
+                       .Replace("[color=shaman]", "")
+                       .Replace("[color=rogue]", "")
+                       .Replace("[color=druid]", "")
+                       .Replace("[color=priest]", "")
+                       .Replace("[color=mage]", "")
+                       .Replace("[color=warlock]", "")
+                       .Replace("[/color]", "")
                        .Replace("[b]", "")
                        .Replace("[/b]", "")
                        .Replace("[i]", "")
@@ -54,6 +64,17 @@ namespace OPKODABbl.Helpers
         public static string BbCode(this string text)
         {
             return text
+                       // Цвета
+                       .Replace("[color=paladin]", "<font color=\"#f58cba\">")
+                       .Replace("[color=warrior]", "<font color=\"#c79c6e\">")
+                       .Replace("[color=hunter]", "<font color=\"#abd473\">")
+                       .Replace("[color=shaman]", "<font color=\"#0070de\">")
+                       .Replace("[color=rogue]", "<font color=\"#fff569\">")
+                       .Replace("[color=druid]", "<font color=\"#ff7d0a\">")
+                       .Replace("[color=priest]", "<font color=\"#ffffff\">")
+                       .Replace("[color=mage]", "<font color=\"#69ccf0\">")
+                       .Replace("[color=warlock]", "<font color=\"#9482c9\">")
+                       .Replace("[/color]", "</font>")
                        // Цитирование
                        .Replace("[quote]", "<div class=\"quote\">")
                        .Replace("[/quote]", "</div>")
