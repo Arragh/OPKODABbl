@@ -1048,6 +1048,7 @@ div.message_info {
         text-align: right;
     }
         div.message_info div.buttons a {
+            margin: 0px 0px 0px 3px;
             padding: 1px 5px 2px 5px;
             background-color: #1b8bdf;
             font-family: Verdana;

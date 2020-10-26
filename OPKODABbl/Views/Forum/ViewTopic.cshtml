@@ -66,7 +66,10 @@
                         <a class="anchor_link" href="@link" name="@htmlAnchor">@reply.ReplyDate.ToShortDateString() - @reply.ReplyDate.ToShortTimeString()</a>
                     </div>
                     <div class="buttons">
-                        <a asp-action="EditReply" asp-controller="Forum" asp-route-topicId="@Model.Id" asp-route-replyId="@reply.Id" asp-route-htmlAnchor="@htmlAnchor">Редактировать</a>
+                        @if (reply.User.Name == User.Identity.Name && Convert.ToInt32((DateTime.Now - reply.ReplyDate).TotalMinutes) < 10)
+                        {
+                            <a asp-action="EditReply" asp-controller="Forum" asp-route-topicId="@Model.Id" asp-route-replyId="@reply.Id" asp-route-htmlAnchor="@htmlAnchor">Редактировать</a>
+                        }
                         <a asp-action="AddReply" asp-controller="Forum" asp-route-topicId="@Model.Id" asp-route-quoteMessageId="@reply.Id">Цитировать</a>
                     </div>
                 </div>

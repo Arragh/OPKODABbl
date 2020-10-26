@@ -359,26 +359,26 @@ namespace OPKODABbl.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name);
+                // Ищем сообщение по нескольким параметрам
+                Reply reply = await _websiteDB.Replies.Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == replyId && r.Topic.Id == topicId && r.User.Name == User.Identity.Name);
 
-                if (user != null)
+                // Если сообщение с заданными параметрами найдено, то заходим в условие
+                if (reply != null && Convert.ToInt32((DateTime.Now - reply.ReplyDate).TotalMinutes) < 10)
                 {
-                    Reply reply = await _websiteDB.Replies.Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == replyId && r.Topic.Id == topicId && r.User.Id == user.Id);
-
-                    if (reply != null)
+                    // Формируем модель редактирования
+                    EditReplyViewModel model = new EditReplyViewModel()
                     {
-                        EditReplyViewModel model = new EditReplyViewModel()
-                        {
-                            ReplyId = reply.Id,
-                            TopicId = reply.Topic.Id,
-                            ReplyBody = reply.ReplyBody,
-                            HtmlAnchor = htmlAnchor
-                        };
+                        ReplyId = reply.Id,
+                        TopicId = reply.Topic.Id,
+                        ReplyBody = reply.ReplyBody,
+                        HtmlAnchor = htmlAnchor
+                    };
 
-                        return View(model);
-                    }
+                    // Передаем модель в представление
+                    return View(model);
                 }
 
+                // Если сообщение не найдено, выдаем ошибку 404
                 return Redirect("/Main/PageNotFound");
             }
 
@@ -401,22 +401,28 @@ namespace OPKODABbl.Controllers
                 {
                     Reply reply = await _websiteDB.Replies.Include(r => r.Topic).ThenInclude(t => t.Replies).FirstOrDefaultAsync(r => r.Id == model.ReplyId && r.Topic.Id == model.TopicId && r.User.Name == User.Identity.Name);
 
-                    if (reply != null)
+                    // Проверяем есть ли такое сообщение и не истекло ли время на его редактирование (тут делаем время + 10 минут, дав пользователю фору на сам процесс редактирования)
+                    if (reply != null && Convert.ToInt32((DateTime.Now - reply.ReplyDate).TotalMinutes) < 20)
                     {
+                        // Изменяем тело сообщения
                         reply.ReplyBody = model.ReplyBody;
 
+                        // СОхраняем изменения
                         _websiteDB.Replies.Update(reply);
                         await _websiteDB.SaveChangesAsync();
 
+                        // Формируем прямую ссылку на сообщение
                         string EditedMessageLink = $"/Forum/ViewTopic?topicId={model.TopicId}&page={(int)Math.Ceiling(reply.Topic.Replies.Count() / (double)10)}#{model.HtmlAnchor}";
 
+                        // Редирект по прямой ссылке
                         return Redirect(EditedMessageLink);
                     }
 
-                    // Если ответ не найден, выдаём ошибку 404
+                    // Если сообщение не найдено, выдаём ошибку 404
                     return Redirect("/Main/PageNotFound");
                 }
 
+                // Если модель не прошла валидацию, возвращаем её в представление
                 return View(model);
             }
 
