@@ -89,15 +89,21 @@ namespace OPKODABbl.Controllers
             // Проверяем существование подраздела в общем и для данного пользователя в частности (при недостатке прав он будет равен null)
             if (subsection != null)
             {
+                // Берем настройки из БД
+                SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
+
                 // Сортировка ответов в каждой теме по дате
                 subsection.Topics.ForEach(t => t.Replies = t.Replies.OrderBy(r => r.ReplyDate).ToList());
                 // Сортировка тем в подразделе по дате последнего ответа и разбив по страницам
                 int count = subsection.Topics.Count();
-                int pageSize = 10;
-                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Announcement).ThenByDescending(t => t.Replies.Last().ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                int subsectionPageSize = settings.SubsectionPageSize;
+                int topicPageSize = settings.TopicPageSize;
 
-                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+                subsection.Topics = subsection.Topics.OrderByDescending(t => t.Announcement).ThenByDescending(t => t.Replies.Last().ReplyDate).Skip((page - 1) * subsectionPageSize).Take(subsectionPageSize).ToList();
+
+                ViewBag.TotalPages = (int)Math.Ceiling(count / (double)subsectionPageSize);
                 ViewBag.CurrentPage = page;
+                ViewBag.TopicPageSize = topicPageSize;
 
                 // Передаем в представление
                 return View(subsection);
@@ -136,9 +142,12 @@ namespace OPKODABbl.Controllers
             // Если у юзера недостаточно прав для просмотра, то топик будет null
             if (topic != null)
             {
+                // Берем настройки из БД
+                SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
+
                 // Разбиваем ответы по страницам
                 int count = topic.Replies.Count();
-                int pageSize = 10;
+                int pageSize = settings.TopicPageSize;
 
                 topic.Replies = topic.Replies.OrderBy(r => r.ReplyDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 // Замена символов и ББ-код в каждом ответе

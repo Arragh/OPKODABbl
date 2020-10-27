@@ -23,6 +23,7 @@ namespace OPKODABbl.Service
         public DbSet<Subsection> Subsections { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Reply> Replies { get; set; }
+        public DbSet<SettingsForum> SettingsForum { get; set; }
 
         public WebsiteContext(DbContextOptions<WebsiteContext> options) : base(options)
         {
@@ -203,9 +204,19 @@ namespace OPKODABbl.Service
             };
             #endregion
 
+            #region Добавление настроек
+            SettingsForum settingsForum = new SettingsForum()
+            {
+                Id = Guid.NewGuid(),
+                SubsectionPageSize = 10,
+                TopicPageSize = 10
+            };
+            #endregion
+
             modelBuilder.Entity<CharacterClass>().HasData(new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock });
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, officer, member, recruit, user });
             modelBuilder.Entity<User>().HasData(new User[] { Administrator, Anonymous, user1, user2, user3 });
+            modelBuilder.Entity<SettingsForum>().HasData(settingsForum);
 
             base.OnModelCreating(modelBuilder);
         }

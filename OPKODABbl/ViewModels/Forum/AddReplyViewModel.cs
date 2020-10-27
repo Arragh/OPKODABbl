@@ -13,7 +13,7 @@ namespace OPKODABbl.ViewModels.Forum
         [Required(ErrorMessage = "Поле ответа не может быть пустым")]
         [Display(Name = "Введите текст сообщения")]
         [DataType(DataType.Text)]
-        [StringLength(5000, ErrorMessage = "Логин должен быть от {2} до {1} символов.", MinimumLength = 1)]
+        [StringLength(10000, ErrorMessage = "Длина сообщения должна быть от {2} до {1} символов.", MinimumLength = 1)]
         public string ReplyBody { get; set; }
     }
 }
