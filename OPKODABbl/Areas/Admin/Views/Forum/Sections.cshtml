@@ -1,7 +1,29 @@
-﻿@model List<OPKODABbl.Models.Forum.Section>
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Forum.SectionsViewModel
+
+<form asp-action="ApplySettings" asp-controller="Forum">
+    <table border="1" align="center">
+        <tr>
+            <td>Тем на странице</td>
+            <td>Сообщений на странице</td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input style="width: 50px;" type="number" min="10" max="100" asp-for="SubsectionPageSize" />
+            </td>
+            <td align="center">
+                <input style="width: 50px;" type="number" min="1" max="100" asp-for="TopicPageSize" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="Сохранить" />
+            </td>
+        </tr>
+    </table>
+</form>
 
 <table border="1" align="center">
-    @foreach (var sec in Model.OrderBy(s => s.SectionPosition))
+    @foreach (var sec in Model.Sections.OrderBy(s => s.SectionPosition))
 	{
 		 <tr style="background-color: red;">
 			 <td>

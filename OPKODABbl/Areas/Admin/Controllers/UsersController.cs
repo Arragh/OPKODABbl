@@ -57,6 +57,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
             if (user != null)
             {
+                // Список ролей для выпадающего списка droplist на странице
                 SelectList rolesList = new SelectList(_websiteDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
                 ViewBag.Roles = rolesList;
 
@@ -83,6 +84,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
             if (user != null)
             {
+                // Список ролей для выпадающего списка droplist на странице
                 SelectList rolesList = new SelectList(_websiteDB.Roles.OrderByDescending(r => r.AccessLevel), "Id", "Name", user.RoleId);
                 ViewBag.Roles = rolesList;
 

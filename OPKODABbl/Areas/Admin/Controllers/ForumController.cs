@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OPKODABbl.Areas.Admin.ViewModels.Forum;
 using OPKODABbl.Models.Forum;
 using OPKODABbl.Service;
 
@@ -22,9 +23,35 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Список разделов и подразделов
         public async Task<IActionResult> Sections()
         {
+            SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
             List<Section> sections = await _websiteDB.Sections.Include(f => f.Subsections).ToListAsync();
 
-            return View(sections);
+            SectionsViewModel model = new SectionsViewModel()
+            {
+                SubsectionPageSize = settings.SubsectionPageSize,
+                TopicPageSize = settings.TopicPageSize,
+                Sections = sections
+            };
+
+            return View(model);
+        }
+        #endregion
+
+        #region Сохранить настройки
+        public async Task<IActionResult> ApplySettings(SectionsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
+
+                settings.SubsectionPageSize = model.SubsectionPageSize;
+                settings.TopicPageSize = model.TopicPageSize;
+
+                _websiteDB.SettingsForum.Update(settings);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Sections", "Forum");
         }
         #endregion
 
@@ -205,6 +232,8 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Удалить сообщение[POST]
         public async Task<IActionResult> DeleteReply(Guid replyId, int htmlAnchor)
         {
+            SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
+
             Reply reply = await _websiteDB.Replies.Include(r => r.Topic).ThenInclude(t => t.Replies).FirstOrDefaultAsync(reply => reply.Id == replyId);
 
             // Рассчитываем новый хтмл-якорь для прямой ссылки редиректа
@@ -216,15 +245,15 @@ namespace OPKODABbl.Areas.Admin.Controllers
                 newHtmlAnchor = htmlAnchor;
             }
 
-            // Рассчитываем страницу для редиректа.
+            // Рассчитываем страницу для редиректа. Условно примемр азмер страницы за 10
             // Каждое первое сообщение на новой странице будет иметь номер типа 11, 21, 31 и т.д.
             // Следовательно для рассчета страницы прибавляем 9 и делим на 10 (10/10==1, 19/10==1, 20/10==2, 29/10==2, 30/10==3 и т.д.)
-            int page = (newHtmlAnchor + 9) / 10;
+            int page = (newHtmlAnchor + (settings.TopicPageSize - 1)) / settings.TopicPageSize;
 
             // Формируем ссылку для редиректа
             string link = $"/Forum/ViewTopic?topicId={reply.Topic.Id}&page={page}#{newHtmlAnchor}";
 
-            // Если такок сообщение существует, удаляем его из БД
+            // Если такое сообщение существует, удаляем его из БД
             if (reply != null)
             {
                 _websiteDB.Replies.Remove(reply);
