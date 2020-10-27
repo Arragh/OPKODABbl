@@ -29,12 +29,42 @@ namespace OPKODABbl.Areas.Admin.Controllers
             _appEnvironment = appEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Gallery> galleries = _websiteDB.Galleries;
+            List<Gallery> galleries = await _websiteDB.Galleries.ToListAsync();
+            SettingsGallery settings = await _websiteDB.SettingsGallery.FirstAsync();
 
-            return View(galleries);
+            IndexViewModel model = new IndexViewModel()
+            {
+                GalleriesPerPage = settings.GalleriesPerPage,
+                ImagesPerGallery = settings.ImagesPerGallery,
+                MaxImageSize = settings.MaxImageSize,
+                ImageResizeQuality = settings.ImageResizeQuality,
+                Galleries = galleries
+            };
+
+            return View(model);
         }
+
+        #region Сохранение настроек
+        public async Task<IActionResult> ApplySettings(IndexViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                SettingsGallery settings = await _websiteDB.SettingsGallery.FirstAsync();
+
+                settings.GalleriesPerPage = model.GalleriesPerPage;
+                settings.ImageResizeQuality = model.ImageResizeQuality;
+                settings.MaxImageSize = model.MaxImageSize;
+                settings.ImagesPerGallery = model.ImagesPerGallery;
+
+                _websiteDB.SettingsGallery.Update(settings);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Gallery");
+        }
+        #endregion
 
         #region Создать галерею [GET]
         [HttpGet]

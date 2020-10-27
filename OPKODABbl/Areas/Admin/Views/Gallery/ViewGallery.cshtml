@@ -6,7 +6,7 @@
 
     <br /><br />
 
-    @Model.GalleryTitle
+    @Model.GalleryTitle (Изображений: @Model.GalleryImages.Count())
 
     <br /><br />
 
@@ -15,32 +15,35 @@
 		 @Html.Raw(Model.GalleryDescription)
 	}
 
-    @if (Model.ImagesCount < 30)
-    {
-        <form asp-controller="Gallery" asp-action="ViewGallery" method="post" enctype="multipart/form-data">
-            <div>
-                <input type="hidden" asp-for="GalleryId" value="@Model.GalleryId" />
-                <input type="hidden" asp-for="GalleryDate" value="@Model.GalleryDate" />
-                <input type="hidden" asp-for="UserName" value="@Model.UserName" />
-                <input type="hidden" asp-for="GalleryTitle" value="@Model.GalleryTitle" />
-                <input type="hidden" asp-for="GalleryDescription" value="@Model.GalleryDescription" />
-            </div>
-            <div>
-                <font color="red">@Html.ValidationMessageFor(f => f.GalleryImage)</font><br />
-                <input type="file" name="uploads" accept=".jpg,.jpeg,.gif,.png" multiple="" />
-                &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="Загрузить" />
-            </div>
-        </form>
-    }
+    <form asp-controller="Gallery" asp-action="ViewGallery" method="post" enctype="multipart/form-data">
+        <div>
+            <input type="hidden" asp-for="GalleryId" value="@Model.GalleryId" />
+            <input type="hidden" asp-for="GalleryDate" value="@Model.GalleryDate" />
+            <input type="hidden" asp-for="UserName" value="@Model.UserName" />
+            <input type="hidden" asp-for="GalleryTitle" value="@Model.GalleryTitle" />
+            <input type="hidden" asp-for="GalleryDescription" value="@Model.GalleryDescription" />
+        </div>
+        <div>
+            <font color="red">@Html.ValidationMessageFor(f => f.GalleryImage)</font><br />
+            <input type="file" name="uploads" accept=".jpg,.jpeg,.gif,.png" multiple="" />
+            &nbsp;&nbsp;&nbsp;
+            <input type="submit" value="Загрузить" />
+        </div>
+    </form>
 
     <br />
     <br />
 
     @if (Model.GalleryImages != null && Model.GalleryImages.Count > 0)
     {
+        int imageCount = 0;
+
         foreach (var image in Model.GalleryImages)
         {
+            if (imageCount > 0 && imageCount % 3 == 0)
+            {
+                <br /><br />
+            }
             <div style="display: inline-block;">
                 <a href="@Url.Content(image.ImagePathOriginal)"><img src="@Url.Content(image.ImagePathScaled)" /></a><br />
                 @if (User.IsInRole("admin"))
@@ -48,6 +51,7 @@
                     <a asp-action="ViewGallery" asp-controller="Gallery" asp-route-galleryId="@Model.GalleryId" asp-route-imageToDeleteName="@image.ImageName">Удалить изображение</a>
                 }
             </div>
+            imageCount++;
         }
     }
 

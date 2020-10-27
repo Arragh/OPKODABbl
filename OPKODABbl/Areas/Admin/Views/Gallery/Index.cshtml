@@ -1,13 +1,46 @@
-﻿@model IEnumerable<OPKODABbl.Models.Gallery.Gallery>
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Gallery.IndexViewModel
 
 <center>
+    <br />
+    @Html.ActionLink("Назад в админ-панель", "Index", "Home")
+    <br /><br />
+
+    <form asp-action="ApplySettings" asp-controller="Gallery" method="post">
+        <table border="1" align="center">
+            <tr>
+                <td>Галерей на страницу</td>
+                <td>Картинок в галерее</td>
+                <td>MAX объем загружаемой картинки (МБ)</td>
+                <td>Качество уменьшенной картинки (%)</td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <input style="width: 50px;" type="number" asp-for="GalleriesPerPage" min="1" max="120" />
+                </td>
+                <td align="center">
+                    <input style="width: 50px;" type="number" asp-for="ImagesPerGallery" min="1" max="120" />
+                </td>
+                <td align="center">
+                    <input style="width: 50px;" type="number" asp-for="MaxImageSize" min="1" max="10" />
+                </td>
+                <td align="center">
+                    <input style="width: 50px;" type="number" asp-for="ImageResizeQuality" min="1" max="100" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <input type="submit" value="Сохранить" />
+                </td>
+            </tr>
+        </table>
+    </form>
 
     @Html.ActionLink("Создать галерею", "CreateGallery", "Gallery")
 
     <br /><br />
 
     <table border="1">
-        @foreach (var gallery in Model)
+        @foreach (var gallery in Model.Galleries)
         {
             <tr>
                 <td>@gallery.Id</td>
