@@ -295,11 +295,11 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #endregion
 
         #region Удалить раздел[POST]
-        public async Task<IActionResult> DeleteSection(Guid sectionId)
+        public async Task<IActionResult> DeleteSection(Guid sectionId, bool isChecked)
         {
             Section section = await _websiteDB.Sections.Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).FirstOrDefaultAsync(s => s.Id == sectionId);
 
-            if (section != null)
+            if (section != null && isChecked)
             {
                 // Начинаем с удаления ответов в темах, затем темы, далее подразделы и последним сам раздел
                 _websiteDB.Replies.RemoveRange(section.Subsections.SelectMany(s => s.Topics.SelectMany(t => t.Replies)).ToList());
@@ -314,11 +314,11 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #endregion
 
         #region Удалить подраздел[POST]
-        public async Task<IActionResult> DeleteSubsection(Guid subsectionId)
+        public async Task<IActionResult> DeleteSubsection(Guid subsectionId, bool isChecked)
         {
             Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).ThenInclude(t => t.Replies).FirstOrDefaultAsync(s => s.Id == subsectionId);
 
-            if (subsection != null)
+            if (subsection != null && isChecked)
             {
                 // Начинаем с удаления ответов в темах, затем темы, и последним сам подраздел
                 _websiteDB.Replies.RemoveRange(subsection.Topics.SelectMany(t => t.Replies).ToList());

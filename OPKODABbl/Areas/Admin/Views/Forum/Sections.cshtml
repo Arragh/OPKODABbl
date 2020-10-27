@@ -31,7 +31,13 @@
 			 </td>
 			 <td>@Html.ActionLink("Вверх", "MoveSectionUp", "Forum", new { sectionId = sec.Id })</td>
              <td>@Html.ActionLink("Вниз", "MoveSectionDown", "Forum", new { sectionId = sec.Id })</td>
-             <td>@Html.ActionLink("УДАЛИТЬ", "DeleteSection", "Forum", new { sectionId = sec.Id })</td>
+             <td>
+                 <form asp-action="DeleteSection" asp-controller="Forum" method="post">
+                     <input type="hidden" value="@sec.Id" name="sectionId" />
+                     <input type="checkbox" value="True" name="isChecked" />
+                     <input type="submit" value="Удалить" />
+                 </form>
+             </td>
 		 </tr>
 		 @foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
 		 {
@@ -41,7 +47,13 @@
 				</td>
                 <td>@Html.ActionLink("Вверх", "MoveSubsectionUp", "Forum", new { sectionId = sec.Id, subsectionId = subsec.Id })</td>
                 <td>@Html.ActionLink("Вниз", "MoveSubsectionDown", "Forum", new { sectionId = sec.Id, subsectionId = subsec.Id })</td>
-                <td>@Html.ActionLink("УДАЛИТЬ", "DeleteSubsection", "Forum", new { subsectionId = subsec.Id })</td>
+                <td>
+                    <form asp-action="DeleteSubsection" asp-controller="Forum" method="post">
+                        <input type="hidden" value="@subsec.Id" name="subsectionId" />
+                        <input type="checkbox" value="True" name="isChecked" />
+                        <input type="submit" value="Удалить" />
+                    </form>
+                </td>
 			</tr>
 		 }
 		<tr>
