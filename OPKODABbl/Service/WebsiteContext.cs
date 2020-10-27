@@ -24,6 +24,7 @@ namespace OPKODABbl.Service
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<SettingsForum> SettingsForum { get; set; }
+        public DbSet<SettingsGallery> SettingsGallery { get; set; }
 
         public WebsiteContext(DbContextOptions<WebsiteContext> options) : base(options)
         {
@@ -211,12 +212,22 @@ namespace OPKODABbl.Service
                 SubsectionPageSize = 10,
                 TopicPageSize = 10
             };
+
+            SettingsGallery settingsGallery = new SettingsGallery()
+            {
+                Id = Guid.NewGuid(),
+                GalleriesPerPage = 12,
+                ImagesPerGallery = 30,
+                MaxImageSize = 2,
+                ImageResizeQuality = 50
+            };
             #endregion
 
             modelBuilder.Entity<CharacterClass>().HasData(new CharacterClass[] { paladin, warrior, shaman, hunter, rogue, druid, priest, mage, warlock });
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, officer, member, recruit, user });
             modelBuilder.Entity<User>().HasData(new User[] { Administrator, Anonymous, user1, user2, user3 });
             modelBuilder.Entity<SettingsForum>().HasData(settingsForum);
+            modelBuilder.Entity<SettingsGallery>().HasData(settingsGallery);
 
             base.OnModelCreating(modelBuilder);
         }

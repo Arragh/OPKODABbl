@@ -48,7 +48,10 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGallery(CreateGalleryViewModel model, IFormFile sliderImage)
         {
-            int imageSize = 1048576 * 2;
+            // Настройки галереи
+            SettingsGallery settings = await _websiteDB.SettingsGallery.FirstAsync();
+
+            int imageSize = 1048576 * settings.MaxImageSize;
 
             // Проверяем, чтобы обязательно был указан файл с изображением
             if (sliderImage == null || sliderImage.Length == 0)
@@ -101,7 +104,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                             Size = new Size(1056, 220)
                         }));
                         // Сохраняем уменьшенную копию
-                        await clone.SaveAsync(_appEnvironment.WebRootPath + pathSliderImage, new JpegEncoder { Quality = 50 });
+                        await clone.SaveAsync(_appEnvironment.WebRootPath + pathSliderImage, new JpegEncoder { Quality = settings.ImageResizeQuality });
                     }
                 }
                 // Если вдруг что-то пошло не так (например, на вход подало не картинку), то выводим сообщение об ошибке
@@ -205,8 +208,11 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ViewGallery(ViewGalleryViewModel model, IFormFileCollection uploads)
         {
-            int imageSize = 1048576 * 2;
-            int imagesPerGallery = 30;
+            // Настройки галереи
+            SettingsGallery settings = await _websiteDB.SettingsGallery.FirstAsync();
+
+            int imageSize = 1048576 * settings.MaxImageSize;
+            int imagesPerGallery = settings.ImagesPerGallery;
 
             // Выбираем все изображения, находящиеся в данной галерее
             List<GalleryImage> images = await _websiteDB.GalleryImages.Where(i => i.GalleryId == model.GalleryId).OrderByDescending(i => i.ImageDate).ToListAsync();
@@ -230,7 +236,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     }
                     if (file.Length > imageSize)
                     {
-                        ModelState.AddModelError("GalleryImage", $"Файл \"{file.FileName}\" превышает установленный лимит 2MB.");
+                        ModelState.AddModelError("GalleryImage", $"Файл \"{file.FileName}\" превышает установленный лимит {settings.MaxImageSize}MB.");
                         break;
                     }
                 }
@@ -279,7 +285,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                                 Size = new Size(300, 169)
                             }));
                             // Сохраняем уменьшенную копию
-                            await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = 50 });
+                            await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = settings.ImageResizeQuality });
                             // Сохраняем исходное изображение
                             await image.SaveAsync(_appEnvironment.WebRootPath + pathOriginal);
                         }
@@ -378,12 +384,15 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditGallery(EditGalleryViewModel model, IFormFile sliderImage)
         {
-            int imageSize = 1048576 * 2;
+            // Настройки галереи
+            SettingsGallery settings = await _websiteDB.SettingsGallery.FirstAsync();
+
+            int imageSize = 1048576 * settings.MaxImageSize;
 
             // Если размер превью-изображения превышает установленный лимит, генерируем ошибку модели
             if (sliderImage != null && sliderImage.Length > imageSize)
             {
-                ModelState.AddModelError("GalleryPreviewImage", $"Файл \"{sliderImage.FileName}\" превышает установленный лимит 2MB.");
+                ModelState.AddModelError("GalleryPreviewImage", $"Файл \"{sliderImage.FileName}\" превышает установленный лимит {settings.MaxImageSize}MB.");
             }
 
             // Проверяем, чтобы такая галерея существовала в БД
@@ -435,7 +444,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                                 Size = new Size(1056, 220)
                             }));
                             // Сохраняем уменьшенную копию
-                            await clone.SaveAsync(_appEnvironment.WebRootPath + pathSliderImage, new JpegEncoder { Quality = 50 });
+                            await clone.SaveAsync(_appEnvironment.WebRootPath + pathSliderImage, new JpegEncoder { Quality = settings.ImageResizeQuality });
                         }
                     }
                     // Если вдруг что-то пошло не так (например, на вход подало не картинку), то выводим сообщение об ошибке
