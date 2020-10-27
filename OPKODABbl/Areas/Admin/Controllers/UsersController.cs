@@ -30,18 +30,23 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #region Список пользователей
         public async Task<IActionResult> AllUsers()
         {
-            List<User> users = await _websiteDB.Users.Include(u => u.Role).OrderBy(u => u.RegisterDate).ToListAsync();
-            List<Role> roles = await _websiteDB.Roles.ToListAsync();
-            List<CharacterClass> characterClasses = await _websiteDB.CharacterClasses.ToListAsync();
+            //List<User> users = await _websiteDB.Users.Include(u => u.Role).OrderByDescending(u => u.Role.AccessLevel).ThenBy(u => u.RegisterDate).ToListAsync();
+            //List<Role> roles = await _websiteDB.Roles.ToListAsync();
+            //List<CharacterClass> characterClasses = await _websiteDB.CharacterClasses.ToListAsync();
 
-            AllUsersViewModel model = new AllUsersViewModel()
-            {
-                Users = users,
-                Roles = roles,
-                CharacterClasses = characterClasses
-            };
+            //AllUsersViewModel model = new AllUsersViewModel()
+            //{
+            //    Users = users,
+            //    Roles = roles,
+            //    CharacterClasses = characterClasses
+            //};
 
-            return View(model);
+            //return View(model);
+
+
+            List<User> users = await _websiteDB.Users.Include(u => u.Role).Include(u => u.CharacterClass).OrderByDescending(u => u.Role.AccessLevel).ThenBy(u => u.RegisterDate).ToListAsync();
+
+            return View(users);
         }
         #endregion
 

@@ -1,6 +1,7 @@
-﻿@model OPKODABbl.Areas.Admin.ViewModels.Users.AllUsersViewModel
+﻿@*@model OPKODABbl.Areas.Admin.ViewModels.Users.AllUsersViewModel*@
+@model List<OPKODABbl.Models.Account.User>
 
-<center>
+@*<center>
     <table border="1">
         @foreach (var user in Model.Users)
         {
@@ -19,6 +20,43 @@
                 </td>
                 <td>
                     @Model.Roles.FirstOrDefault(r => r.Id == user.RoleId).Name
+                </td>
+                <td>
+                    @user.RegisterDate.ToShortDateString()
+                </td>
+                <td>
+                    <a asp-action="EditUser" asp-controller="Users" asp-route-userId="@user.Id">Изменить</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteUserWith" asp-controller="Users" asp-route-userId="@user.Id">Удалить с сообщениями</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteUserWithout" asp-controller="Users" asp-route-userId="@user.Id">Удалить без сообщений</a>
+                </td>
+            </tr>
+        }
+    </table>
+</center>*@
+
+<center>
+    <table border="1">
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    @user.Id
+                </td>
+                <td>
+                    @user.Name
+                </td>
+                <td>
+                    @if (user.CharacterClass != null)
+                    {
+                        <img src="@user.CharacterClass.ClassIconPath" />
+                    }
+                </td>
+                <td>
+                    @user.Role.Name
                 </td>
                 <td>
                     @user.RegisterDate.ToShortDateString()
