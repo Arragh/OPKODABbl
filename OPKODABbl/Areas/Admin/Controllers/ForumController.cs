@@ -294,5 +294,42 @@ namespace OPKODABbl.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Удалить раздел[POST]
+        public async Task<IActionResult> DeleteSection(Guid sectionId)
+        {
+            Section section = await _websiteDB.Sections.Include(s => s.Subsections).ThenInclude(s => s.Topics).ThenInclude(t => t.Replies).FirstOrDefaultAsync(s => s.Id == sectionId);
+
+            if (section != null)
+            {
+                // Начинаем с удаления ответов в темах, затем темы, далее подразделы и последним сам раздел
+                _websiteDB.Replies.RemoveRange(section.Subsections.SelectMany(s => s.Topics.SelectMany(t => t.Replies)).ToList());
+                _websiteDB.Topics.RemoveRange(section.Subsections.SelectMany(s => s.Topics).ToList());
+                _websiteDB.Subsections.RemoveRange(section.Subsections);
+                _websiteDB.Sections.Remove(section);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Sections", "Forum");
+        }
+        #endregion
+
+        #region Удалить подраздел[POST]
+        public async Task<IActionResult> DeleteSubsection(Guid subsectionId)
+        {
+            Subsection subsection = await _websiteDB.Subsections.Include(s => s.Topics).ThenInclude(t => t.Replies).FirstOrDefaultAsync(s => s.Id == subsectionId);
+
+            if (subsection != null)
+            {
+                // Начинаем с удаления ответов в темах, затем темы, и последним сам подраздел
+                _websiteDB.Replies.RemoveRange(subsection.Topics.SelectMany(t => t.Replies).ToList());
+                _websiteDB.Topics.RemoveRange(subsection.Topics);
+                _websiteDB.Subsections.Remove(subsection);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Sections", "Forum");
+        }
+        #endregion
+
     }
 }
