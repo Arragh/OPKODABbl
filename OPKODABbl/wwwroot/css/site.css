@@ -978,6 +978,20 @@ table.viewsubsection {
         color: #ffffff;
         border: 1px solid #2e3741;
     }
+        table.viewsubsection td.content a.adm {
+            margin: 0px 0px 0px 3px;
+            padding: 1px 5px 2px 5px;
+            background-color: #12a44b;
+            font-family: Verdana;
+            font-size: 11px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+            table.viewsubsection td.content a.adm:hover {
+                color: #ffffff;
+                background-color: #ff0000;
+                text-decoration: none;
+            }
         table.viewsubsection td.content a.pagelink {
             font-family: Verdana;
             font-size: 11px;
@@ -1047,7 +1061,20 @@ div.message_info {
         display: inline-block;
         text-align: right;
     }
-        div.message_info div.buttons a {
+        div.message_info div.buttons a.adm {
+            margin: 0px 0px 0px 3px;
+            padding: 1px 5px 2px 5px;
+            background-color: #12a44b;
+            font-family: Verdana;
+            font-size: 11px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+            div.message_info div.buttons a.adm:hover {
+                color: #ffffff;
+                background-color: #ff0000;
+            }
+        div.message_info div.buttons a.all {
             margin: 0px 0px 0px 3px;
             padding: 1px 5px 2px 5px;
             background-color: #1b8bdf;
@@ -1056,7 +1083,7 @@ div.message_info {
             color: #ffffff;
             text-decoration: none;
         }
-            div.message_info div.buttons a:hover {
+            div.message_info div.buttons a.all:hover {
                 color: #ffffff;
                 background-color: #ff0000;
             }

@@ -202,5 +202,68 @@ namespace OPKODABbl.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Удалить сообщение[POST]
+        public async Task<IActionResult> DeleteReply(Guid replyId, int htmlAnchor)
+        {
+            Reply reply = await _websiteDB.Replies.Include(r => r.Topic).ThenInclude(t => t.Replies).FirstOrDefaultAsync(reply => reply.Id == replyId);
+
+            // Рассчитываем новый хтмл-якорь для прямой ссылки редиректа
+            int newHtmlAnchor = htmlAnchor - 1;
+
+            // Если мы удаляем не последнее сообщение, то следующее за ним сообщение приобретёт якорь удаляемого сообщения
+            if (reply.Topic.Replies.Count() > htmlAnchor)
+            {
+                newHtmlAnchor = htmlAnchor;
+            }
+
+            // Рассчитываем страницу для редиректа.
+            // Каждое первое сообщение на новой странице будет иметь номер типа 11, 21, 31 и т.д.
+            // Следовательно для рассчета страницы прибавляем 9 и делим на 10 (10/10==1, 19/10==1, 20/10==2, 29/10==2, 30/10==3 и т.д.)
+            int page = (newHtmlAnchor + 9) / 10;
+
+            // Формируем ссылку для редиректа
+            string link = $"/Forum/ViewTopic?topicId={reply.Topic.Id}&page={page}#{newHtmlAnchor}";
+
+            // Если такок сообщение существует, удаляем его из БД
+            if (reply != null)
+            {
+                _websiteDB.Replies.Remove(reply);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            if (reply.Topic.Replies.Count() == 0)
+            {
+                Topic topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == reply.Topic.Id);
+                _websiteDB.Topics.Remove(topic);
+                await _websiteDB.SaveChangesAsync();
+
+                return Redirect($"/Forum/Subsection?subsectionId={topic.Subsection.Id}");
+            }
+
+            // Редирект на сформированную ссылку
+            return Redirect(link);
+        }
+        #endregion
+
+        #region Удалить тему[POST]
+        public async Task<IActionResult> DeleteTopic(Guid topicId)
+        {
+            Topic topic = await _websiteDB.Topics.Include(t => t.Subsection).Include(t => t.Replies).FirstOrDefaultAsync(t => t.Id == topicId);
+
+            // Формируем возвратный линк
+            string link = $"/Forum/Subsection?subsectionId={topic.Subsection.Id}";
+
+            // Проверяем, чтобы такая тема существовала
+            if (topic != null)
+            {
+                _websiteDB.Replies.RemoveRange(topic.Replies);
+                _websiteDB.Topics.Remove(topic);
+                await _websiteDB.SaveChangesAsync();
+            }
+
+            return Redirect(link);
+        }
+        #endregion
+
     }
 }

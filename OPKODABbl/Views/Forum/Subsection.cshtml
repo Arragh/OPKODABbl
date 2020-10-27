@@ -66,6 +66,10 @@
                     }
                 </td>
                 <td class="content">
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a class="adm" asp-action="DeleteTopic" asp-controller="Forum" asp-area="Admin" asp-route-topicId="@topic.Id">Удалить</a>
+                    }
                     &nbsp;<a class="topicname" asp-action="ViewTopic" asp-controller="Forum" asp-route-topicId="@topic.Id">@topic.TopicName</a><br />
                     @if (totalPages > 1)
                     {
