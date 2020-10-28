@@ -30,7 +30,7 @@ namespace OPKODABbl.Controllers
             {
                 ViewBag.Title = news.NewsTitle;
 
-                int newsTitleLength = 60;
+                int newsTitleLength = 50;
                 // Если длина заголовка больше отображаемого лимита
                 if (news.NewsTitle.Length > newsTitleLength)
                 {

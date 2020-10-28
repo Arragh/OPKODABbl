@@ -2,16 +2,20 @@
 
 <center>
 
+    <br />
+    @Html.ActionLink("Назад в управление новостями", "Index", "News")
+    <br /><br />
+
     <form asp-controller="News" asp-action="CreateNews" method="post" enctype="multipart/form-data">
         <div>
             <label asp-for="NewsTitle"></label><br />
-            <input type="text" asp-for="NewsTitle" width="300" /><br />
+            <input style="width: 500px;" type="text" asp-for="NewsTitle" /><br />
             <span asp-validation-for="NewsTitle"></span>
         </div>
         <div>
             <label asp-for="NewsBody"></label><br />
             @await Html.PartialAsync("BBcodeButtonsPartial")
-            <textarea style="width: 500px; height: 300px;" id="textarea" asp-for="NewsBody"></textarea><br />
+            <textarea rows="30" cols="100" id="textarea" asp-for="NewsBody"></textarea><br />
             <span asp-validation-for="NewsBody"></span>
         </div>
         <div>

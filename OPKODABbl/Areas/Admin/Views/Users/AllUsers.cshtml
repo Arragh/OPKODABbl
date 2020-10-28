@@ -70,10 +70,18 @@
                     <a asp-action="EditUser" asp-controller="Users" asp-route-userId="@user.Id">Изменить</a>
                 </td>
                 <td>
-                    <a asp-action="DeleteUserWith" asp-controller="Users" asp-route-userId="@user.Id">Удалить с сообщениями</a>
+                    <form asp-action="DeleteUserWith" asp-controller="Users" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <input type="checkbox" name="isChecked" value="True" />
+                        <input type="submit" value="Удалить со всеми сообщениями" />
+                    </form>
                 </td>
                 <td>
-                    <a asp-action="DeleteUserWithout" asp-controller="Users" asp-route-userId="@user.Id">Удалить без сообщений</a>
+                    <form asp-action="DeleteUserWithout" asp-controller="Users">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <input type="checkbox" name="isChecked" value="True" />
+                        <input type="submit" value="Удалить без сообщений" />
+                    </form>
                 </td>
             </tr>
         }

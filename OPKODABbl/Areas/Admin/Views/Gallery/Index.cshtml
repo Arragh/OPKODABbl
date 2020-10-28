@@ -44,7 +44,7 @@
         {
             <tr>
                 <td>@gallery.Id</td>
-                <td>@gallery.GalleryTitle</td>
+                <td style="width: 400px;">@gallery.GalleryTitle</td>
                 <td>@gallery.GalleryDate</td>
                 <td>@gallery.GalleryUserName</td>
                 <td>@Html.ActionLink("Добавить/Удалить изображения", "ViewGallery", "Gallery", new { galleryId = gallery.Id })</td>

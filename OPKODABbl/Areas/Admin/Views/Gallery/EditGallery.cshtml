@@ -2,6 +2,10 @@
 
 <center>
 
+    <br />
+    @Html.ActionLink("Назад в управление галереей", "Index", "Gallery")
+    <br /><br />
+
     <form asp-controller="Gallery" asp-action="EditGallery" method="post" enctype="multipart/form-data">
         <div>
             <input type="hidden" asp-for="GalleryId" value="@Model.GalleryId" />

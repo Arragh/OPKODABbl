@@ -1,5 +1,12 @@
 ﻿@model OPKODABbl.Areas.Admin.ViewModels.Forum.SectionsViewModel
 
+<center>
+    <br />
+    @Html.ActionLink("Назад в панель администратора", "Index", "Home")
+    <br />
+    <br />
+</center>
+
 <form asp-action="ApplySettings" asp-controller="Forum">
     <table border="1" align="center">
         <tr>
@@ -24,27 +31,27 @@
 
 <table border="1" align="center">
     @foreach (var sec in Model.Sections.OrderBy(s => s.SectionPosition))
-	{
-		 <tr style="background-color: red;">
-			 <td>
-				 @sec.SectionName
-			 </td>
-			 <td>@Html.ActionLink("Вверх", "MoveSectionUp", "Forum", new { sectionId = sec.Id })</td>
-             <td>@Html.ActionLink("Вниз", "MoveSectionDown", "Forum", new { sectionId = sec.Id })</td>
-             <td>
-                 <form asp-action="DeleteSection" asp-controller="Forum" method="post">
-                     <input type="hidden" value="@sec.Id" name="sectionId" />
-                     <input type="checkbox" value="True" name="isChecked" />
-                     <input type="submit" value="Удалить" />
-                 </form>
-             </td>
-		 </tr>
-		 @foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
-		 {
-			<tr>
-				<td>
-					-----@subsec.SubsectionName
-				</td>
+    {
+        <tr style="background-color: red;">
+            <td>
+                @sec.SectionName
+            </td>
+            <td>@Html.ActionLink("Вверх", "MoveSectionUp", "Forum", new { sectionId = sec.Id })</td>
+            <td>@Html.ActionLink("Вниз", "MoveSectionDown", "Forum", new { sectionId = sec.Id })</td>
+            <td>
+                <form asp-action="DeleteSection" asp-controller="Forum" method="post">
+                    <input type="hidden" value="@sec.Id" name="sectionId" />
+                    <input type="checkbox" value="True" name="isChecked" />
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+        @foreach (var subsec in sec.Subsections.OrderBy(s => s.SubsectionPosition))
+        {
+            <tr>
+                <td>
+                    -----@subsec.SubsectionName
+                </td>
                 <td>@Html.ActionLink("Вверх", "MoveSubsectionUp", "Forum", new { sectionId = sec.Id, subsectionId = subsec.Id })</td>
                 <td>@Html.ActionLink("Вниз", "MoveSubsectionDown", "Forum", new { sectionId = sec.Id, subsectionId = subsec.Id })</td>
                 <td>
@@ -54,9 +61,9 @@
                         <input type="submit" value="Удалить" />
                     </form>
                 </td>
-			</tr>
-		 }
-		<tr>
+            </tr>
+        }
+        <tr>
             <td colspan="4">
                 <form asp-action="CreateSubsection" asp-controller="Forum" method="post">
                     <input type="hidden" name="sectionId" value="@sec.Id" />
@@ -64,11 +71,13 @@
                     <input type="submit" value="Создать подраздел" />
                 </form>
             </td>
-		</tr>
-	}
+        </tr>
+    }
 </table>
 
-<br /><br /><br />
+<br />
+<br />
+<br />
 
 <center>
     <form asp-action="CreateSection" asp-controller="Forum" method="post">

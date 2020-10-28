@@ -13,6 +13,7 @@ namespace OPKODABbl.Models.Forum
         public DateTime TopicDate { get; set; }
         public bool Announcement { get; set; }
         public Subsection Subsection { get; set; }
+        public User User { get; set; }
         public List<Reply> Replies { get; set; }
     }
 }

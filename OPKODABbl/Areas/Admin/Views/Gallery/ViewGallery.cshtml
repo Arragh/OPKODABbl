@@ -2,8 +2,8 @@
 
 <center>
 
-    @Html.ActionLink("Назад", "Index", "Gallery")
-
+    <br />
+    @Html.ActionLink("Назад в управление галереей", "Index", "Gallery")
     <br /><br />
 
     @Model.GalleryTitle (Изображений: @Model.GalleryImages.Count())
@@ -11,9 +11,15 @@
     <br /><br />
 
     @if (!string.IsNullOrEmpty(Model.GalleryDescription))
-	{
-		 @Html.Raw(Model.GalleryDescription)
-	}
+    {
+        <table border="1" style="width: 700px;">
+            <tr>
+                <td>
+                    @Html.Raw(Model.GalleryDescription)
+                </td>
+            </tr>
+        </table>
+    }
 
     <form asp-controller="Gallery" asp-action="ViewGallery" method="post" enctype="multipart/form-data">
         <div>

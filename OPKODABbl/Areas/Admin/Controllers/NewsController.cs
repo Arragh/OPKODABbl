@@ -31,7 +31,17 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _websiteDB.News.OrderByDescending(n => n.NewsDate).ToListAsync());
+            SettingsNews settings = await _websiteDB.SettingsNews.FirstAsync();
+            List<News> news = await _websiteDB.News.OrderByDescending(n => n.NewsDate).ToListAsync();
+
+            IndexViewModel model = new IndexViewModel()
+            {
+                MaxImageSize = settings.MaxImageSize,
+                ImageResizeQuality = settings.ImageResizeQuality,
+                News = news
+            };
+
+            return View(model);
         }
 
         #region Создать новость [GET]
@@ -46,8 +56,10 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNews(CreateNewsViewModel model, IFormFileCollection uploads)
         {
+            SettingsNews settings = await _websiteDB.SettingsNews.FirstAsync();
+
             // Объем изображения в мегабайтах
-            int imageSize = 1048576 * 2;
+            int imageSize = 1048576 * settings.MaxImageSize;
 
             if (uploads.Count > 3)
             {
@@ -60,7 +72,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                 {
                     if (file.Length > imageSize)
                     {
-                        ModelState.AddModelError("NewsImage", $"Файл \"{file.FileName}\" превышает установленный лимит 2MB.");
+                        ModelState.AddModelError("NewsImage", $"Файл \"{file.FileName}\" превышает установленный лимит {settings.MaxImageSize}MB.");
                         break;
                     }
                 }
@@ -122,7 +134,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                                     Size = new Size(300, 169)
                                 }));
                                 // Сохраняем уменьшенную копию
-                                await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = 50 });
+                                await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = settings.ImageResizeQuality });
                                 // Сохраняем исходное изображение
                                 await image.SaveAsync(_appEnvironment.WebRootPath + pathOriginal);
                             }
@@ -257,7 +269,9 @@ namespace OPKODABbl.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditNews(EditNewsViewModel model, IFormFileCollection uploads)
         {
-            int imageSize = 1048576 * 2;
+            SettingsNews settings = await _websiteDB.SettingsNews.FirstAsync();
+
+            int imageSize = 1048576 * settings.MaxImageSize;
 
             // Ищем запись в БД по Id
             News news = await _websiteDB.News.FirstOrDefaultAsync(n => n.Id == model.NewsId);
@@ -277,7 +291,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                     {
                         if (file.Length > imageSize)
                         {
-                            ModelState.AddModelError("NewsImage", $"Файл \"{file.FileName}\" превышает установленный лимит 2MB.");
+                            ModelState.AddModelError("NewsImage", $"Файл \"{file.FileName}\" превышает установленный лимит {settings.MaxImageSize}MB.");
                             break;
                         }
                     }
@@ -335,7 +349,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                                         Size = new Size(300, 169)
                                     }));
                                     // Сохраняем уменьшенную копию
-                                    await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = 50 });
+                                    await clone.SaveAsync(_appEnvironment.WebRootPath + pathScaled, new JpegEncoder { Quality = settings.ImageResizeQuality });
                                     // Сохраняем исходное изображение
                                     await image.SaveAsync(_appEnvironment.WebRootPath + pathOriginal);
                                 }
@@ -419,7 +433,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
             // Проверяем, чтобы такая запись существовала
             if (news != null)
             {
-                // Создаем список из привязанных к удаляемой записи изображений
+                // Создаем список из привязанных к удаляемой записи изображений (уже не стану переделывать на Include, оставлю как есть)
                 List<NewsImage> newsImages = await _websiteDB.NewsImages.Where(i => i.NewsId == newsId).ToListAsync();
 
                 if (newsImages.Count > 0)
@@ -453,10 +467,26 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
                 return RedirectToAction("Index", "News");
             }
-            else
+
+            return Redirect("/Main/PageNotFound");
+        }
+        #endregion
+
+        #region Сохранить настройки
+        public async Task<IActionResult> ApplySettings(IndexViewModel model)
+        {
+            SettingsNews settings = await _websiteDB.SettingsNews.FirstAsync();
+
+            if (ModelState.IsValid)
             {
-                return Redirect("/Main/PageNotFound");
+                settings.ImageResizeQuality = model.ImageResizeQuality;
+                settings.MaxImageSize = model.MaxImageSize;
+
+                _websiteDB.SettingsNews.Update(settings);
+                await _websiteDB.SaveChangesAsync();
             }
+
+            return RedirectToAction("Index", "News");
         }
         #endregion
 

@@ -1,27 +1,51 @@
-﻿@using OPKODABbl.Models.Main
-@model List<News>
+﻿@model OPKODABbl.Areas.Admin.ViewModels.News.IndexViewModel
 
 <center>
 
     @Html.ActionLink("Назад в панель администратора", "Index", "Home")
     <br /><br />
+
+    <form asp-action="ApplySettings" asp-controller="News">
+        <table border="1" align="center">
+            <tr>
+                <td>Максимальный размер изображения (МБ)</td>
+                <td>Качество уменьшенного изображения</td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <input style="width: 50px;" type="number" min="1" max="10" asp-for="MaxImageSize" />
+                </td>
+                <td align="center">
+                    <input style="width: 50px;" type="number" min="1" max="100" asp-for="ImageResizeQuality" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="Сохранить" />
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <br />
+
     @Html.ActionLink("Создать новость", "CreateNews", "News")
     <br /><br />
     <table border="1">
-        @foreach (var item in Model)
+        @foreach (var news in Model.News)
         {
             <tr>
                 <td>
-                    @item.Id
+                    @news.Id
+                </td>
+                <td style="width: 500px;">
+                    @news.NewsTitle
                 </td>
                 <td>
-                    @item.NewsTitle
+                    @Html.ActionLink("Изменить", "EditNews", "News", new { newsId = news.Id })
                 </td>
                 <td>
-                    @Html.ActionLink("Изменить", "EditNews", "News", new { newsId = item.Id })
-                </td>
-                <td>
-                    @Html.ActionLink("Удалить", "DeleteNews", "News", new { newsId = item.Id })
+                    @Html.ActionLink("Удалить", "DeleteNews", "News", new { newsId = news.Id })
                 </td>
             </tr>
         }

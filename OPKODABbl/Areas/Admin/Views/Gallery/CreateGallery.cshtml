@@ -2,6 +2,10 @@
 
 <center>
 
+    <br />
+    @Html.ActionLink("Назад в управление галереей", "Index", "Gallery")
+    <br /><br />
+
     <form asp-controller="Gallery" asp-action="CreateGallery" method="post" enctype="multipart/form-data">
         <div>
             <label asp-for="GalleryTitle"></label><br />

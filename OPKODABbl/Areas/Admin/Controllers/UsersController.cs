@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using OPKODABbl.Areas.Admin.ViewModels.Users;
 using OPKODABbl.Helpers;
 using OPKODABbl.Models.Account;
+using OPKODABbl.Models.Forum;
 using OPKODABbl.Service;
 
 namespace OPKODABbl.Areas.Admin.Controllers
@@ -107,19 +108,19 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #endregion
 
         #region Удалить пользователя со всеми его сообщениями[POST]
-        public async Task<IActionResult> DeleteUserWith(Guid userId)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserWith(Guid userId, bool isChecked)
         {
-            User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)
-                                              .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
-            if (user != null)
-            {
-                _websiteDB.Replies.RemoveRange(user.Replies);
+            User user = await _websiteDB.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-                foreach (var topic in user.Topics)
-                {
-                    _websiteDB.RemoveRange(topic.Replies);
-                }
-                _websiteDB.Topics.RemoveRange(user.Topics);
+            if (user != null && isChecked)
+            {
+                List<Reply> replies = await _websiteDB.Replies.Include(r => r.User).Where(r => r.User.Id == user.Id).ToListAsync();
+                List<Topic> topics = await _websiteDB.Topics.Include(t => t.User).Include(t => t.Replies).Where(t => t.User.Id == user.Id).ToListAsync();
+
+                _websiteDB.Replies.RemoveRange(topics.SelectMany(t => t.Replies).ToList());
+                _websiteDB.Replies.RemoveRange(replies);
+                _websiteDB.Topics.RemoveRange(topics);
                 _websiteDB.Users.Remove(user);
                 await _websiteDB.SaveChangesAsync();
             }
@@ -129,11 +130,12 @@ namespace OPKODABbl.Areas.Admin.Controllers
         #endregion
 
         #region Удалить пользователя и оставить сообщения[POST]
-        public async Task<IActionResult> DeleteUserWithout(Guid userId)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserWithout(Guid userId, bool isChecked)
         {
             User user = await _websiteDB.Users.Include(u => u.Topics).ThenInclude(t => t.Replies)
                                               .Include(u => u.Replies).FirstOrDefaultAsync(u => u.Id == userId);
-            if (user != null)
+            if (user != null && isChecked)
             {
                 foreach (var reply in user.Replies)
                 {
