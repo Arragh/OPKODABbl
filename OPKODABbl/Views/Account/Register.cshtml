@@ -67,6 +67,22 @@
                 </td>
             </tr>
             <tr>
+                <td class="left">
+                    @Model.Captcha.Question<br />
+                    <a href="@Model.Captcha.ImagePathOriginal"><img src="@Model.Captcha.ImagePathScaled" /></a>
+                </td>
+                <td class="right">
+                    <input type="hidden" asp-for="CaptchaId" value="@Model.Captcha.Id" />
+                    <div>
+                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <input class="login_page" type="text" asp-for="CaptchaAnswer" />
+                    </div>
+                    <div class="attention_wrapper">
+                        <span class="wrong_data" asp-validation-for="CaptchaAnswer"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">
                     <div>
                         <input class="login_button" type="submit" value="Регистрация" />

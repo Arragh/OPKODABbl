@@ -1,0 +1,26 @@
+﻿@model OPKODABbl.Areas.Admin.ViewModels.Captcha.AddCaptchaViewModel
+
+<center>
+    <br />
+        @Html.ActionLink("Назад в панель администратора", "AllCaptchas", "Captcha")
+    <br /><br />
+</center>
+
+<table border="1" style="width: 1000px;" align="center">
+    <tr>
+        <td>
+
+            <form asp-controller="Captcha" asp-action="AddCaptcha" method="post" enctype="multipart/form-data">
+                <div>
+                    <input type="file" name="captchaImage" accept=".jpg,.jpeg,.gif,.png" /><br />
+                    <label asp-for="Question"></label><br />
+                    <textarea asp-for="Question" rows="30" cols="100"></textarea><br /><br />
+                    <label asp-for="Answer"></label><br />
+                    <textarea asp-for="Answer" rows="30" cols="100"></textarea><br /><br />
+                    <input type="submit" value="Загрузить" />
+                </div>
+            </form>
+
+        </td>
+    </tr>
+</table>

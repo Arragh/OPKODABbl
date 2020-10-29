@@ -26,6 +26,7 @@ namespace OPKODABbl.Service
         public DbSet<SettingsForum> SettingsForum { get; set; }
         public DbSet<SettingsGallery> SettingsGallery { get; set; }
         public DbSet<SettingsNews> SettingsNews { get; set; }
+        public DbSet<Captcha> Captchas { get; set; }
 
         public WebsiteContext(DbContextOptions<WebsiteContext> options) : base(options)
         {

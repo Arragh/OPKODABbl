@@ -17,6 +17,7 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -35,14 +36,24 @@ namespace OPKODABbl.Controllers
 
         #region Регистрация [GET]
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             ViewBag.Title = "Регистрация нового пользователя";
 
             SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
-            return View();
+            List<Captcha> captchas = await _websiteDB.Captchas.ToListAsync();
+
+            Random rnd = new Random();
+            Captcha captcha = captchas[rnd.Next(captchas.Count())];
+
+            RegisterViewModel model = new RegisterViewModel()
+            {
+                Captcha = captcha
+            };
+
+            return View(model);
         }
         #endregion
 
@@ -52,6 +63,13 @@ namespace OPKODABbl.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             ViewBag.Title = "Регистрация нового пользователя";
+
+            // Проверяем капчу
+            Captcha captcha = await _websiteDB.Captchas.FirstOrDefaultAsync(c => c.Id == model.CaptchaId);
+            if (captcha.Answer.ToLower() != model.CaptchaAnswer.ToLower())
+            {
+                ModelState.AddModelError("CaptchaAnswer", "Неверная капча");
+            }
 
             // Проверка имени пользователя на наличие запрещенных символов
             if (!string.IsNullOrWhiteSpace(model.Name))
@@ -133,6 +151,13 @@ namespace OPKODABbl.Controllers
             // В случае ошибок валидации возвращаем модель с сообщениями об ошибках
             SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
+
+            List<Captcha> captchas = await _websiteDB.Captchas.ToListAsync();
+
+            Random rnd = new Random();
+            Captcha newCaptcha = captchas[rnd.Next(captchas.Count())];
+
+            model.Captcha = newCaptcha;
 
             return View(model);
         }

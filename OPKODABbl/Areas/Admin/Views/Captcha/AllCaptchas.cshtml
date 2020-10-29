@@ -1,0 +1,30 @@
+﻿@model List<OPKODABbl.Models.Account.Captcha>
+
+<center>
+    <br />
+        @Html.ActionLink("Назад в панель администратора", "Index", "Home")
+    <br /><br />
+    <br />
+        @Html.ActionLink("Добавить капчу", "AddCaptcha", "Captcha")
+    <br /><br />
+</center>
+
+<table border="1" align="center">
+    @foreach (var captcha in Model)
+	{
+        <tr>
+            <td style="width: 300px;">
+                <a href="@captcha.ImagePathOriginal"><img src="@captcha.ImagePathScaled" /></a>
+            </td>
+            <td style="width: 500px;">
+                @captcha.Question
+            </td>
+            <td style="width: 500px;">
+                @captcha.Answer
+            </td>
+            <td>
+                <a asp-action="DeleteCaptcha" asp-controller="Captcha" asp-route-captchaId="@captcha.Id">УДАЛИТЬ</a>
+            </td>
+        </tr>
+	}
+</table>

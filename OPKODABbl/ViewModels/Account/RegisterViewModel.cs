@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OPKODABbl.Models.Account;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OPKODABbl.ViewModels.Account
@@ -32,5 +33,12 @@ namespace OPKODABbl.ViewModels.Account
         [Required(ErrorMessage = "Укажите класс вашего персонажа в игре")]
         [Display(Name = "Класс игрового персонажа")]
         public Guid CharacterClassId { get; set; }
+
+        [Required]
+        public string CaptchaAnswer { get; set; }
+
+        public Guid CaptchaId { get; set; }
+
+        public Captcha Captcha { get; set; }
     }
 }
