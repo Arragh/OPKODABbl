@@ -225,6 +225,10 @@ table.register {
         vertical-align: top;
         text-align: right;
     }
+    table.register td.left img {
+        margin: 5px 0px 0px 0px;
+        border: 2px solid #ffffff;
+    }
     table.register td.right {
         width: 50%;
         text-align: center;
@@ -1131,6 +1135,20 @@ form.reply {
     margin: 10px 0px 0px 0px;
     text-align: center;
 }
+    form.reply input.topicname {
+        width: 760px;
+        margin: 10px 0px 0px 0px;
+        padding: 5px 5px 5px 5px;
+        border: 2px solid #ffffff;
+        background-color: rgba(49, 51, 54, 0.6);
+        font-family: Verdana;
+        color: #ffffff;
+        font-size: 13px;
+        outline: none;
+    }
+        forum.reply input.topicname:focus {
+            outline: none;
+        }
     form.reply textarea {
         min-width: 760px;
         max-width: 760px;
@@ -1147,7 +1165,7 @@ form.reply {
     form.reply textarea:focus {
         outline: none;
     }
-form.reply input {
+form.reply input.button {
     padding: 5px 10px 5px 10px;
     margin: 10px 0px -10px 0px;
     border: 2px solid #ffffff;
@@ -1157,13 +1175,13 @@ form.reply input {
     font-size: 19px;
     color: #1b8bdf;
 }
-form.reply input:focus {
-    outline: none;
-}
-form.reply input:hover {
-    color: #ffffff;
-    background-color: #1b8bdf;
-}
+    form.reply input.button:focus {
+        outline: none;
+    }
+    form.reply input.button:hover {
+        color: #ffffff;
+        background-color: #1b8bdf;
+    }
 
 form.quickreply {
     width: 774px;

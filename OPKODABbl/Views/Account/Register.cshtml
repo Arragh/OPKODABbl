@@ -69,12 +69,12 @@
             <tr>
                 <td class="left">
                     @Model.Captcha.Question<br />
-                    <a href="@Model.Captcha.ImagePathOriginal"><img src="@Model.Captcha.ImagePathScaled" /></a>
+                    <a href="@Model.Captcha.ImagePathOriginal" target="_blank"><img src="@Model.Captcha.ImagePathScaled" /></a>
                 </td>
                 <td class="right">
                     <input type="hidden" asp-for="CaptchaId" value="@Model.Captcha.Id" />
                     <div>
-                        <img style="vertical-align: middle;" src="~/images/pass_icon.png" />
+                        <img style="vertical-align: middle;" src="~/images/recaptcha_icon.png" />
                         <input class="login_page" type="text" asp-for="CaptchaAnswer" />
                     </div>
                     <div class="attention_wrapper">

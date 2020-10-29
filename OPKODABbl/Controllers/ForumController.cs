@@ -363,8 +363,10 @@ namespace OPKODABbl.Controllers
         [HttpGet]
         public async Task<IActionResult> EditReply(Guid topicId, Guid replyId, int htmlAnchor)
         {
+            Topic topic = await _websiteDB.Topics.Include(t => t.Replies).Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == topicId);
+
             // Эти 2 вьюбага необходимы для работы колбасы ссылок навигации на странице
-            ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == topicId);
+            ViewBag.Topic = topic;
             ViewBag.TopicId = topicId;
 
             if (User.Identity.IsAuthenticated)
@@ -383,6 +385,13 @@ namespace OPKODABbl.Controllers
                         ReplyBody = reply.ReplyBody,
                         HtmlAnchor = htmlAnchor
                     };
+
+                    // Если это первое сообщение в теме и, следственно, юзер хозяин топика, то разрешаем редактирование заголовка темы
+                    if (topic.Replies.OrderBy(r => r.ReplyDate).First().Id == reply.Id)
+                    {
+                        model.TopicOwner = true;
+                        model.TopicName = topic.TopicName;
+                    }
 
                     // Передаем модель в представление
                     return View(model);
@@ -403,8 +412,9 @@ namespace OPKODABbl.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
+                Topic topic = await _websiteDB.Topics.Include(t => t.Replies).Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
                 // Эти 2 вьюбага необходимы для работы колбасы ссылок навигации на странице
-                ViewBag.Topic = await _websiteDB.Topics.Include(t => t.Subsection).FirstOrDefaultAsync(t => t.Id == model.TopicId);
+                ViewBag.Topic = topic;
                 ViewBag.TopicId = model.TopicId;
 
                 if (ModelState.IsValid)
@@ -417,7 +427,14 @@ namespace OPKODABbl.Controllers
                         // Изменяем тело сообщения
                         reply.ReplyBody = model.ReplyBody;
 
-                        // СОхраняем изменения
+                        // Если это первое сообщение в теме и следственно юзер хозяин топика, то изменяем заголовок темы
+                        if (topic.Replies.OrderBy(r => r.ReplyDate).First().Id == reply.Id && model.TopicOwner && model.TopicName != null)
+                        {
+                            topic.TopicName = model.TopicName;
+                        }
+
+                        // Сохраняем изменения
+                        _websiteDB.Topics.Update(topic);
                         _websiteDB.Replies.Update(reply);
                         await _websiteDB.SaveChangesAsync();
 

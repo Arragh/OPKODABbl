@@ -40,19 +40,29 @@ namespace OPKODABbl.Controllers
         {
             ViewBag.Title = "Регистрация нового пользователя";
 
+            // Список классов для dropbox
             SelectList ingameClasses = new SelectList(_websiteDB.CharacterClasses, "Id", "ClassName");
             ViewBag.Classes = ingameClasses;
 
+            // Картинки капчи
             List<Captcha> captchas = await _websiteDB.Captchas.ToListAsync();
+            // Если нет ни одной картинки или пользователь уже залогинился, регистрация будет недоступна
+            if (captchas.Count() == 0 || User.Identity.IsAuthenticated)
+            {
+                return Content("Регистрация недоступна");
+            }
 
+            // Рандомно выбираем картинку капчи из списка
             Random rnd = new Random();
             Captcha captcha = captchas[rnd.Next(captchas.Count())];
 
+            // Передаем выбранную картинку в модель
             RegisterViewModel model = new RegisterViewModel()
             {
                 Captcha = captcha
             };
 
+            // Возвращаем модель с картинкой в представление
             return View(model);
         }
         #endregion

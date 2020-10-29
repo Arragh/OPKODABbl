@@ -34,7 +34,7 @@ namespace OPKODABbl.ViewModels.Account
         [Display(Name = "Класс игрового персонажа")]
         public Guid CharacterClassId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Капча обязательна")]
         public string CaptchaAnswer { get; set; }
 
         public Guid CaptchaId { get; set; }

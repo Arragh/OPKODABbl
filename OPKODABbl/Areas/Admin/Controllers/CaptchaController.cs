@@ -126,7 +126,7 @@ namespace OPKODABbl.Areas.Admin.Controllers
                 await _websiteDB.Captchas.AddAsync(captcha);
                 await _websiteDB.SaveChangesAsync();
 
-                return RedirectToAction("AddCaptcha", "Captcha");
+                return RedirectToAction("AllCaptchas", "Captcha");
             }
 
             // Возврат модели при неудачной валидации
@@ -141,6 +141,19 @@ namespace OPKODABbl.Areas.Admin.Controllers
 
             if (captcha != null)
             {
+                // Удаляем исходные (полноразмерные) изображения
+                FileInfo imageOriginal = new FileInfo(_appEnvironment.WebRootPath + captcha.ImagePathOriginal);
+                if (imageOriginal.Exists)
+                {
+                    imageOriginal.Delete();
+                }
+                // И их уменьшенные копии
+                FileInfo imageScaled = new FileInfo(_appEnvironment.WebRootPath + captcha.ImagePathScaled);
+                if (imageScaled.Exists)
+                {
+                    imageScaled.Delete();
+                }
+
                 _websiteDB.Remove(captcha);
                 await _websiteDB.SaveChangesAsync();
             }

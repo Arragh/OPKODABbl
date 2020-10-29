@@ -11,6 +11,11 @@ namespace OPKODABbl.ViewModels.Forum
         public Guid ReplyId { get; set; }
         public Guid TopicId { get; set; }
 
+        [Display(Name = "Заголовок темы")]
+        [DataType(DataType.Text)]
+        [StringLength(120, ErrorMessage = "Заголовок темы должен быть от {2} до {1} символов.", MinimumLength = 4)]
+        public string TopicName { get; set; }
+
         [Required(ErrorMessage = "Поле ответа не может быть пустым")]
         [Display(Name = "Введите текст сообщения")]
         [DataType(DataType.Text)]
@@ -18,5 +23,7 @@ namespace OPKODABbl.ViewModels.Forum
         public string ReplyBody { get; set; }
 
         public int HtmlAnchor { get; set; }
+
+        public bool TopicOwner { get; set; }
     }
 }
