@@ -8,12 +8,25 @@
 </head>
 <body>
 
-    @await Html.PartialAsync("HeaderPartial")
+    <table class="body">
+        <tr>
+            <td class="renderbody">
+                @await Html.PartialAsync("HeaderPartial")
 
 
-    <div class="renderbody">
-        @RenderBody()
-    </div>
+                <div class="renderbody">
+                    @RenderBody()
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="bottom">
+                <div class="bottom">
+                    blablabla copyright i vse takoe...
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @RenderSection("Scripts", required: false)

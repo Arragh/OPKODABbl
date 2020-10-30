@@ -142,6 +142,10 @@ namespace OPKODABbl.Controllers
             // Если у юзера недостаточно прав для просмотра, то топик будет null
             if (topic != null)
             {
+                topic.Views += 1;
+                _websiteDB.Topics.Update(topic);
+                await _websiteDB.SaveChangesAsync();
+
                 // Берем настройки из БД
                 SettingsForum settings = await _websiteDB.SettingsForum.FirstAsync();
 
@@ -232,7 +236,8 @@ namespace OPKODABbl.Controllers
                                 TopicName = model.TopicName,
                                 TopicDate = DateTime.Now,
                                 Announcement = model.Announcement,
-                                User = user
+                                User = user,
+                                Views = 0
                             };
 
                             // И модель первого в нём сообщения, которое и будет сообщением только что созданной темы

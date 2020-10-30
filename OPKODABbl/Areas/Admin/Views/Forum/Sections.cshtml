@@ -82,7 +82,7 @@
 <center>
     <form asp-action="CreateSection" asp-controller="Forum" method="post">
         <input type="text" name="sectionName" />
-        <input style="width: 50px;" type="number" name="sectionAccessLevel" />
+        <input style="width: 50px;" type="number" name="sectionAccessLevel" value="1" min="1" max="5" />
         <input type="submit" value="Создать раздел" />
     </form>
 </center>
